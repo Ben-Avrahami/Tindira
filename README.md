@@ -2,7 +2,7 @@
 
 Vote for you favorite:
 
-<img src="Media/logo.png" alt="Image Alt text" title="logo" width="600" height="600">
+<img src="Media/logo1.png" alt="Image Alt text" title="logo" width="600" height="600">
 
 <img src="Media/logo2.png" alt="Image Alt text" title="logo2" width="600" height="600">
 
