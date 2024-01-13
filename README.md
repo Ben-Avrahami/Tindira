@@ -11,7 +11,7 @@ Greetings, Earthlings! 🌍 Get ready to be captivated by the brilliance of Team
 #### Ben - The Brainiac:
 *Superpower:* Can turn tea into code. Seriously, we're convinced he's part machine. ☕💻
 
-**Gal - The Code Galactica:**
+#### Gal - The Code Galactica:
 *Secret Weapon:* Multitasking. Can juggle more tasks than a circus performer on rollerblades. 🤹‍♀️
 
 #### Mor - The Coding Maestro:
