@@ -14,8 +14,9 @@ Greetings, Earthlings! 🌍 Get ready to be captivated by the brilliance of Team
 **Gal - The Code Galactica:**
 *Secret Weapon:* Multitasking. Can juggle more tasks than a circus performer on rollerblades. 🤹‍♀️
 
-**Mor - The Coding Maestro:**
+#### Mor - The Coding Maestro:
 *Claim to Fame:* Once debugged a colleague's dream. No nightmare-inducing bugs allowed. 🛌🐛
+
 
 **Yoni - The Chip Charmer:**
 *Mood Booster:* Sings to the servers to keep them happy. A real-life server whisperer. 🎤🎶
