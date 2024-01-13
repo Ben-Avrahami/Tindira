@@ -32,6 +32,7 @@ To create a web app so epic that even the most seasoned developers will gaze upo
 - Gal will be speaking in JavaScript. Don't worry; it's contagious and perfectly normal. 💬🚀
 - Mor's coding hat is non-negotiable. It's the source of his coding superpowers. 🎩💻
 - Yoni's servers have a taste for '80s rock. If they seem sluggish, play some Queen or AC/DC. 🎸🤘
+- Omer's rebellious spirit is untamed; beware of unexpected innovations and non-Intel adventures! ⚠️🔧
 
 ### Communication Nexus:
 For official transmissions, we rely on a high-tech communication hub known as Whatsapp. For unofficial banter, we use carrier pigeons because we're classy like that. Omer, we'll teach you the pigeon-whispering technique soon. 📱🕊️
