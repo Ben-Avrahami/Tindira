@@ -21,7 +21,7 @@ Greetings, Earthlings! 🌍 Get ready to be captivated by the brilliance of Team
 #### Yoni - The Chip Charmer:
 *Mood Booster:* Sings to the servers to keep them happy. A real-life server whisperer. 🎤🎶
 
-**Omer - The Rebel Without an Intel Cause:**
+#### Omer - The Rebel Without an Intel Cause:
 *Battle Cry:* "No Intel inside, but plenty of innovation outside!" 🚫💡
 
 ### Our Quest:
