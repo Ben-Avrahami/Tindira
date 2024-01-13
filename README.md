@@ -1,4 +1,4 @@
-The SuperIntel Developers & Omer the Non-Intel Whiz
+#The SuperIntel Developers & Omer the Non-Intel Whiz
 
 <img src="Media/logo5.png" alt="Image Alt text" title="logo2" width="600" height="600">
 
