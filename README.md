@@ -8,7 +8,7 @@
 Greetings, Earthlings! 🌍 Get ready to be captivated by the brilliance of Team SuperIntel Developers & Omer the Non-Intel Whiz. Join us on a coding odyssey as we embark on our Open University web app project, offering you a sneak peek into the enchanting world behind our screens.
 
 ### Meet the Geniuses:
-**Ben - The Brainiac:**
+#### Ben - The Brainiac:
 *Superpower:* Can turn tea into code. Seriously, we're convinced he's part machine. ☕💻
 
 **Gal - The Code Galactica:**
