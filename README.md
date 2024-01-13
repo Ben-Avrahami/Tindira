@@ -1,5 +1,7 @@
 The SuperIntel Developers & Omer the Non-Intel Whiz
 
+<img src="Media/logo5.png" alt="Image Alt text" title="logo2" width="600" height="600">
+
 Welcome to Our Code Haven!
 Greetings, Earthlings! 🌍 Prepare to be dazzled by the brilliance of Team SuperIntel Developers & Omer the Non-Intel Whiz. We're embarking on a coding odyssey for our Open University web app project, and we're here to share a sneak peek into the magic behind our screens.
 
