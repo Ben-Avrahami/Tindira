@@ -4,6 +4,10 @@
     <div>increment is {{ userStore.increment }}</div>
     <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City"
       class="w-full md:w-[14rem]" />
+      <Button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <iconify-icon icon="mdi:home" class="mr-4" ></iconify-icon>
+        <span >Sample Btn with icon</span>
+      </Button>
   </main>
 </template>
 
@@ -14,6 +18,7 @@ import { ref } from "vue";
 const userStore = useAppStore();
 import Knob from 'primevue/knob';
 import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/Button';
 let value = 0;
 
 const selectedCity = ref();
