@@ -7,6 +7,8 @@ import App from './App.vue';
 import router from './router';
 
 import PrimeVue from 'primevue/config';
+
+// Ignore error because '@/Presets/Lara/index.js' lacks type definitions.
 // @ts-ignore
 import  Lara  from '@/Presets/Lara/index.js';
 
