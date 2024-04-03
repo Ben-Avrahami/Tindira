@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import 'iconify-icon';
+
 </script>
 
 <template>
@@ -8,6 +9,10 @@ import 'iconify-icon';
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
+<<<<<<< HEAD
+=======
+      <HelloWorld msg="You did it!" />
+>>>>>>> main
 
 
       <nav>
