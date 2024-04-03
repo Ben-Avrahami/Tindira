@@ -1,6 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <p class="text-3xl font-bold underline text-orange-600">
+      Hello world!!!!!!@
+    </p>
   </div>
 </template>
 
