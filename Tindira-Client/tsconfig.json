@@ -12,6 +12,10 @@
     }
   ],
   "compilerOptions": {
-    "types": ["vite/client"]
-  }
+    "types": [
+      "vite/client"
+    ],
+    "allowJs": true,
+    "checkJs": false
+  },
 }
