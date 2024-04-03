@@ -6,7 +6,7 @@
       class="w-full md:w-[14rem]" />
     <Button @click="console.log('clicked')">
       <iconify-icon icon="mdi:home" class="mr-4"></iconify-icon>
-      <span class="animate-bounce w-6 h-6">Sample Btn with icon</span>
+      <span class="animate-bounce">Sample Btn! with icon</span>
     </Button>
   </main>
 </template>
