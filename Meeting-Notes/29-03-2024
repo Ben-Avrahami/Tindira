@@ -1,0 +1,42 @@
+Meeting with all Team Members + Nadav Beno
+
+# Tindira - Apartment Searching App
+
+## Overview
+Tindira is an apartment searching application designed to simplify the process of finding suitable accommodation. It offers essential features for users to swipe through available apartments, post listings, filter search results, and connect with potential roommates. The app aims to streamline the apartment hunting experience while providing a user-friendly interface.
+
+## Must-Have Features
+1. **Swipe Functionality:** Users can swipe apartments left or right based on their preferences.
+2. **Google Maps Integration:** API integration with Google Maps to display apartment locations and enable area selection for apartment search.
+3. **User Profile Management:** Database to store user profiles, previous swipes, and other relevant information.
+4. **User Authentication:** Secure sign-in functionality, possibly utilizing Google Single Sign-On for convenience.
+5. **Apartment Posting:** Ability for users to post apartment listings on the app.
+6. **Filtering Options:** Users can filter displayed apartments by location, price, size (rooms), and type (private, building).
+
+## Nice-to-Have Features
+1. **Roommate Matching:** Users can find roommates with similar preferences for shared accommodation.
+2. **Multiple Categories:** Options for different types of accommodation such as rent, buy, sublet, apartment swapping, and arrangements involving animal/plant care.
+3. **Couple Mode:** Enables users to share apartments with partners, sending listings to each other through the app and sharing swiping data for better experiences.
+4. **AI Integration:** Possibility to incorporate AI for enhanced user experience, such as adjusting filters based on user swipes.
+
+## Student Notes
+1. **User Authentication:** Essential for security and personalized user experience.
+2. **Sign-on and Login:** Integral components for user access to the platform.
+3. **Privileges Management:** Implementation of user roles to control actions like uploading and approval/deletion of listings.
+4. **Database Management:** Requirement for storing files and user data.
+5. **External API Integration:** Consideration needed for incorporating external APIs, ensuring compatibility and functionality within the project scope.
+
+## Approval
+Approved by Nadav Beno.
+
+
+## Student Notes
+### Must-Have
+- **User Authentication:** Essential for security and personalized user experience.
+- **Sign-on and Login:** Integral components for user access to the platform.
+- **Privileges Management:** Implementation of user roles to control actions like uploading and approval/deletion of listings.
+- **Database Management:** Requirement for storing files and user data.
+- **External API Integration:** **need to figure out how to add external api if we choose this idea**.
+
+## Approval
+Approved by Nadav Beno.
