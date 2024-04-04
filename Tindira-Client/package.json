@@ -13,6 +13,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@vueuse/core": "^10.9.0",
     "aos": "^2.3.4",
     "pinia": "^2.1.7",
     "primevue": "^3.50.0",
