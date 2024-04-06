@@ -2,7 +2,7 @@
   "TableName": "TindiraUsers",
   "AttributeDefinitions": [
     {
-      "AttributeName": "id",
+      "AttributeName": "UserId",
       "AttributeType": "S"
     },
     {
@@ -44,12 +44,6 @@
     {
       "AttributeName": "listings",
       "AttributeType": "L"
-    }
-  ],
-  "KeySchema": [
-    {
-      "AttributeName": "id",
-      "KeyType": "HASH"
     }
   ],
   "BillingMode": "PROVISIONED",
