@@ -1,0 +1,60 @@
+{
+  "TableName": "TindiraUsers",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "email",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "phoneNumber",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "roles",
+      "AttributeType": "L"
+    },
+    {
+      "AttributeName": "firstName",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "lastName",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "profilePicture",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "profileDescription",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "history",
+      "AttributeType": "M"
+    },
+    {
+      "AttributeName": "reviews",
+      "AttributeType": "M"
+    },
+    {
+      "AttributeName": "listings",
+      "AttributeType": "L"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    }
+  ],
+  "BillingMode": "PROVISIONED",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
