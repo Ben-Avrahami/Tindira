@@ -13,44 +13,46 @@
                     </template>
                 </Carousel>
             </template>
-            <template #title>
-                <div class="drag-area">
-                    Lior's Home
-                </div>
-            </template>
-            <template #subtitle>
-                <div class="drag-area flex justify-between items-center">
-                    Sublet- Tel Aviv
-                    <Button severity="secondary" text rounded aria-label="Info" class="mr-2" style="font-size: 2rem;">
-                        <template #icon>
-                            <Icon icon="ooui:info-filled"></Icon>
-                        </template>
-                    </Button>
-                </div>
-            </template>
-            <template #content>
-                <p class="drag-area m-0">
-                    A nice cosy home, in the most vibrant place in tel aviv
-                </p>
 
-            </template>
-            <template #footer>
-                <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
+                <template #title>
+                    <div class="drag-area">
+                        Lior's Home
+                    </div>
+                </template>
+                <template #subtitle>
+                    <div class="drag-area flex justify-between items-center">
+                        Sublet- Tel Aviv
+                        <Button severity="secondary" text rounded aria-label="Info" class="mr-2"
+                            style="font-size: 2rem;">
+                            <template #icon>
+                                <Icon icon="ooui:info-filled"></Icon>
+                            </template>
+                        </Button>
+                    </div>
+                </template>
+                <template #content>
+                    <p class="drag-area m-0">
+                        A nice cosy home, in the most vibrant place in tel aviv
+                    </p>
 
-                    <Button severity="secondary" rounded aria-label="Like">
-                        <template #icon>
-                            <Icon icon="mdi:times"></Icon>
-                        </template>
-                    </Button>
+                </template>
+                <template #footer>
+                    <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
 
-                    <Button class="text-rose-700 drag-area" rounded aria-label="Like">
-                        <template #icon>
-                            <Icon icon="ph:heart"></Icon>
-                        </template>
-                    </Button>
+                        <Button severity="secondary" rounded aria-label="Like">
+                            <template #icon>
+                                <Icon icon="mdi:times"></Icon>
+                            </template>
+                        </Button>
 
-                </div>
-            </template>
+                        <Button class="text-rose-700 drag-area" rounded aria-label="Like">
+                            <template #icon>
+                                <Icon icon="ph:heart"></Icon>
+                            </template>
+                        </Button>
+
+                    </div>
+                </template>
         </Card>
     </VueDraggable>
 </template>
@@ -85,7 +87,7 @@ function onEnd(event: any) {
         if (event.originalEvent.screenX > 1500) {
             console.log("right");
         }
-        if (event.originalEvent.screenX < 500){
+        if (event.originalEvent.screenX < 500) {
             console.log("left")
         }
         console.log("MouseEvent");
