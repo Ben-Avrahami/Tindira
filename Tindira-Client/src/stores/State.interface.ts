@@ -1,3 +1,3 @@
 export interface State {
-    increment: number;
+    isLoading: boolean;
 }
