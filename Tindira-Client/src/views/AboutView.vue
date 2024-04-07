@@ -4,10 +4,10 @@
       Hello world!!!!!!@
     </p>
     <Button @click="console.log('clicked')">
-      <iconify-icon icon="mdi:home" class="mr-4"></iconify-icon>
+      <Icon icon="mdi:home" />
+      <Icon icon="ph:heart-fill" />
       <span class="animate-bounce">test if dark mode persists</span>
     </Button>
-    <iconify-icon icon="ph:heart-fill"></iconify-icon>
   </div>
 
 
