@@ -1,18 +1,19 @@
 <template>
     <VueDraggable ref="el" v-model="links" @end="onEnd" handle=".drag-area">
-        <Card>
-            <template #header>
-                <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
-                    <template #item="slotProps">
-                        <div class="border-1 surface-border border-round m-2  p-3">
-                            <div class="relative mx-auto">
-                                <Image alt="Apartment images" class="w-full border-round" :src="slotProps.data"
-                                    preview />
+
+            <Card class="w-4/5 mx-auto">
+                <template #header>
+                    <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
+                        <template #item="slotProps">
+                            <div class="border-1 surface-border border-round m-2  p-3">
+                                <div class="relative mx-auto">
+                                    <Image alt="Apartment images" class="w-full border-round" :src="slotProps.data"
+                                        preview />
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                </Carousel>
-            </template>
+                        </template>
+                    </Carousel>
+                </template>
 
                 <template #title>
                     <div class="drag-area">
@@ -53,7 +54,7 @@
 
                     </div>
                 </template>
-        </Card>
+            </Card>
     </VueDraggable>
 </template>
 
@@ -77,10 +78,10 @@ const links = ref([
 function onEnd(event: any) {
     console.log(event);
     if (event.originalEvent instanceof TouchEvent) {
-        if (event.originalEvent.changedTouches[0].clientX > 0) {
+        if (event.originalEvent.changedTouches[0].clientX >200) {
             console.log("right");
         }
-        else {
+        if (event.originalEvent.changedTouches[0].clientX <0){
             console.log("left")
         }
     } else if (event.originalEvent instanceof MouseEvent) {
