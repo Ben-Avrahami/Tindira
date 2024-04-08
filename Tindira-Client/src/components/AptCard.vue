@@ -5,9 +5,9 @@
                 <template #header>
                     <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
                         <template #item="slotProps">
-                            <div class="border-1 surface-border border-round m-2  p-3">
+                            <div class="border-1 surface-border border-round m-2 p-3">
                                 <div class="relative mx-auto">
-                                    <Image alt="Apartment images" class="w-full border-round" :src="slotProps.data"
+                                    <Image alt="Apartment images" class="w-full border-round" :src="slotProps.data.src"
                                         preview />
                                 </div>
                             </div>
@@ -23,8 +23,7 @@
                 <template #subtitle>
                     <div class="drag-area flex justify-between items-center">
                         Sublet- Tel Aviv
-                        <Button severity="secondary" text rounded aria-label="Info" class="mr-2"
-                            style="font-size: 2rem;">
+                        <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl">
                             <template #icon>
                                 <Icon icon="ooui:info-filled"></Icon>
                             </template>
@@ -70,10 +69,22 @@ import Image from 'primevue/image';
 import { VueDraggable } from 'vue-draggable-plus'
 
 const links = ref([
-    'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
-    'https://chesmar.com/wp-content/uploads/2019/05/how-many-bedrooms-should-my-new-home-have.jpg',
-    'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
-    'https://www.thespruce.com/thmb/2_Q52GK3rayV1wnqm6vyBvgI3Ew=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/put-together-a-perfect-guest-room-1976987-hero-223e3e8f697e4b13b62ad4fe898d492d.jpg'
+    {
+        src: 'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
+        alt: 'Apartment Image 1'
+    },
+    {
+        src: 'https://chesmar.com/wp-content/uploads/2019/05/how-many-bedrooms-should-my-new-home-have.jpg',
+        alt: 'Apartment Image 2'
+    },
+    {
+        src: 'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
+        alt: 'Apartment Image 3'
+    },
+    {
+        src: 'https://www.thespruce.com/thmb/2_Q52GK3rayV1wnqm6vyBvgI3Ew=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/put-together-a-perfect-guest-room-1976987-hero-223e3e8f697e4b13b62ad4fe898d492d.jpg',
+        alt: 'Apartment Image 4'
+    }
 ])
 
 let startingX = 0;
@@ -104,7 +115,7 @@ function onEnd(event: any) {
 
 function onStart(event: any) {
     if (event.originalEvent instanceof TouchEvent) {
-        startingX = event.originalEvent.clientX;
+        startingX = event.originalEvent.changedTouches[0].clientX;
     } else if (event.originalEvent instanceof MouseEvent) {
         startingX = event.originalEvent.clientX;
     }

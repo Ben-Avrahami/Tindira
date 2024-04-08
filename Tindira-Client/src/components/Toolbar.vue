@@ -4,20 +4,20 @@
 
       <img src="../assets/logo.png" alt="Image" width="100" />
 
-      <Button class="mr-2" text aria-label="Home" @click="navigateTo('/')">
+      <Button class="text-2xl" text aria-label="Home" @click="navigateTo('/')">
         <template #icon>
           <Icon icon="material-symbols:home"></Icon>
         </template>
 
       </Button>
 
-      <Button class="mr-2" text aria-label="Profile" @click="navigateTo('/profile')">
+      <Button class="text-2xl" text aria-label="Profile" @click="navigateTo('/profile')">
         <template #icon>
           <Icon icon="mdi:user"></Icon>
         </template>
       </Button>
 
-      <Button class="mr-2" text aria-label="Add" @click="navigateTo('/add')">
+      <Button class="text-2xl" text aria-label="Add" @click="navigateTo('/add')">
         <template #icon>
           <Icon icon="material-symbols:add"></Icon>
         </template>
@@ -32,7 +32,7 @@
     <template #end>
       <ProgressSpinner v-if="userStore.isLoading" style="width: 50px; height: 50px" strokeWidth="8"/>
 
-      <Button class="mr-2" text aria-label="Add" @click="toggleDarkMode()">
+      <Button class="text-2xl" text aria-label="Add" @click="toggleDarkMode()">
         <template #icon>
           <Icon v-if="isDark" icon="ph-sun"></Icon>
           <Icon v-if="!isDark" icon="ph-moon"></Icon>
