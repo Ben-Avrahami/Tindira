@@ -1,5 +1,5 @@
 <template>
-    <VueDraggable ref="el" v-model="links" @end="onEnd" handle=".drag-area">
+    <VueDraggable ref="el" v-model="links" @end="onEnd" @start="onStart" handle=".drag-area">
         <transition name="swipe">
             <Card class="w-4/5 mx-auto swipe-card" ref="card">
                 <template #header>
@@ -40,13 +40,13 @@
                 <template #footer>
                     <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
 
-                        <Button severity="secondary" rounded aria-label="Like" @click="swipeleft">
+                        <Button severity="secondary" rounded aria-label="Like" @click="swipe(false)">
                             <template #icon>
                                 <Icon icon="mdi:times"></Icon>
                             </template>
                         </Button>
 
-                        <Button class="text-rose-700 drag-area" rounded aria-label="Like" @click="swipeRight">
+                        <Button class="text-rose-700 drag-area" rounded aria-label="Like" @click="swipe(true)">
                             <template #icon>
                                 <Icon icon="ph:heart"></Icon>
                             </template>
@@ -76,37 +76,49 @@ const links = ref([
     'https://www.thespruce.com/thmb/2_Q52GK3rayV1wnqm6vyBvgI3Ew=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/put-together-a-perfect-guest-room-1976987-hero-223e3e8f697e4b13b62ad4fe898d492d.jpg'
 ])
 
+let startingX = 0;
+let sensitivity = 50;
+
 function onEnd(event: any) {
     console.log(event);
     if (event.originalEvent instanceof TouchEvent) {
-        if (event.originalEvent.changedTouches[0].clientX > 200) {
+        if (event.originalEvent.changedTouches[0].clientX > startingX + sensitivity) {
             console.log("right");
+            swipe(true);
         }
-        if (event.originalEvent.changedTouches[0].clientX < 0) {
+        if (event.originalEvent.changedTouches[0].clientX < startingX - sensitivity) {
             console.log("left")
+            swipe(false);
         }
     } else if (event.originalEvent instanceof MouseEvent) {
-        if (event.originalEvent.screenX > 1500) {
+        if (event.originalEvent.clientX > startingX + sensitivity) {
             console.log("right");
+            swipe(true);
         }
-        if (event.originalEvent.screenX < 500) {
+        if (event.originalEvent.clientX < startingX - sensitivity) {
             console.log("left")
+            swipe(false);
         }
-        console.log("MouseEvent");
     }
 }
 
-
-function swipeRight() {
-    const el = document.querySelector('.swipe-card');
-    if (el) {
-        el.classList.add('animate-right');
+function onStart(event: any) {
+    if (event.originalEvent instanceof TouchEvent) {
+        startingX = event.originalEvent.clientX;
+    } else if (event.originalEvent instanceof MouseEvent) {
+        startingX = event.originalEvent.clientX;
     }
+    console.log("starting x is ", startingX);
 }
-function swipeleft() {
+
+function swipe(isLike: boolean) {
     const el = document.querySelector('.swipe-card');
+    el!.addEventListener('animationend', () => {
+        el!.classList.remove('animate-right');
+        el!.classList.remove('animate-left');
+    });
     if (el) {
-        el.classList.add('animate-left');
+        isLike ? el.classList.add('animate-right') : el.classList.add('animate-left');
     }
 }
 
@@ -115,18 +127,8 @@ function swipeleft() {
 </script>
 
 <style scoped>
-.swipe-enter-active,
-.swipe-leave-active {
-    transition: transform 1s;
-}
-
-.swipe-enter,
-.swipe-leave-to {
-    transform: translateX(100%);
-}
-
 .animate-right {
-    animation: swipeRight 1s forwards;
+    animation: swipeRight 1s;
 }
 
 @keyframes swipeRight {
@@ -140,7 +142,7 @@ function swipeleft() {
 }
 
 .animate-left {
-    animation: swipeLeft 1s forwards ease-out;
+    animation: swipeLeft 1s ease-out;
 }
 
 @keyframes swipeLeft {
@@ -152,6 +154,4 @@ function swipeleft() {
         transform: translateX(-100%) translateY(-20%) rotate(-20deg);
     }
 }
-
-
 </style>
