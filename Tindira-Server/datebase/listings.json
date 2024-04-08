@@ -1,0 +1,339 @@
+[
+  {
+    "listingId": "listing1",
+    "ownerId": "user1",
+    "title": "Spacious Apartment in Downtown",
+    "description": "A beautiful apartment with panoramic views of the city skyline.",
+    "price": 2000,
+    "address": {
+      "city": "New York",
+      "street": "Broadway",
+      "number": "123"
+    },
+    "numberOfRooms": 3,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing1/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing1/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing1/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing1/image4.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "40.7128",
+      "y_coordinate": "-74.006"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-05-01",
+    "postUploadDate": "2024-04-01",
+    "contractLength": "1 year",
+    "contractStartingDate": "2024-05-01",
+    "contractEndDate": "2025-05-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 1
+  },
+  {
+    "listingId": "listing2",
+    "ownerId": "user3",
+    "title": "Cozy Studio Apartment",
+    "description": "A charming studio apartment perfect for a single occupant.",
+    "price": 1500,
+    "address": {
+      "city": "Los Angeles",
+      "street": "Sunset Blvd",
+      "number": "456"
+    },
+    "numberOfRooms": 1,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing2/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing2/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing2/image3.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "34.0522",
+      "y_coordinate": "-118.2437"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-06-01",
+    "postUploadDate": "2024-04-02",
+    "contractLength": "6 months",
+    "contractStartingDate": "2024-06-01",
+    "contractEndDate": "2024-12-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 0
+  },
+  {
+    "listingId": "listing3",
+    "ownerId": "user6",
+    "title": "Luxury Penthouse with Stunning Views",
+    "description": "An exquisite penthouse offering luxurious amenities and breathtaking views.",
+    "price": 5000,
+    "address": {
+      "city": "Miami",
+      "street": "Ocean Drive",
+      "number": "789"
+    },
+    "numberOfRooms": 4,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing3/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing3/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing3/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing3/image4.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing3/image5.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "25.7617",
+      "y_coordinate": "-80.1918"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-07-01",
+    "postUploadDate": "2024-04-03",
+    "contractLength": "1 year",
+    "contractStartingDate": "2024-07-01",
+    "contractEndDate": "2025-07-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": false,
+    "parking": 2
+  },
+  {
+    "listingId": "listing4",
+    "ownerId": "user7",
+    "title": "Charming Beach House",
+    "description": "A charming beachfront house perfect for a relaxing getaway.",
+    "price": 3000,
+    "address": {
+      "city": "Malibu",
+      "street": "Pacific Coast Hwy",
+      "number": "101"
+    },
+    "numberOfRooms": 2,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing4/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing4/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing4/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing4/image4.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "34.0259",
+      "y_coordinate": "-118.7798"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-08-01",
+    "postUploadDate": "2024-04-04",
+    "contractLength": "3 months",
+    "contractStartingDate": "2024-08-01",
+    "contractEndDate": "2024-11-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 1
+  },
+  {
+    "listingId": "listing5",
+    "ownerId": "user9",
+    "title": "Modern Loft in the Heart of the City",
+    "description": "A stylish loft apartment located in a vibrant neighborhood.",
+    "price": 2500,
+    "address": {
+      "city": "San Francisco",
+      "street": "Market St",
+      "number": "567"
+    },
+    "numberOfRooms": 2,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image4.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image5.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing5/image6.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "37.7749",
+      "y_coordinate": "-122.4194"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-09-01",
+    "postUploadDate": "2024-04-05",
+    "contractLength": "6 months",
+    "contractStartingDate": "2024-09-01",
+    "contractEndDate": "2025-03-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 0
+  },
+  {
+    "listingId": "listing6",
+    "ownerId": "user1",
+    "title": "Rustic Cabin Retreat",
+    "description": "A cozy cabin nestled in the woods, perfect for a peaceful retreat.",
+    "price": 1800,
+    "address": {
+      "city": "Aspen",
+      "street": "Mountain Rd",
+      "number": "789"
+    },
+    "numberOfRooms": 2,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image4.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image5.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing6/image6.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "39.1911",
+      "y_coordinate": "-106.8175"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-10-01",
+    "postUploadDate": "2024-04-06",
+    "contractLength": "3 months",
+    "contractStartingDate": "2024-10-01",
+    "contractEndDate": "2025-01-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 1
+  },
+  {
+    "listingId": "listing7",
+    "ownerId": "user3",
+    "title": "Historic Townhouse",
+    "description": "A historic townhouse with period features and modern amenities.",
+    "price": 3500,
+    "address": {
+      "city": "Boston",
+      "street": "Beacon St",
+      "number": "345"
+    },
+    "numberOfRooms": 4,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image4.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image5.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing7/image6.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "42.3601",
+      "y_coordinate": "-71.0589"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-11-01",
+    "postUploadDate": "2024-04-07",
+    "contractLength": "1 year",
+    "contractStartingDate": "2024-11-01",
+    "contractEndDate": "2025-11-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": false,
+    "parking": 2
+  },
+  {
+    "listingId": "listing8",
+    "ownerId": "user6",
+    "title": "Seaside Cottage",
+    "description": "A charming cottage by the sea, perfect for a peaceful getaway.",
+    "price": 2800,
+    "address": {
+      "city": "Cape Cod",
+      "street": "Ocean Blvd",
+      "number": "123"
+    },
+    "numberOfRooms": 3,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image4.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image5.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing8/image6.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "41.6688",
+      "y_coordinate": "-70.2967"
+    },
+    "isActive": true,
+    "postExpireDate": "2024-12-01",
+    "postUploadDate": "2024-04-08",
+    "contractLength": "3 months",
+    "contractStartingDate": "2024-12-01",
+    "contractEndDate": "2025-03-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 1
+  },
+  {
+    "listingId": "listing9",
+    "ownerId": "user7",
+    "title": "Country Farmhouse Retreat",
+    "description": "A cozy farmhouse nestled in the countryside, perfect for a peaceful retreat.",
+    "price": 2200,
+    "address": {
+      "city": "Napa Valley",
+      "street": "Vineyard Ln",
+      "number": "456"
+    },
+    "numberOfRooms": 4,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing9/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing9/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing9/image3.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "38.5025",
+      "y_coordinate": "-122.2654"
+    },
+    "isActive": true,
+    "postExpireDate": "2025-01-01",
+    "postUploadDate": "2024-04-09",
+    "contractLength": "6 months",
+    "contractStartingDate": "2025-01-01",
+    "contractEndDate": "2025-07-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 2
+  },
+  {
+    "listingId": "listing10",
+    "ownerId": "user9",
+    "title": "Mountain Chalet",
+    "description": "A cozy chalet nestled in the mountains, perfect for a ski getaway.",
+    "price": 3200,
+    "address": {
+      "city": "Lake Tahoe",
+      "street": "Ski Run Blvd",
+      "number": "789"
+    },
+    "numberOfRooms": 3,
+    "images": [
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing10/image1.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing10/image2.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing10/image3.jpg",
+      "https://tindira.s3.us-east-2.amazonaws.com/listings/listing10/image4.jpg"
+    ],
+    "coordinates": {
+      "x_coordinate": "38.9399",
+      "y_coordinate": "-119.9772"
+    },
+    "isActive": true,
+    "postExpireDate": "2025-02-01",
+    "postUploadDate": "2024-04-10",
+    "contractLength": "3 months",
+    "contractStartingDate": "2025-02-01",
+    "contractEndDate": "2025-05-01",
+    "category": "rent",
+    "likedBy": [],
+    "isAnimalFriendly": true,
+    "parking": 1
+  }
+]
