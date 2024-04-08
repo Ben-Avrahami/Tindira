@@ -1,7 +1,7 @@
 <template>
     <VueDraggable ref="el" v-model="links" @end="onEnd" handle=".drag-area">
-
-            <Card class="w-4/5 mx-auto">
+        <transition name="swipe">
+            <Card class="w-4/5 mx-auto swipe-card" ref="card">
                 <template #header>
                     <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
                         <template #item="slotProps">
@@ -40,13 +40,13 @@
                 <template #footer>
                     <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
 
-                        <Button severity="secondary" rounded aria-label="Like">
+                        <Button severity="secondary" rounded aria-label="Like" @click="swipeleft">
                             <template #icon>
                                 <Icon icon="mdi:times"></Icon>
                             </template>
                         </Button>
 
-                        <Button class="text-rose-700 drag-area" rounded aria-label="Like">
+                        <Button class="text-rose-700 drag-area" rounded aria-label="Like" @click="swipeRight">
                             <template #icon>
                                 <Icon icon="ph:heart"></Icon>
                             </template>
@@ -55,6 +55,7 @@
                     </div>
                 </template>
             </Card>
+        </transition>
     </VueDraggable>
 </template>
 
@@ -78,10 +79,10 @@ const links = ref([
 function onEnd(event: any) {
     console.log(event);
     if (event.originalEvent instanceof TouchEvent) {
-        if (event.originalEvent.changedTouches[0].clientX >200) {
+        if (event.originalEvent.changedTouches[0].clientX > 200) {
             console.log("right");
         }
-        if (event.originalEvent.changedTouches[0].clientX <0){
+        if (event.originalEvent.changedTouches[0].clientX < 0) {
             console.log("left")
         }
     } else if (event.originalEvent instanceof MouseEvent) {
@@ -96,4 +97,61 @@ function onEnd(event: any) {
 }
 
 
+function swipeRight() {
+    const el = document.querySelector('.swipe-card');
+    if (el) {
+        el.classList.add('animate-right');
+    }
+}
+function swipeleft() {
+    const el = document.querySelector('.swipe-card');
+    if (el) {
+        el.classList.add('animate-left');
+    }
+}
+
+
+
 </script>
+
+<style scoped>
+.swipe-enter-active,
+.swipe-leave-active {
+    transition: transform 1s;
+}
+
+.swipe-enter,
+.swipe-leave-to {
+    transform: translateX(100%);
+}
+
+.animate-right {
+    animation: swipeRight 1s forwards;
+}
+
+@keyframes swipeRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(-20%) rotate(20deg);
+    }
+}
+
+.animate-left {
+    animation: swipeLeft 1s forwards ease-out;
+}
+
+@keyframes swipeLeft {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%) translateY(-20%) rotate(-20deg);
+    }
+}
+
+
+</style>
