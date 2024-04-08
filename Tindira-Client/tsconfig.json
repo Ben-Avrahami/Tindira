@@ -10,5 +10,12 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "types": [
+      "vite/client"
+    ],
+    "allowJs": true,
+    "checkJs": false
+  },
 }
