@@ -1,0 +1,86 @@
+{
+  "TableName": "TindiraListings",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "listingId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "ownerId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "title",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "description",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "price",
+      "AttributeType": "N"
+    },
+    {
+      "AttributeName": "address",
+      "AttributeType": "M"
+    },
+    {
+      "AttributeName": "numberOfRooms",
+      "AttributeType": "N"
+    },
+    {
+      "AttributeName": "images",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "coordinates",
+      "AttributeType": "M"
+    },
+    {
+      "AttributeName": "isActive",
+      "AttributeType": "BOOL"
+    },
+    {
+      "AttributeName": "postExpireDate",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "postUploadDate",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "contractLength",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "contractStartingDate",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "contractEndDate",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "category",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "likedBy",
+      "AttributeType": "SS"
+    },
+    {
+      "AttributeName": "isAnimalFriendly",
+      "AttributeType": "BOOL"
+    },
+    {
+      "AttributeName": "parking",
+      "AttributeType": "N"
+    }
+  ],
+  "BillingMode": "PROVISIONED",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
