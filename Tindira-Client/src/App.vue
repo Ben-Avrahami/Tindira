@@ -5,13 +5,15 @@ import Toolbar from '@/components/Toolbar.vue'
 </script>
 
 <template>
+  <div class="dark:bg-gray-600 flex flex-col h-screen">
 
-  <Toolbar />
+    <Toolbar />
 
-  <main class="container mx-auto">
-    <router-view />
-  </main>
+    <main class="container mx-auto flex-1">
+      <router-view />
+    </main>
 
+  </div>
 </template>
 
 <style scoped></style>
