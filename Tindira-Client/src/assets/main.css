@@ -1,37 +1,32 @@
-@import './base.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+
+:root {
+  --primary-50: 255, 241, 242;
+  --primary-100: 255, 228, 230;
+  --primary-200: 254, 205, 211;
+  --primary-300: 253, 164, 175;
+  --primary-400: 251, 113, 133;
+  --primary-500: 244, 63, 94; /* Base shade */
+  --primary-600: 225, 29, 72;
+  --primary-700: 190, 18, 60;
+  --primary-800: 159, 18, 57;
+  --primary-900: 136, 19, 55;
+  --primary-950: 216, 73, 0;
+
+
+    --surface-0: 255, 255, 255; /* White */
+    --surface-50: 248, 250, 252;
+    --surface-100: 241, 245, 249;
+    --surface-200: 226, 232, 240;
+    --surface-300: 203, 213, 225;
+    --surface-400: 148, 163, 184;
+    --surface-500: 100, 116, 139;
+    --surface-600: 71, 85, 105;
+    --surface-700: 51, 65, 85;
+    --surface-800: 30, 41, 59;
+    --surface-900: 15, 23, 42;
+    --surface-950: 216, 73, 0; /* Darker shade */
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-}
