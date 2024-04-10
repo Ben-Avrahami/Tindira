@@ -10,8 +10,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user1/image1.jpg",
     "profileDescription": "I'm John Doe, a lessor interested in renting out properties.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -27,8 +33,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user2/image1.jpg",
     "profileDescription": "I'm Jane Smith, a renter looking for properties to rent.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -44,8 +56,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user3/image1.jpg",
     "profileDescription": "I'm Alice Jones, a lessor with properties available for rent.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -61,8 +79,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user4/image1.jpg",
     "profileDescription": "I'm Bob White, a renter searching for a new apartment.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -78,8 +102,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user5/image1.jpg",
     "profileDescription": "I'm Emma Davis, an admin overseeing property listings.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -95,8 +125,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user6/image1.jpg",
     "profileDescription": "I'm Charlie Brown, a renter interested in finding a cozy apartment.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -112,8 +148,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user7/image1.jpg",
     "profileDescription": "I'm Sarah Jones, a lessor offering various rental properties.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -129,8 +171,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user8/image1.jpg",
     "profileDescription": "I'm Mike Smith, a renter looking for a spacious apartment.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -146,8 +194,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user9/image1.jpg",
     "profileDescription": "I'm Lisa White, a lessor with beautiful rental properties.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -163,8 +217,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user10/image1.jpg",
     "profileDescription": "I'm Peter Davis, a renter looking for a comfortable apartment.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -180,8 +240,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user11/image1.jpg",
     "profileDescription": "I'm Amy Johnson, an admin responsible for managing user accounts.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
@@ -197,8 +263,14 @@
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user12/image1.jpg",
     "profileDescription": "I'm Tom Brown, a renter seeking a modern apartment.",
     "history": {
-      "rent": [],
-      "sublet": []
+      "rent": {
+        "liked": [],
+        "unliked": []
+      },
+      "sublet": {
+        "liked": [],
+        "unliked": []
+      }
     },
     "reviews": {},
     "listings": []
