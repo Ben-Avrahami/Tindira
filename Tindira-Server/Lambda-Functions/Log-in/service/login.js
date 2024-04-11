@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 
 const { error } = require("console");
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const userTable = "jin-users";
+const userTable = "jin-TindiraUsers";
 const auth = require("../utils/auth");
 
 async function login(user) {
