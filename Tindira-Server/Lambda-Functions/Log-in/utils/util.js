@@ -9,4 +9,4 @@ function buildResponse(statusCode, body) {
   };
 }
 
-module.exports.buildResponse;
+module.exports.buildResponse = buildResponse;

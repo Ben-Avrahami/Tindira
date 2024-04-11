@@ -7,14 +7,14 @@ const util = require("../utils/util");
 const bcrypt = require("bcryptjs");
 
 const { error } = require("console");
-const dynamoDB = new AWS.dynamoDB.DocumentationClient();
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const userTable = "jin-users";
 const auth = require("../utils/auth");
 
 async function login(user) {
   const username = user.username;
   const password = user.password;
-  if (!user || !username || password) {
+  if (!user || !username || !password) {
     return util.buildResponse(401, {
       message: "username and password are required",
     });
@@ -46,7 +46,7 @@ async function login(user) {
 async function getUser(username) {
   const params = {
     TableName: userTable,
-    key: {
+    Key: {
       username: username,
     },
   };

@@ -1,8 +1,6 @@
 const registerService = require("./service/register");
-
 const loginService = require("./service/login");
-
-const verifyrService = require("./service/verify");
+const verifyService = require("./service/verify");
 const util = require("./utils/util");
 
 const healthPath = "/health";
@@ -30,7 +28,7 @@ exports.handler = async (event) => {
 
     case event.httpMethod === "POST" && event.path === verifyPath:
       const verifyBody = JSON.parse(event.body);
-      response = verifyrService.verify(verifyBody);
+      response = verifyService.verify(verifyBody);
       break;
     default:
       response = util.buildResponse(404, "404 Not Found");

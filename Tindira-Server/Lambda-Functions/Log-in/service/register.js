@@ -7,14 +7,14 @@ const util = require("../utils/util");
 const bcrypt = require("bcryptjs");
 
 const { error } = require("console");
-const dynamoDB = new AWS.dynamoDB.DocumentationClient();
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 const userTable = "jin-users";
 
 async function register(userInfo) {
   const name = userInfo.name;
   const email = userInfo.email;
   const username = userInfo.username;
-  const password = userInfo.passwordme;
+  const password = userInfo.password;
 
   if (!name || !email || !username || !password) {
     return util.buildResponse(401, {
@@ -28,12 +28,12 @@ async function register(userInfo) {
         "Username already exusts in our database. Please choose a different username ",
     });
   }
-  const encryptesPassword = bcrypt.hashSync(password.trim(), 10);
+  const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
   const user = {
     name: name,
     email: email,
     username: username.toLowerCase().trim(),
-    password: encryptesPassword,
+    password: encryptedPassword,
   };
 
   const saveUserResponse = await saveUser(user);
@@ -48,11 +48,11 @@ async function register(userInfo) {
 async function getUser(username) {
   const params = {
     TableName: userTable,
-    key: {
+    Key: {
       username: username,
     },
   };
-  return await dynamoDB
+  return await dynamodb
     .get(params)
     .promise()
     .then(
@@ -70,14 +70,17 @@ async function saveUser(user) {
     TableName: userTable,
     Item: user,
   };
-  return await dynamoDB.put(params).promise.then(
-    () => {
-      return true;
-    },
-    (error) => {
-      console.error("There is an error saving user", error);
-    }
-  );
+  return await dynamodb
+    .put(params)
+    .promise()
+    .then(
+      () => {
+        return true;
+      },
+      (error) => {
+        console.error("There is an error saving user", error);
+      }
+    );
 }
 
 module.exports.register = register;
