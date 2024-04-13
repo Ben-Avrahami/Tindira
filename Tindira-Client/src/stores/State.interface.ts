@@ -1,3 +1,3 @@
 export interface State {
-    isLoading: boolean;
+  isLoading: boolean
 }

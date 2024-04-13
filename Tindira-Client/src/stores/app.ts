@@ -6,10 +6,6 @@ export const useAppStore = defineStore('app', {
   state: (): State => ({
     isLoading: false
   }),
-  getters: {
-  },
-  actions: {
-
-
-  }
+  getters: {},
+  actions: {}
 })
