@@ -3,16 +3,26 @@
     <transition name="swipe">
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
-          <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
+
+          <Galleria v-if="isBigScreen" :value="links" :numVisible="3" :circular="true" :showThumbnails="false"
+            :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true" :fullscreen="true">
+            <template #item="slotProps">
+            
+                <div class="relative mx-auto">
+                  <Image alt="Apartment images" class="w-full border-round" :src="slotProps.item.src" />
+                </div>
+              
+            </template>
+            <template #thumbnail="slotProps">
+              <img :src="slotProps.item.src" alt="Apartment images" style="display: block" />
+            </template>
+          </Galleria>
+
+          <Carousel v-else :value="links" :numVisible="1" :numScroll="1" circular>
             <template #item="slotProps">
               <div class="border-1 surface-border border-round m-2 p-3">
                 <div class="relative mx-auto">
-                  <Image
-                    alt="Apartment images"
-                    class="w-full border-round"
-                    :src="slotProps.data.src"
-                    preview
-                  />
+                  <Image alt="Apartment images" class="w-full border-round" :src="slotProps.data.src" preview />
                 </div>
               </div>
             </template>
@@ -56,12 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
-import Card from 'primevue/card'
-import Carousel from 'primevue/carousel'
-import Button from 'primevue/Button'
-import Image from 'primevue/image'
+
+import { computed, ref } from "vue";
+import { Icon } from '@iconify/vue';
+import Card from 'primevue/card';
+import Carousel from 'primevue/carousel';
+import Galleria from 'primevue/galleria';
+import Button from 'primevue/Button';
+import Image from 'primevue/image';
 import { VueDraggable } from 'vue-draggable-plus'
 
 const links = ref([
@@ -82,6 +94,8 @@ const links = ref([
     alt: 'Apartment Image 4'
   }
 ])
+
+const isBigScreen = computed(() => window.innerWidth > 768);
 
 let startingX = 0
 let sensitivity = 50
