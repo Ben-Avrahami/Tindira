@@ -238,7 +238,7 @@ export default {
             'inline-flex justify-center items-center overflow-hidden',
 
             // Appearance
-            'bg-transparent text-red-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
+            'bg-transparent text-primary-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
             {
                 'opacity-0 group-hover:opacity-100': parent.props.showItemNavigatorsOnHover
             },
@@ -269,7 +269,7 @@ export default {
             'inline-flex justify-center items-center overflow-hidden',
 
             // Appearance
-            'bg-transparent text-red-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
+            'bg-transparent text-primary-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
             {
                 'opacity-0 group-hover:opacity-100': parent.props.showItemNavigatorsOnHover
             },
@@ -291,7 +291,7 @@ export default {
             'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
 
             // Z-Index
-            'z-50'
+            'z-10'
         ]
     }),
     caption: {
