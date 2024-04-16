@@ -35,6 +35,9 @@ class _API {
         let response = await this.service.get("/health");
         return response;
     }
+
+    //dummy method to check connection to backend
+    //to be removed later
     async checkLogin() {
         let response = await this.service.post("/login", {
             username: "galben",

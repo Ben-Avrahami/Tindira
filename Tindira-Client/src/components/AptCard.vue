@@ -134,7 +134,7 @@ function onStart(event: any) {
 }
 
 async function swipe(isLike: boolean) {
-  console.log(await API.checkHealth());
+  console.log((await API.checkLogin()).data);
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', () => {
     el!.classList.remove('animate-right')
