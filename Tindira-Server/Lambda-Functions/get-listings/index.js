@@ -5,23 +5,6 @@ const {
   convertFiltersToLowercase,
 } = require("./utils");
 
-async function getUserHistory(username) {
-  const params = {
-    TableName: "TindiraUsers",
-    Key: {
-      username: username.toLowerCase(),
-    },
-  };
-
-  try {
-    const data = await dynamodb.get(params).promise();
-    return data.Item.history || {};
-  } catch (error) {
-    console.error("Error fetching user history:", error);
-    throw error;
-  }
-}
-
 exports.handler = async (event, context) => {
   try {
     const { username, amount, category, filters } = event.queryStringParameters;
@@ -53,17 +36,3 @@ exports.handler = async (event, context) => {
     };
   }
 };
-
-// Function to filter out listings that are in user's history
-function filterListingsByUserHistory(listings, userHistory) {
-  const likedListings = Object.values(userHistory).reduce(
-    (acc, categoryHistory) => {
-      return acc.concat(categoryHistory.liked);
-    },
-    []
-  );
-
-  return listings.filter(
-    (listing) => !likedListings.includes(listing.listingId)
-  );
-}
