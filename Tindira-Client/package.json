@@ -16,6 +16,7 @@
   "dependencies": {
     "@vueuse/core": "^10.9.0",
     "aos": "^2.3.4",
+    "axios": "^1.6.8",
     "pinia": "^2.1.7",
     "primevue": "^3.51.0",
     "vue": "^3.4.21",

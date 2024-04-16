@@ -7,11 +7,11 @@
           <Galleria v-if="isBigScreen" :value="links" :numVisible="3" :circular="true" :showThumbnails="false"
             :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true" :fullscreen="true">
             <template #item="slotProps">
-            
-                <div class="relative mx-auto">
-                  <Image alt="Apartment images" class="w-full border-round" :src="slotProps.item.src" />
-                </div>
-              
+
+              <div class="relative mx-auto">
+                <Image alt="Apartment images" class="w-full border-round" :src="slotProps.item.src" />
+              </div>
+
             </template>
             <template #thumbnail="slotProps">
               <img :src="slotProps.item.src" alt="Apartment images" style="display: block" />
@@ -75,6 +75,7 @@ import Galleria from 'primevue/galleria';
 import Button from 'primevue/Button';
 import Image from 'primevue/image';
 import { VueDraggable } from 'vue-draggable-plus'
+import API from "@/api";
 
 const links = ref([
   {
@@ -132,7 +133,8 @@ function onStart(event: any) {
   console.log('starting x is ', startingX)
 }
 
-function swipe(isLike: boolean) {
+async function swipe(isLike: boolean) {
+  console.log(await API.checkHealth());
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', () => {
     el!.classList.remove('animate-right')
