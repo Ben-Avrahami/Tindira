@@ -7,7 +7,7 @@ class _API {
     service: AxiosInstance = axios;
     constructor() {
         let service = axios.create({
-            baseURL: 'https://aa94or46cc.execute-api.us-east-2.amazonaws.com/prod',
+            baseURL: import.meta.env.VITE_API_BASE_URL,
             headers: {
                 "Content-Type": "application/json",
                 "x-api-key": import.meta.env.VITE_X_API_KEY
