@@ -7,9 +7,11 @@ class _API {
     service: AxiosInstance = axios;
     constructor() {
         let service = axios.create({
+            //@ts-ignore
             baseURL: import.meta.env.VITE_API_BASE_URL,
             headers: {
                 "Content-Type": "application/json",
+                //@ts-ignore
                 "x-api-key": import.meta.env.VITE_X_API_KEY
             }
         });
