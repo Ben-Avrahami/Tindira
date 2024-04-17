@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from "axios";
+import Message from "primevue/message";
 
 ////////////////////////////////////////////////
 //                API SECTION
@@ -13,7 +14,7 @@ class _API {
                 "Content-Type": "application/json",
                 //@ts-ignore
                 "x-api-key": import.meta.env.VITE_X_API_KEY
-            }
+            },
         });
         this.service = service;
     }
@@ -36,6 +37,11 @@ class _API {
     async checkHealth() {
         let response = await this.service.get("/health");
         return response;
+    }
+
+    async getNextListings(amount: number, category: string, filters: any, username: string) {
+        let response = await this.service.get(`/listings/getNext?username=${username}&amount=${amount.toString()}&category=${category}`);
+        return response.data;
     }
 
     //dummy method to check connection to backend
