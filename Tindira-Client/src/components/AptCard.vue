@@ -31,7 +31,8 @@
         </template>
 
         <template #title>
-          <div class="drag-area">{{ nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to take a break' }}
+          <div class="drag-area">{{ nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to take a break'
+            }}
           </div>
         </template>
         <template #subtitle>
@@ -69,7 +70,7 @@
 
 <script setup lang="ts">
 
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Icon } from '@iconify/vue';
 import Card from 'primevue/card';
 import Carousel from 'primevue/carousel';
@@ -124,7 +125,7 @@ function onStart(event: any) {
   console.log('starting x is ', startingX)
 }
 
-async function swipe(isLike: boolean) {
+onMounted(() => {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
     nextListingsArr.value.shift();
@@ -132,6 +133,11 @@ async function swipe(isLike: boolean) {
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
   })
+  
+})
+
+async function swipe(isLike: boolean) {
+  const el = document.querySelector('.swipe-card')
   if (el) {
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
