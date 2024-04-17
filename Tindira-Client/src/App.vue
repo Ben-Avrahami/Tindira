@@ -8,7 +8,9 @@ import Toolbar from '@/components/Toolbar.vue'
     <Toolbar />
 
     <main class="container mx-auto flex-1">
-      <router-view />
+      <Suspense>
+        <router-view />
+      </Suspense>
     </main>
   </div>
 </template>
