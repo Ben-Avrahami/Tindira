@@ -7,7 +7,8 @@ const {
 
 exports.handler = async (event, context) => {
   try {
-    const { username, amount, category, filters } = event.queryStringParameters;
+    const { username, amount, category, filters, listingId } =
+      event.queryStringParameters;
 
     const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
@@ -20,7 +21,14 @@ exports.handler = async (event, context) => {
     const listings = await queryListings(lowerCaseCategory, lowerCaseFilters);
 
     // Filter out listings that are in user's history
-    const filteredListings = filterListingsByUserHistory(listings, userHistory);
+    let filteredListings = filterListingsByUserHistory(listings, userHistory);
+
+    // Exclude listing with the provided listingId
+    if (listingId) {
+      filteredListings = filteredListings.filter(
+        (listing) => listing.listingId !== listingId
+      );
+    }
 
     const nextListings = filteredListings.slice(0, amount);
 
@@ -30,14 +38,12 @@ exports.handler = async (event, context) => {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify(nextListings),
     };
   } catch (error) {
     console.error("Error:", error);
     return {
       statusCode: 500,
-      statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
