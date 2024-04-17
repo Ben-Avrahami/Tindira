@@ -8,7 +8,7 @@ async function queryListings(category, filters, listingId) {
     ExpressionAttributeNames: {
       "#category": "category",
       "#isActive": "isActive",
-      "#listingId": "listingId", // Add this line
+      "#listingId": "listingId",
     },
     ExpressionAttributeValues: {
       ":category": category.toLowerCase(),

@@ -7,7 +7,8 @@ const {
 
 exports.handler = async (event, context) => {
   try {
-    const { username, amount, category, filters } = event.queryStringParameters;
+    const { username, amount, category, listingId, filters } =
+      event.queryStringParameters;
 
     const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
@@ -17,7 +18,11 @@ exports.handler = async (event, context) => {
 
     const userHistory = await getUserHistory(lowerCaseUserName);
 
-    const listings = await queryListings(lowerCaseCategory, lowerCaseFilters);
+    const listings = await queryListings(
+      lowerCaseCategory,
+      lowerCaseFilters,
+      listingId
+    );
 
     // Filter out listings that are in user's history
     let filteredListings = filterListingsByUserHistory(listings, userHistory);
