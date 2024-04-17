@@ -1,14 +1,14 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function queryListings(category, filters) {
+async function queryListings(category, filters, listingId) {
   const params = {
     TableName: "TindiraListings",
     FilterExpression: "#category = :category and #isActive = :isActive",
     ExpressionAttributeNames: {
       "#category": "category",
       "#isActive": "isActive",
-      "#listingId": "listingId",
+      "#listingId": "listingId", // Add this line
     },
     ExpressionAttributeValues: {
       ":category": category.toLowerCase(),

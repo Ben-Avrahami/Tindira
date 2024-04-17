@@ -7,8 +7,7 @@ const {
 
 exports.handler = async (event, context) => {
   try {
-    const { username, amount, category, filters, listingId } =
-      event.queryStringParameters;
+    const { username, amount, category, filters } = event.queryStringParameters;
 
     const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
