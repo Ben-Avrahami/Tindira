@@ -23,13 +23,6 @@ exports.handler = async (event, context) => {
     // Filter out listings that are in user's history
     let filteredListings = filterListingsByUserHistory(listings, userHistory);
 
-    // Exclude listing with the provided listingId
-    if (listingId) {
-      filteredListings = filteredListings.filter(
-        (listing) => listing.listingId !== listingId
-      );
-    }
-
     const nextListings = filteredListings.slice(0, amount);
 
     return {

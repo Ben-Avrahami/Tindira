@@ -8,6 +8,7 @@ async function queryListings(category, filters) {
     ExpressionAttributeNames: {
       "#category": "category",
       "#isActive": "isActive",
+      "#listingId": "listingId",
     },
     ExpressionAttributeValues: {
       ":category": category.toLowerCase(),
@@ -20,6 +21,12 @@ async function queryListings(category, filters) {
     params.FilterExpression += ` and #${key} = :${key}`;
     params.ExpressionAttributeNames[`#${key}`] = key.toLowerCase();
     params.ExpressionAttributeValues[`:${key}`] = filters[key];
+  }
+
+  // Add a condition to filter by listingId if provided
+  if (listingId) {
+    params.FilterExpression += " and #listingId <> :listingId";
+    params.ExpressionAttributeValues[":listingId"] = listingId;
   }
 
   try {
