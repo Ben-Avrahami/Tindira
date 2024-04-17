@@ -4,7 +4,7 @@
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
 
-          <Galleria v-if="isBigScreen" :value="currentListing.images" :numVisible="3" :circular="true"
+          <Galleria v-if="isBigScreen" :value="currentListing?.images" :numVisible="3" :circular="true"
             :showThumbnails="false" :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true"
             :fullscreen="true">
             <template #item="slotProps">
@@ -19,7 +19,7 @@
             </template>
           </Galleria>
 
-          <Carousel v-else :value="currentListing.images" :numVisible="1" :numScroll="1" circular>
+          <Carousel v-else :value="currentListing?.images" :numVisible="1" :numScroll="1" circular>
             <template #item="slotProps">
               <div class="border-1 surface-border border-round m-2 p-3">
                 <div class="relative mx-auto">
@@ -127,6 +127,7 @@ function onStart(event: any) {
 async function swipe(isLike: boolean) {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
+    nextListingsArr.value.shift();
     await setNextListing()
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
@@ -137,7 +138,7 @@ async function swipe(isLike: boolean) {
 }
 
 async function setNextListing() {
-  currentListing.value = nextListingsArr.value.shift()
+  currentListing.value = nextListingsArr.value[0]
   console.log("currentListing", currentListing.value)
   const nextListing = await API.getNextListings(1, "rent", {}, "galben");
   nextListingsArr.value.push(...nextListing);
