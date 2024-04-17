@@ -13,9 +13,7 @@ exports.handler = async (event, context) => {
     const lowerCaseCategory = category.toLowerCase();
     let lowerCaseFilters = {};
 
-    if (filters && Object.keys(filters).length > 0) {
-      lowerCaseFilters = convertFiltersToLowercase(filters);
-    }
+    lowerCaseFilters = convertFiltersToLowercase(filters);
 
     const userHistory = await getUserHistory(lowerCaseUserName);
 
@@ -24,10 +22,8 @@ exports.handler = async (event, context) => {
     // Filter out listings that are in user's history
     const filteredListings = filterListingsByUserHistory(listings, userHistory);
 
-    // Return specified amount of listings
     const nextListings = filteredListings.slice(0, amount);
 
-    // Return response
     return {
       statusCode: 200,
       headers: {

@@ -61,10 +61,7 @@ function filterListingsByUserHistory(listings, userHistory) {
   );
 }
 
-// Function to convert filters object to lowercase
 function convertFiltersToLowercase(filters) {
-  // Implement your logic to convert all strings in the filters object to lowercase
-  // For demonstration purposes, let's assume it recursively converts all strings to lowercase
   if (typeof filters === "object") {
     for (const key in filters) {
       if (typeof filters[key] === "string") {
