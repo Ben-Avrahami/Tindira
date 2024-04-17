@@ -11,7 +11,11 @@ exports.handler = async (event, context) => {
 
     const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
-    const lowerCaseFilters = convertFiltersToLowercase(filters);
+    let lowerCaseFilters = {};
+
+    if (filters && Object.keys(filters).length > 0) {
+      lowerCaseFilters = convertFiltersToLowercase(filters);
+    }
 
     const userHistory = await getUserHistory(lowerCaseUserName);
 
@@ -26,12 +30,22 @@ exports.handler = async (event, context) => {
     // Return response
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+
       body: JSON.stringify(nextListings),
     };
   } catch (error) {
     console.error("Error:", error);
     return {
       statusCode: 500,
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ message: "Internal Server Error" }),
     };
   }

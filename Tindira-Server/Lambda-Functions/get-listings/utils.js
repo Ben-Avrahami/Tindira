@@ -16,12 +16,10 @@ async function queryListings(category, filters) {
   };
 
   // Add additional filter expressions based on filters provided
-  if (Object.keys(filters).length > 0) {
-    for (const key in filters) {
-      params.FilterExpression += ` and #${key} = :${key}`;
-      params.ExpressionAttributeNames[`#${key}`] = key.toLowerCase();
-      params.ExpressionAttributeValues[`:${key}`] = filters[key];
-    }
+  for (const key in filters) {
+    params.FilterExpression += ` and #${key} = :${key}`;
+    params.ExpressionAttributeNames[`#${key}`] = key.toLowerCase();
+    params.ExpressionAttributeValues[`:${key}`] = filters[key];
   }
 
   try {
