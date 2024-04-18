@@ -12,8 +12,8 @@ interface Address {
   export interface Listing {
     likedBy: string[];
     listingId: string;
-    postExpireDate: string;
-    contractEndDate: string;
+    postExpireDate: Date;
+    contractEndDate: Date;
     numberOfRooms: number;
     address: Address;
     parking: number;

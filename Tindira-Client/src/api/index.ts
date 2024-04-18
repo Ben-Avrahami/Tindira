@@ -39,8 +39,9 @@ class _API {
         return response;
     }
 
-    async getNextListings(amount: number, category: string, filters: any, username: string) {
-        let response = await this.service.get(`/listings/getNext?username=${username}&amount=${amount.toString()}&category=${category}`);
+    async getNextListings(amount: number, category: string, filters: any, username: string, ignoreIds: string[]) {
+        let response = await this.service.get(`/listings/getNext?username=${username}&amount=${amount.toString()}&category=${category}&listingId=0`);
+        console.log(response)
         return response.data;
     }
 
