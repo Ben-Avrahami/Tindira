@@ -31,8 +31,7 @@
         </template>
 
         <template #title>
-          <div class="drag-area">{{ userStore.nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to take a break'
-            }}
+          <div class="drag-area">{{ userStore.nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to takea break' }}
           </div>
         </template>
         <template #subtitle>
@@ -78,12 +77,11 @@ import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { VueDraggable } from 'vue-draggable-plus'
 import Button from 'primevue/Button';
-import API from "@/api";
 
 import { useAppStore } from '../stores/app'
 
 const userStore = useAppStore()
-await setNextListing();
+await userStore.getNextListing(1);
 
 
 const isBigScreen = computed(() => window.innerWidth > 768);
@@ -129,11 +127,11 @@ onMounted(() => {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
     userStore.nextListingsArr.shift();
-    await setNextListing()
+    await userStore.getNextListing(1);
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
   })
-  
+
 })
 
 async function swipe(isLike: boolean) {
@@ -143,10 +141,6 @@ async function swipe(isLike: boolean) {
   }
 }
 
-async function setNextListing() {
-  const nextListing = await API.getNextListings(1, "rent", {}, "galben",[]);
-  userStore.nextListingsArr.push(...nextListing);
-}
 </script>
 
 <style scoped>

@@ -1,27 +1,26 @@
 <template>
     <div class="flex items-center space-x-4">
-        <Chip label="Price" class="flex-grow" />
+        <Chip label="Max Price/Month" class="flex-grow" />
         <InputNumber v-model="price" inputId="currency-il" mode="currency" currency="ILS" locale="en-US"
             class="flex-grow" />
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="City" class="flex-grow" />
-        <Dropdown v-model="selectedCity" filter :options="citiesInIsrael || []" placeholder="Choose a Category"
-            class="flex-grow" />
+        <Dropdown v-model="selectedFilters.selectedCity" filter :options="citiesInIsrael || []"
+            placeholder="Choose a Category" class="flex-grow" />
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Category" class="flex-grow" />
-        <Dropdown v-model="selectedCategory" :options="categoryOptions" placeholder="Choose a Category"
+        <Dropdown v-model="selectedFilters.selectedCategory" :options="categoryOptions" placeholder="Choose a Category"
             class="flex-grow" />
     </div>
     <div class="flex items-center space-x-4">
-        <Chip label="Animel Friendly" class="flex-grow" />
-        <Dropdown v-model="selectedCategory" :options="categoryOptions" placeholder="Choose a Category"
-            class="flex-grow" />
+        <Chip label="Animal Friendly" />
+        <Checkbox v-model="selectedFilters.isAnimalFriendly" :binary="true" />
     </div>
     <div class="flex items-center space-x-4">
-        <Chip label="Number of Parkings" class="flex-grow" />
-        <InputNumber v-model="parkings" showButtons buttonLayout="vertical" :min="0" :max="10" class="flex-grow">
+        <Chip label="Min Parkings" />
+        <InputNumber v-model="selectedFilters.parkings" showButtons buttonLayout="vertical" :min="0" :max="10">
             <template #incrementbuttonicon>
                 <Icon icon="mdi:plus"></Icon>
             </template>
@@ -30,26 +29,60 @@
             </template>
         </InputNumber>
     </div>
+    <div class="flex items-center space-x-4">
+        <Chip label="Min Rooms" />
+        <InputNumber v-model="selectedFilters.numberOfRooms" showButtons buttonLayout="vertical" :min="0" :max="10">
+            <template #incrementbuttonicon>
+                <Icon icon="mdi:plus"></Icon>
+            </template>
+            <template #decrementbuttonicon>
+                <Icon icon="mdi:minus"></Icon>
+            </template>
+        </InputNumber>
+    </div>
+    <div class="flex items-center space-x-4">
+        <Chip label="Dates" />
+
+        <Calendar v-model="selectedFilters.dates" selectionMode="range" :manualInput="false" dateFormat="dd/mm/yy" />
+    </div>
+<!-- 
+    <Button text rounded label="Filters" @click="showFilters()">
+        <template #icon>
+            <Icon icon="mdi:content-save"></Icon>
+        </template>
+    </Button> -->
 
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import ProgressSpinner from 'primevue/progressspinner'
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
+import Button from 'primevue/Button';
 import { useAppStore } from '../stores/app'
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import { getCities } from '@/api/GetCitiesApi';
+import Checkbox from 'primevue/checkbox';
+import Calendar from 'primevue/calendar';
 
 const userStore = useAppStore()
 
+const selectedFilters = reactive({
+    dates: null,
+    price: null,
+    parkings: 0,
+    numberOfRooms: 0,
+    isAnimalFriendly: false,
+    selectedCategory: "sublet",
+    selectedCity: null,
+})
 
-let selectedFilters = ref()
+let dates = ref()
 let price = ref()
-let parkings = ref()
+
 const categoryOptions = ref([
     "sublet",
     "rent",
@@ -59,13 +92,8 @@ const categoryOptions = ref([
 ])
 let citiesInIsrael = ref(await getCities())
 
-const selectedCategory = ref("sublet")
-const selectedCity = ref()
 
 
-function setPlace() {
-    console.log("Place set")
-}
 
 
 

@@ -1,3 +1,4 @@
+import type { SelectedFilters } from "@/stores/State.interface";
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from "axios";
 import Message from "primevue/message";
 
@@ -39,8 +40,8 @@ class _API {
         return response;
     }
 
-    async getNextListings(amount: number, category: string, filters: any, username: string, ignoreIds: string[]) {
-        let response = await this.service.get(`/listings/getNext?username=${username}&amount=${amount.toString()}&category=${category}&listingId=0`);
+    async getNextListings(amount: number, filters: SelectedFilters, username: string, ignoreIds: string[]) {
+        let response = await this.service.get(`/listings/getNext?username=${username}&amount=${amount.toString()}&category=${filters.category}&listingId=0`);
         console.log(response)
         return response.data;
     }

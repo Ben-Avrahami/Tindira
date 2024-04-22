@@ -51,9 +51,5 @@ const categoryOptions = ref([
 
 const selectedCategory = ref("sublet")
 
-watch(selectedCategory, (newCategory) => {
-  userStore.changeCategory(newCategory as "sublet" | "rent" | "animel sublet" | "switch" | "buy");
-});
-
 
 </script>
