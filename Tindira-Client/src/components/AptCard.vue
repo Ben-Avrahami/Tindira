@@ -81,7 +81,6 @@ import Button from 'primevue/Button';
 import { useAppStore } from '../stores/app'
 
 const userStore = useAppStore()
-await userStore.getNextListing(1);
 
 
 const isBigScreen = computed(() => window.innerWidth > 768);
