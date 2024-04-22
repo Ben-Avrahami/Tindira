@@ -11,7 +11,7 @@
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Category" class="flex-grow" />
-        <Dropdown v-model="selectedFilters.selectedCategory" :options="categoryOptions" placeholder="Choose a Category"
+        <Dropdown v-model="selectedFilters.category" :options="categoryOptions" placeholder="Choose a Category"
             class="flex-grow" />
     </div>
     <div class="flex items-center space-x-4">
@@ -45,17 +45,17 @@
 
         <Calendar v-model="selectedFilters.dates" selectionMode="range" :manualInput="false" dateFormat="dd/mm/yy" />
     </div>
-<!-- 
-    <Button text rounded label="Filters" @click="showFilters()">
+
+    <Button text rounded @click="userStore.updateFilters(selectedFilters); closeDialog()">
         <template #icon>
             <Icon icon="mdi:content-save"></Icon>
         </template>
-    </Button> -->
+    </Button>
 
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, inject } from 'vue'
 import { Icon } from '@iconify/vue'
 import ProgressSpinner from 'primevue/progressspinner'
 import Dropdown from 'primevue/dropdown';
@@ -70,15 +70,7 @@ import Calendar from 'primevue/calendar';
 
 const userStore = useAppStore()
 
-const selectedFilters = reactive({
-    dates: null,
-    price: null,
-    parkings: 0,
-    numberOfRooms: 0,
-    isAnimalFriendly: false,
-    selectedCategory: "sublet",
-    selectedCity: null,
-})
+const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 let dates = ref()
 let price = ref()
@@ -92,6 +84,11 @@ const categoryOptions = ref([
 ])
 let citiesInIsrael = ref(await getCities())
 
+const dialogRef = inject('dialogRef');
+
+function closeDialog() {
+    (dialogRef as any).value.close();
+}
 
 
 
