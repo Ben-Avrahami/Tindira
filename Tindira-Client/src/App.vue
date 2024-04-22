@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Toolbar from '@/components/Toolbar.vue'
+import DynamicDialog from 'primevue/dynamicdialog';
 </script>
 
 <template>
@@ -10,6 +11,9 @@ import Toolbar from '@/components/Toolbar.vue'
     <main class="container mx-auto flex-1">
       <Suspense>
         <router-view />
+      </Suspense>
+      <Suspense>
+        <DynamicDialog />
       </Suspense>
     </main>
   </div>

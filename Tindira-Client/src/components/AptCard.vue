@@ -4,7 +4,7 @@
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
 
-          <Galleria v-if="isBigScreen" :value="nextListingsArr[0]?.images" :numVisible="3" :circular="true"
+          <Galleria v-if="isBigScreen" :value="userStore.nextListingsArr[0]?.images" :numVisible="3" :circular="true"
             :showThumbnails="false" :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true"
             :fullscreen="true">
             <template #item="slotProps">
@@ -19,7 +19,7 @@
             </template>
           </Galleria>
 
-          <Carousel v-else :value="nextListingsArr[0]?.images" :numVisible="1" :numScroll="1" circular>
+          <Carousel v-else :value="userStore.nextListingsArr[0]?.images" :numVisible="1" :numScroll="1" circular>
             <template #item="slotProps">
               <div class="border-1 surface-border border-round m-2 p-3">
                 <div class="relative mx-auto">
@@ -31,7 +31,7 @@
         </template>
 
         <template #title>
-          <div class="drag-area">{{ nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to take a break'
+          <div class="drag-area">{{ userStore.nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to take a break'
             }}
           </div>
         </template>
@@ -46,7 +46,7 @@
           </div>
         </template>
         <template #content>
-          <p class="drag-area m-0">{{ nextListingsArr[0]?.description }}</p>
+          <p class="drag-area m-0">{{ userStore.nextListingsArr[0]?.description }}</p>
         </template>
         <template #footer>
           <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
@@ -75,16 +75,16 @@ import { Icon } from '@iconify/vue';
 import Card from 'primevue/card';
 import Carousel from 'primevue/carousel';
 import Galleria from 'primevue/galleria';
-import Button from 'primevue/Button';
 import Image from 'primevue/image';
 import { VueDraggable } from 'vue-draggable-plus'
+import Button from 'primevue/Button';
 import API from "@/api";
-import type { Listing } from "@/interfaces/listing.interface";
 
-// let currentListing = ref<Listing>()
-let nextListingsArr = ref<Listing[]>(await API.getNextListings(5, "rent", {}, "galben"))
+import { useAppStore } from '../stores/app'
+
+const userStore = useAppStore()
 await setNextListing();
-// console.log(currentListing.value)
+
 
 const isBigScreen = computed(() => window.innerWidth > 768);
 
@@ -128,7 +128,7 @@ function onStart(event: any) {
 onMounted(() => {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
-    nextListingsArr.value.shift();
+    userStore.nextListingsArr.shift();
     await setNextListing()
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
@@ -144,11 +144,8 @@ async function swipe(isLike: boolean) {
 }
 
 async function setNextListing() {
-  // currentListing.value = nextListingsArr.value[0]
-  // console.log("currentListing", currentListing.value)
-  const nextListing = await API.getNextListings(1, "rent", {}, "galben");
-  nextListingsArr.value.push(...nextListing);
-  console.log("nextArr", nextListingsArr.value)
+  const nextListing = await API.getNextListings(1, "rent", {}, "galben",[]);
+  userStore.nextListingsArr.push(...nextListing);
 }
 </script>
 
