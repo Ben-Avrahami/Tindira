@@ -67,7 +67,6 @@ import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/Button';
 import { useAppStore } from '../stores/app'
-import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import { getCities } from '@/api/GetCitiesApi';
 import Checkbox from 'primevue/checkbox';
@@ -77,8 +76,6 @@ const userStore = useAppStore()
 
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
-let dates = ref()
-let price = ref()
 
 const categoryOptions = ref([
     "sublet",

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let data = {
+const data = {
     resource_id: 'b7cf8f14-64a2-4b33-8d4b-edb286fdbd37',
     limit: 1500 //1272
 };
