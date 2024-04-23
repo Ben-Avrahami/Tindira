@@ -26,7 +26,7 @@ const FiltersDialog = defineAsyncComponent(() => import('@/components/FiltersDia
 const showFilters = () => {
   dialog.open(FiltersDialog, {
     props: {
-      header: 'Filters Dialog',
+      header: 'Filters',
       style: {
         width: '95vw',
       },

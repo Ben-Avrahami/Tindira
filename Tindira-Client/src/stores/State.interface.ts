@@ -10,10 +10,10 @@ export interface State {
 export interface SelectedFilters {
   category: "sublet" | "rent" | "animel sublet" | "switch" | "buy";
   dates: Date | null;
-  price: number | null;
-  parkings: number;
-  numberOfRooms: number;
+  isWholeDateRangeOnly:boolean;
+  maxPrice: number | null;
+  minNumberOfParkings: number;
+  minNumberOfRooms: number;
   isAnimalFriendly: boolean;
-  selectedCategory: string;
-  selectedCity: string | null;
+  city: string | null;
 }

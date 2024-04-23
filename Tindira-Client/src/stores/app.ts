@@ -9,12 +9,12 @@ export const useAppStore = defineStore('app', {
     SelectedFilters: {
       category: "rent",
       dates: null,
-      price: null,
-      parkings: 0,
-      numberOfRooms: 0,
+      isWholeDateRangeOnly:false,
+      maxPrice: null,
+      minNumberOfParkings: 0,
+      minNumberOfRooms: 0,
       isAnimalFriendly: false,
-      selectedCategory: "sublet",
-      selectedCity: null,
+      city: null,
     }
   }),
   getters: {},
@@ -29,8 +29,8 @@ export const useAppStore = defineStore('app', {
       this.nextListingsArr.push(...newListing);
     },
     async updateFilters(newFilters: SelectedFilters) {
-      // Check if the filters were actually changed
       if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
+        console.log("filters",JSON.stringify(newFilters))
         this.SelectedFilters = newFilters;
         this.isLoading = true;
         this.nextListingsArr = await API.getNextListings(5, newFilters, "galben", []);

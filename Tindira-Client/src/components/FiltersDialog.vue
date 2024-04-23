@@ -1,18 +1,18 @@
 <template>
     <div class="flex items-center space-x-4">
-        <Chip label="Max Price/Month" class="flex-grow" />
-        <InputNumber v-model="price" inputId="currency-il" mode="currency" currency="ILS" locale="en-US"
-            class="flex-grow" />
+        <Chip label="Max Price/Month" />
+        <InputNumber v-model="selectedFilters.maxPrice" inputId="currency-il" mode="currency" currency="ILS" locale="en-US"
+          />
     </div>
     <div class="flex items-center space-x-4">
-        <Chip label="City" class="flex-grow" />
-        <Dropdown v-model="selectedFilters.selectedCity" filter :options="citiesInIsrael || []"
-            placeholder="Choose a Category" class="flex-grow" />
+        <Chip label="City"  />
+        <Dropdown v-model="selectedFilters.city" filter :options="citiesInIsrael || []"
+            placeholder="Choose a City"  />
     </div>
     <div class="flex items-center space-x-4">
-        <Chip label="Category" class="flex-grow" />
+        <Chip label="Category"  />
         <Dropdown v-model="selectedFilters.category" :options="categoryOptions" placeholder="Choose a Category"
-            class="flex-grow" />
+            />
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Animal Friendly" />
@@ -20,7 +20,7 @@
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Min Parkings" />
-        <InputNumber v-model="selectedFilters.parkings" showButtons buttonLayout="vertical" :min="0" :max="10">
+        <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
             <template #incrementbuttonicon>
                 <Icon icon="mdi:plus"></Icon>
             </template>
@@ -31,7 +31,7 @@
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Min Rooms" />
-        <InputNumber v-model="selectedFilters.numberOfRooms" showButtons buttonLayout="vertical" :min="0" :max="10">
+        <InputNumber v-model="selectedFilters.minNumberOfRooms" showButtons :min="0" :max="10">
             <template #incrementbuttonicon>
                 <Icon icon="mdi:plus"></Icon>
             </template>
@@ -42,22 +42,27 @@
     </div>
     <div class="flex items-center space-x-4">
         <Chip label="Dates" />
-
-        <Calendar v-model="selectedFilters.dates" selectionMode="range" :manualInput="false" dateFormat="dd/mm/yy" />
+        
+        <Calendar v-model="selectedFilters.dates" selectionMode="range" showButtonBar  :manualInput="false" dateFormat="dd/mm/yy" />
     </div>
-
-    <Button text rounded @click="userStore.updateFilters(selectedFilters); closeDialog()">
-        <template #icon>
-            <Icon icon="mdi:content-save"></Icon>
-        </template>
-    </Button>
+    <div class="flex items-center space-x-4" v-if="selectedFilters.dates">
+        <Chip label="Only display aparetments that are avilable for the whole time?" />
+        <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
+    </div>
+    
+    <div class="flex items-center justify-center">
+        <Button text rounded @click="userStore.updateFilters(selectedFilters); closeDialog()">
+            <template #icon>
+                <Icon icon="mdi:content-save"></Icon>
+            </template>
+        </Button>
+    </div>
 
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, inject } from 'vue'
 import { Icon } from '@iconify/vue'
-import ProgressSpinner from 'primevue/progressspinner'
 import Dropdown from 'primevue/dropdown';
 import Chip from 'primevue/chip';
 import Button from 'primevue/Button';
