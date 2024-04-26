@@ -1,5 +1,6 @@
 <template>
   <div class="card flex justify-center">
+    <Toast />
     <Stepper v-model:activeStep="active">
       <StepperPanel>
         <template #header="{ index, clickCallback }">
@@ -8,6 +9,19 @@
         <template #content="{ nextCallback }">
           <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
             <StepperTitle title="Let's create your account!" />
+            <div class="mb-4">
+              <IconField>
+                <InputIcon>
+                  <Icon icon="mdi:phone" />
+                </InputIcon>
+                <InputMask
+                  id="phone"
+                  v-model="phone"
+                  mask="059-999-9999"
+                  placeholder="05X-XXX-XXXX"
+                />
+              </IconField>
+            </div>
             <div class="mb-4">
               <IconField>
                 <InputIcon>
@@ -25,11 +39,50 @@
               </IconField>
             </div>
             <div class="mb-4">
-              <Password v-model="password" toggleMask placeholder="Password" class="w-full" />
+              <Password v-model="password" toggleMask placeholder="Password" class="w-full">
+                <template #footer>
+                  <Divider />
+                  <p class="mt-2 p-0 mb-2">Requirements</p>
+                  <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
+                    <li
+                      :class="{
+                        'text-green-500': password && /[a-z]/.test(password)
+                      }"
+                    >
+                      At least one lowercase
+                    </li>
+                    <li
+                      :class="{
+                        'text-green-500': password && /[A-Z]/.test(password)
+                      }"
+                    >
+                      At least one uppercase
+                    </li>
+                    <li :class="{ 'text-green-500': password && /\d/.test(password) }">
+                      At least one digit
+                    </li>
+                    <li
+                      :class="{
+                        'text-green-500': password && password.length >= 8
+                      }"
+                    >
+                      Minimum 8 characters
+                    </li>
+                  </ul>
+                </template>
+              </Password>
             </div>
           </div>
           <div class="flex pt-4 justify-end">
-            <NextButton @click="nextCallback" />
+            <NextButton
+              @click="
+                (event: Event) => {
+                  if (validateBasicInfo()) {
+                    nextCallback(event)
+                  }
+                }
+              "
+            />
           </div>
         </template>
       </StepperPanel>
@@ -83,19 +136,20 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { Icon } from '@iconify/vue/dist/iconify.js'
+import { useToast } from 'primevue/usetoast'
+
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
 import StepperIcon from '@/components/signup/StepperIcon.vue'
-import { ref } from 'vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
-import { Icon } from '@iconify/vue/dist/iconify.js'
+
+const toast = useToast()
 
 const active = ref(0)
 const completed = ref(false)
 const products = ref()
-const name = ref()
-const email = ref()
-const password = ref()
 const option1 = ref(false)
 const option2 = ref(false)
 const option3 = ref(false)
@@ -106,6 +160,72 @@ const option7 = ref(false)
 const option8 = ref(false)
 const option9 = ref(false)
 const option10 = ref(false)
+
+// ==== Basic Information Panel ==== //
+
+const phone = ref()
+const name = ref()
+const email = ref()
+const password = ref()
+
+const isPhoneValid = (): boolean => {
+  return phone.value && phone.value.trim().length === 12
+}
+
+const isNameValid = (): boolean => {
+  return name.value && name.value.trim().split(/\s+/).length === 2
+}
+
+const isEmailValid = (): boolean => {
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return regex.test(email.value)
+}
+
+const isPasswordStrong = (): boolean => {
+  // At least one lowercase, one uppercase, one digit, and minimum 8 characters
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&~]{8,}$/
+  return regex.test(password.value)
+}
+
+const validateBasicInfo = (): boolean => {
+  if (!isPhoneValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Phone Number',
+      detail: 'Please enter a valid phone number',
+      life: 3000
+    })
+    return false
+  }
+  if (!isNameValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Name',
+      detail: 'Please enter your full name',
+      life: 3000
+    })
+    return false
+  }
+  if (!isEmailValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Email',
+      detail: 'Please enter a valid email address',
+      life: 3000
+    })
+    return false
+  }
+  if (!isPasswordStrong()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Weak Password',
+      detail: 'Please enter a strong password',
+      life: 3000
+    })
+    return false
+  }
+  return true
+}
 </script>
 
 <style scoped>
