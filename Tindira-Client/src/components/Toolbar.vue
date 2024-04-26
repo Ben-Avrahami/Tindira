@@ -43,9 +43,6 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import Toolbar from 'primevue/toolbar'
-import Button from 'primevue/Button'
-import ProgressSpinner from 'primevue/progressspinner'
 import { useDark, useToggle } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../stores/app'

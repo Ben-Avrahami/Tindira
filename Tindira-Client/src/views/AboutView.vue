@@ -8,9 +8,7 @@
     </Button>
   </div>
 </template>
-<script setup lang="ts">
-import Button from 'primevue/Button'
-</script>
+<script setup lang="ts"></script>
 <style>
 @media (min-width: 1024px) {
   .about {

@@ -1,29 +1,57 @@
 <template>
-  <VueDraggable ref="el" v-model="dummyArrForSwiping" @end="onEnd" @start="onStart" handle=".drag-area">
+  <VueDraggable
+    ref="el"
+    v-model="dummyArrForSwiping"
+    @end="onEnd"
+    @start="onStart"
+    handle=".drag-area"
+  >
     <transition name="swipe">
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
-
-          <Galleria v-if="isBigScreen" :value="userStore.nextListingsArr[0]?.images" :numVisible="3" :circular="true"
-            :showThumbnails="false" :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true"
-            :fullscreen="true">
+          <Galleria
+            v-if="isBigScreen"
+            :value="userStore.nextListingsArr[0]?.images"
+            :numVisible="3"
+            :circular="true"
+            :showThumbnails="false"
+            :showIndicators="true"
+            :showItemNavigators="true"
+            :changeItemOnIndicatorHover="true"
+            :fullscreen="true"
+          >
             <template #item="slotProps">
-
               <div class="relative mx-auto">
-                <Image alt="Apartment images" width="700" class="w-full border-round" :src="slotProps.item" />
+                <Image
+                  alt="Apartment images"
+                  width="700"
+                  class="w-full border-round"
+                  :src="slotProps.item"
+                />
               </div>
-
             </template>
             <template #thumbnail="slotProps">
               <img :src="slotProps.item" alt="Apartment images" style="display: block" />
             </template>
           </Galleria>
 
-          <Carousel v-else :value="userStore.nextListingsArr[0]?.images" :numVisible="1" :numScroll="1" circular>
+          <Carousel
+            v-else
+            :value="userStore.nextListingsArr[0]?.images"
+            :numVisible="1"
+            :numScroll="1"
+            circular
+          >
             <template #item="slotProps">
               <div class="border-1 surface-border border-round m-2 p-3">
                 <div class="relative mx-auto">
-                  <Image alt="Apartment images" width="400" class="w-full border-round" :src="slotProps.data" preview />
+                  <Image
+                    alt="Apartment images"
+                    width="400"
+                    class="w-full border-round"
+                    :src="slotProps.data"
+                    preview
+                  />
                 </div>
               </div>
             </template>
@@ -31,7 +59,11 @@
         </template>
 
         <template #title>
-          <div class="drag-area">{{ userStore.nextListingsArr[0]?.title ?? 'You swiped all the apartments! Time to takea break' }}
+          <div class="drag-area">
+            {{
+              userStore.nextListingsArr[0]?.title ??
+              'You swiped all the apartments! Time to takea break'
+            }}
           </div>
         </template>
         <template #subtitle>
@@ -68,22 +100,15 @@
 </template>
 
 <script setup lang="ts">
-
-import { computed, onMounted, ref } from "vue";
-import { Icon } from '@iconify/vue';
-import Card from 'primevue/card';
-import Carousel from 'primevue/carousel';
-import Galleria from 'primevue/galleria';
-import Image from 'primevue/image';
+import { computed, onMounted, ref } from 'vue'
+import { Icon } from '@iconify/vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import Button from 'primevue/Button';
 
 import { useAppStore } from '../stores/app'
 
 const userStore = useAppStore()
 
-
-const isBigScreen = computed(() => window.innerWidth > 768);
+const isBigScreen = computed(() => window.innerWidth > 768)
 
 const dummyArrForSwiping = ref([])
 
@@ -125,12 +150,11 @@ function onStart(event: any) {
 onMounted(() => {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
-    userStore.nextListingsArr.shift();
-    await userStore.getNextListing(1);
+    userStore.nextListingsArr.shift()
+    await userStore.getNextListing(1)
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
   })
-
 })
 
 async function swipe(isLike: boolean) {
@@ -139,7 +163,6 @@ async function swipe(isLike: boolean) {
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
 }
-
 </script>
 
 <style scoped>
