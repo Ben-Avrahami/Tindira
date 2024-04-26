@@ -3,11 +3,11 @@
     <h1 class="text-3xl font-bold text-center text-surface-300 pt-8">Welcome to Tindira</h1>
     <div class="flex flex-col items-center justify-center h-full">
       <Button class="my-2 w-full" @click="loginWithGoogle">
-        <Icon icon="fa:google" class="mr-2" />
+        <Icon icon="mdi:google" class="mr-2" />
         Continue with Google
       </Button>
       <Button class="my-2 w-full" @click="loginWithPhoneNumber">
-        <Icon icon="fa:phone" class="mr-2" />
+        <Icon icon="mdi:phone" class="mr-2" />
         Continue with Phone Number
       </Button>
     </div>
