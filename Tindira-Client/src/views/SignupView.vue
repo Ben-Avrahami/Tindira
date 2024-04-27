@@ -107,6 +107,33 @@
       </StepperPanel>
       <StepperPanel>
         <template #header="{ index, clickCallback }">
+          <StepperIcon :icon="'mdi:pencil'" :colorize="index <= active" @click="clickCallback" />
+        </template>
+        <template #content="{ prevCallback, nextCallback }">
+          <div
+            class="flex flex-col gap-2 mx-auto relative"
+            style="min-height: 16rem; max-width: 24rem"
+          >
+            <StepperTitle title="Tell us a bit about yourself!" optional />
+            <Textarea
+              v-model="description"
+              rows="10"
+              cols="30"
+              autoResize
+              :maxlength="MAX_DESCRIPTION_LENGTH"
+            />
+            <div class="absolute bottom-0 right-0 mb-4 mr-4 text-sm text-gray-500">
+              {{ description.length }}/{{ MAX_DESCRIPTION_LENGTH }}
+            </div>
+          </div>
+          <div class="flex pt-4 justify-between">
+            <BackButton @click="prevCallback" />
+            <NextButton @click="nextCallback" />
+          </div>
+        </template>
+      </StepperPanel>
+      <StepperPanel>
+        <template #header="{ index, clickCallback }">
           <StepperIcon :icon="'mdi:star'" :colorize="index <= active" @click="clickCallback" />
         </template>
         <template #content="{ prevCallback, nextCallback }">
@@ -254,6 +281,11 @@ const profilePicture = ref<string | null>(null)
 const setProfilePicture = (image: string | null) => {
   profilePicture.value = image
 }
+
+// ==== Profile Description Panel ==== //
+
+const description = ref<string>('')
+const MAX_DESCRIPTION_LENGTH = 500
 </script>
 
 <style scoped>
