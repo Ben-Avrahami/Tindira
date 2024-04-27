@@ -184,8 +184,9 @@
               />
             </div>
           </div>
-          <div class="flex pt-4 justify-start">
+          <div class="flex pt-4 justify-between">
             <BackButton @click="prevCallback" />
+            <Button label="Sign Up!" @click="sendSignUpRequest" />
           </div>
         </template>
       </StepperPanel>
@@ -204,6 +205,7 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
+import axios from 'axios'
 
 const toast = useToast()
 
@@ -231,7 +233,8 @@ const isEmailValid = (): boolean => {
 
 const isPasswordStrong = (): boolean => {
   // At least one lowercase, one uppercase, one digit, and minimum 8 characters
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&~]{8,}$/
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&]{8,}$/
+  // Note: The regex above does not exactly match PrimeVue's regex, which can cause buggy behavior
   return regex.test(password.value)
 }
 
@@ -305,10 +308,58 @@ const validateRoles = (): boolean => {
   }
   return true
 }
+
+// ==== Send sign-up request to backend ==== //
+
+const sendSignUpRequest = async () => {
+  if (
+    !phone.value ||
+    !name.value ||
+    !email.value ||
+    !password.value ||
+    !(rent.value || lease.value)
+  ) {
+    // This should never happen because the NextButton is disabled, but just in case
+    toast.add({
+      severity: 'error',
+      summary: 'Missing Information',
+      detail: 'Please fill in all required fields',
+      life: 3000
+    })
+    return
+  }
+
+  const data = {
+    email: email.value,
+    password: password.value,
+    phone: phone.value, // remove the dashes?
+    roles: {
+      rent: rent.value,
+      lease: lease.value
+    },
+    firstName: name.value.split(' ')[0],
+    lastName: name.value.split(' ')[1],
+    profilePicture: profilePicture.value ?? '',
+    description: description.value ?? ''
+  }
+
+  try {
+    await axios.post(`/users/${phone.value}`, data)
+    toast.add({
+      severity: 'success',
+      summary: 'Sign Up Successful',
+      detail: 'You have successfully signed up!',
+      life: 3000
+    })
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Sign Up Failed',
+      detail: 'An error occurred while signing up',
+      life: 3000
+    })
+  }
+}
 </script>
 
-<style scoped>
-.p-stepper {
-  flex-basis: 40rem;
-}
-</style>
+<style scoped></style>
