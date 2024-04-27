@@ -88,6 +88,25 @@
       </StepperPanel>
       <StepperPanel>
         <template #header="{ index, clickCallback }">
+          <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" @click="clickCallback" />
+        </template>
+        <template #content="{ prevCallback, nextCallback }">
+          <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+            <StepperTitle title="Upload your profile picture" optional />
+            <div class="flex justify-center">
+              <!-- <FileUpload name="profilePicture" accept="image/*" @upload="handleFileUpload" /> -->
+              <!-- <input type="file" @change="handleFileUpload" accept="image/*" /> -->
+              <ProfilePicture :profilePicture :setProfilePicture :toast />
+            </div>
+          </div>
+          <div class="flex pt-4 justify-between">
+            <BackButton @click="prevCallback" />
+            <NextButton @click="nextCallback" />
+          </div>
+        </template>
+      </StepperPanel>
+      <StepperPanel>
+        <template #header="{ index, clickCallback }">
           <StepperIcon :icon="'mdi:star'" :colorize="index <= active" @click="clickCallback" />
         </template>
         <template #content="{ prevCallback, nextCallback }">
@@ -144,6 +163,7 @@ import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
 import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
+import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 
 const toast = useToast()
 
@@ -225,6 +245,14 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   return true
+}
+
+// ==== Profile Picture Panel ==== //
+
+const profilePicture = ref<string | null>(null)
+
+const setProfilePicture = (image: string | null) => {
+  profilePicture.value = image
 }
 </script>
 
