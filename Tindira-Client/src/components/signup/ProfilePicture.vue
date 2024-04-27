@@ -6,7 +6,10 @@
       class="cursor-pointer aspect-[1/1] min-w-24 min-h-24 max-w-72 max-h-72 rounded-full"
     >
       <div class="flex flex-col items-center justify-center h-full">
-        <Icon icon="mdi:cloud-upload" class="w-16 h-16 m-8 sm:m-16 lg:m-24" />
+        <Icon
+          icon="mdi:cloud-upload"
+          class="w-16 h-16 m-8 sm:m-16 lg:m-24 transition-transform duration-500 ease-in-out transform hover:scale-[1.1]"
+        />
       </div>
     </label>
     <div v-else class="flex flex-col items-center">
