@@ -21,13 +21,14 @@
     "primevue": "^3.51.0",
     "vue": "^3.4.23",
     "vue-draggable-plus": "^0.4.0",
-    "vue-google-maps-community-fork": "^0.3.1",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "vue-use-places-autocomplete": "^0.2.2"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",
     "@rushstack/eslint-patch": "^1.10.2",
     "@tsconfig/node20": "^20.1.4",
+    "@types/google.maps": "^3.55.7",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.12.7",
     "@vitejs/plugin-vue": "^5.0.4",

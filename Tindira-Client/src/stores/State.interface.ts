@@ -4,16 +4,19 @@ export interface State {
   isLoading: boolean
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
-  
+
 }
 
 export interface SelectedFilters {
   category: "sublet" | "rent" | "animel sublet" | "switch" | "buy";
   dates: Date | null;
-  isWholeDateRangeOnly:boolean;
+  isWholeDateRangeOnly: boolean;
   maxPrice: number | null;
   minNumberOfParkings: number;
   minNumberOfRooms: number;
   isAnimalFriendly: boolean;
   city: string | null;
+  location: string | null;
+  radius: number | null;
+
 }

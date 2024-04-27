@@ -62,7 +62,7 @@
           <div class="drag-area">
             {{
               userStore.nextListingsArr[0]?.title ??
-              'You swiped all the apartments! Time to takea break'
+              'You swiped all the apartments! Time to take a break'
             }}
           </div>
         </template>
