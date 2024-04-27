@@ -82,11 +82,10 @@ const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 import { usePlacesAutocomplete } from 'vue-use-places-autocomplete'
 let location = ref(selectedFilters.location || '')
-const { suggestions } = usePlacesAutocomplete(location), {
-  const debounce = 500;
+const { suggestions } = usePlacesAutocomplete(location, {
+  debounce: 500,
   minLengthAutocomplete: 3
 })
-
 
 
 const categoryOptions = ref(['sublet', 'rent', 'animel sublet', 'switch', 'buy'])
