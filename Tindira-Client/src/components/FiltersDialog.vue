@@ -5,13 +5,13 @@
       locale="en-US" />
   </div>
   <div class="flex items-center space-x-4">
-    <Chip label="Preferred location" />
+    <Chip label="Preferred Location" />
     <AutoComplete v-model="location" optionLabel="description" :suggestions="suggestions"
-      @item-select="console.log('select', location)" />
+      @item-select="selectedFilters.location = location" />
   </div>
 
   <div class="flex items-center space-x-4">
-    <Chip label="Raduis from location(Km)" />
+    <Chip label="Radius From Location(Km)" />
     <InputNumber v-model="selectedFilters.radius" showButtons :min="1" :max="100">
       <template #incrementbuttonicon>
         <Icon icon="mdi:plus"></Icon>
@@ -82,10 +82,14 @@ const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 import { usePlacesAutocomplete } from 'vue-use-places-autocomplete'
-let location = ref('');
+let location = ref(selectedFilters.location || '');
 
 
 const { suggestions } = usePlacesAutocomplete(location, {
+  apiOptions: {
+    version: 'weekly',
+    region: 'ISR'//TODO: FIX
+  },
   debounce: 500,
   minLengthAutocomplete: 3
 })
