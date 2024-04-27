@@ -6,7 +6,8 @@
   </div>
   <div class="flex items-center space-x-4">
     <Chip label="Preferred location" />
-    <AutoComplete v-model="selectedFilters.location" optionLabel="description" :suggestions="suggestions" />
+    <AutoComplete v-model="location" optionLabel="description" :suggestions="suggestions"
+      @item-select="console.log('select', location)" />
   </div>
 
   <div class="flex items-center space-x-4">
@@ -81,7 +82,9 @@ const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 import { usePlacesAutocomplete } from 'vue-use-places-autocomplete'
-let location = ref(selectedFilters.location || '')
+let location = ref('');
+
+
 const { suggestions } = usePlacesAutocomplete(location, {
   debounce: 500,
   minLengthAutocomplete: 3
