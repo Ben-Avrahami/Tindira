@@ -1,8 +1,8 @@
 <template>
   <Stepper v-model:activeStep="active">
     <StepperPanel>
-      <template #header="{ index, clickCallback }">
-        <StepperIcon :icon="'mdi:user'" :colorize="index <= active" @click="clickCallback" />
+      <template #header="{ index }">
+        <StepperIcon :icon="'mdi:user'" :colorize="index <= active" />
       </template>
       <template #content="{ nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
@@ -86,8 +86,8 @@
       </template>
     </StepperPanel>
     <StepperPanel>
-      <template #header="{ index, clickCallback }">
-        <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" @click="clickCallback" />
+      <template #header="{ index }">
+        <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback, nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
@@ -105,8 +105,8 @@
       </template>
     </StepperPanel>
     <StepperPanel>
-      <template #header="{ index, clickCallback }">
-        <StepperIcon :icon="'mdi:pencil'" :colorize="index <= active" @click="clickCallback" />
+      <template #header="{ index }">
+        <StepperIcon :icon="'mdi:pencil'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback, nextCallback }">
         <div
@@ -132,8 +132,8 @@
       </template>
     </StepperPanel>
     <StepperPanel>
-      <template #header="{ index, clickCallback }">
-        <StepperIcon :icon="'mdi:star'" :colorize="index <= active" @click="clickCallback" />
+      <template #header="{ index }">
+        <StepperIcon :icon="'mdi:star'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback, nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
@@ -169,8 +169,8 @@
       </template>
     </StepperPanel>
     <StepperPanel>
-      <template #header="{ index, clickCallback }">
-        <StepperIcon :icon="'mdi:check'" :colorize="index <= active" @click="clickCallback" />
+      <template #header="{ index }">
+        <StepperIcon :icon="'mdi:check'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
