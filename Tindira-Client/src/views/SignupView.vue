@@ -138,23 +138,33 @@
         </template>
         <template #content="{ prevCallback, nextCallback }">
           <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-            <StepperTitle title="Select your interests" />
-            <div class="flex flex-wrap justify-center gap-3">
-              <ToggleButton v-model="option1" onLabel="Nature" offLabel="Nature" />
-              <ToggleButton v-model="option2" onLabel="Art" offLabel="Art" />
-              <ToggleButton v-model="option3" onLabel="Music" offLabel="Music" />
-              <ToggleButton v-model="option4" onLabel="Design" offLabel="Design" />
-              <ToggleButton v-model="option5" onLabel="Photography" offLabel="Photography" />
-              <ToggleButton v-model="option6" onLabel="Movies" offLabel="Movies" />
-              <ToggleButton v-model="option7" onLabel="Sports" offLabel="Sports" />
-              <ToggleButton v-model="option8" onLabel="Gaming" offLabel="Gaming" />
-              <ToggleButton v-model="option9" onLabel="Traveling" offLabel="Traveling" />
-              <ToggleButton v-model="option10" onLabel="Dancing" offLabel="Dancing" />
+            <StepperTitle title="Select at least one" />
+            <div class="flex flex-wrap justify-center gap-4">
+              <ToggleRole
+                icon="mdi:home-search"
+                description="I would like to rent"
+                :role="rent"
+                :toggleRole="() => (rent = !rent)"
+              />
+              <ToggleRole
+                icon="mdi:home"
+                description="I would like to lease"
+                :role="lease"
+                :toggleRole="() => (lease = !lease)"
+              />
             </div>
           </div>
           <div class="flex pt-4 justify-between">
             <BackButton @click="prevCallback" />
-            <NextButton @click="nextCallback" />
+            <NextButton
+              @click="
+                (event: Event) => {
+                  if (validateRoles()) {
+                    nextCallback(event)
+                  }
+                }
+              "
+            />
           </div>
         </template>
       </StepperPanel>
@@ -191,22 +201,13 @@ import BackButton from '@/components/signup/BackButton.vue'
 import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
+import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 const toast = useToast()
 
 const active = ref(0)
 const completed = ref(false)
 const products = ref()
-const option1 = ref(false)
-const option2 = ref(false)
-const option3 = ref(false)
-const option4 = ref(false)
-const option5 = ref(false)
-const option6 = ref(false)
-const option7 = ref(false)
-const option8 = ref(false)
-const option9 = ref(false)
-const option10 = ref(false)
 
 // ==== Basic Information Panel ==== //
 
@@ -286,6 +287,24 @@ const setProfilePicture = (image: string | null) => {
 
 const description = ref<string>('')
 const MAX_DESCRIPTION_LENGTH = 500
+
+// ==== Interests Panel ==== //
+
+const rent = ref<boolean>(false)
+const lease = ref<boolean>(false)
+
+const validateRoles = (): boolean => {
+  if (!rent.value && !lease.value) {
+    toast.add({
+      severity: 'error',
+      summary: 'No Role Selected',
+      detail: 'Please select at least one role',
+      life: 3000
+    })
+    return false
+  }
+  return true
+}
 </script>
 
 <style scoped>
