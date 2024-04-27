@@ -42,8 +42,8 @@ import { Icon } from '@iconify/vue'
 import type { ToastServiceMethods } from 'primevue/toastservice'
 
 const props = defineProps<{
-  profilePicture: string | null
-  setProfilePicture: (image: string | null) => void
+  profilePicture: string
+  setProfilePicture: (image: string) => void
   toast: ToastServiceMethods
 }>()
 
@@ -54,7 +54,7 @@ const replaceImage = () => {
 }
 
 const removeImage = () => {
-  props.setProfilePicture(null)
+  props.setProfilePicture('')
 }
 
 const handleFileUpload = (event: Event) => {

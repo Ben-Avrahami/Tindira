@@ -203,21 +203,21 @@ import axios from 'axios'
 
 const toaster = useToaster() as Toaster // temp, will be moved to a global component
 
-const active = ref(0)
+const active = ref<number>(0)
 
 // ==== Basic Information Panel ==== //
 
-const phone = ref()
-const name = ref()
-const email = ref()
-const password = ref()
+const phone = ref<string>('')
+const name = ref<string>('')
+const email = ref<string>('')
+const password = ref<string>('')
 
 const isPhoneValid = (): boolean => {
-  return phone.value && phone.value.trim().length === 12
+  return !!phone.value && phone.value.trim().length === 12
 }
 
 const isNameValid = (): boolean => {
-  return name.value && name.value.trim().split(/\s+/).length === 2
+  return !!name.value && name.value.trim().split(/\s+/).length === 2
 }
 
 const isEmailValid = (): boolean => {
@@ -274,9 +274,9 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<string | null>(null)
+const profilePicture = ref<string>('')
 
-const setProfilePicture = (image: string | null) => {
+const setProfilePicture = (image: string) => {
   profilePicture.value = image
 }
 
