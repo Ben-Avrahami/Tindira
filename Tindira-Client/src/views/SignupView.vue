@@ -140,16 +140,16 @@
         <template #content="{ prevCallback, nextCallback }">
           <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
             <StepperTitle title="Select at least one" />
-            <div class="flex flex-wrap justify-center gap-4">
+            <div class="flex flex-row justify-center gap-4">
               <ToggleRole
                 icon="mdi:home-search"
-                description="I would like to rent"
+                description="I want to search an apartment"
                 :role="rent"
                 :toggleRole="() => (rent = !rent)"
               />
               <ToggleRole
-                icon="mdi:home"
-                description="I would like to lease"
+                icon="mdi:home-city"
+                description="I want to post an apartment"
                 :role="lease"
                 :toggleRole="() => (lease = !lease)"
               />
