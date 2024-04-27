@@ -206,8 +206,6 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 const toast = useToast()
 
 const active = ref(0)
-const completed = ref(false)
-const products = ref()
 
 // ==== Basic Information Panel ==== //
 
