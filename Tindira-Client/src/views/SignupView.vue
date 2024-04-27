@@ -75,6 +75,7 @@
           </div>
           <div class="flex pt-4 justify-end">
             <NextButton
+              :disabled="!(phone && name && email && password)"
               @click="
                 (event: Event) => {
                   if (validateBasicInfo()) {
@@ -157,6 +158,7 @@
           <div class="flex pt-4 justify-between">
             <BackButton @click="prevCallback" />
             <NextButton
+              :disabled="!(rent || lease)"
               @click="
                 (event: Event) => {
                   if (validateRoles()) {
