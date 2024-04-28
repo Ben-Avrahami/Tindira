@@ -6,8 +6,9 @@
   </div>
   <div class="flex items-center space-x-4">
     <Chip label="Preferred Location" />
-    <AutoComplete v-model="location" optionLabel="description" :suggestions="suggestions"
-      @item-select="selectedFilters.location = location" />
+    <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
+      :modelValue="selectedFilters.location as string | Location | undefined">
+    </GoogleMapsAutoComplete>
   </div>
 
   <div class="flex items-center space-x-4">
@@ -76,23 +77,21 @@ import { reactive, ref, inject, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
 import { getCities } from '@/api/GetCitiesApi'
+import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
+import type { Location } from '@/stores/State.interface';
 
 
 const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
-import { usePlacesAutocomplete } from 'vue-use-places-autocomplete'
-let location = ref(selectedFilters.location || '');
 
+function updateLocation(location: any) {
+  selectedFilters.location = location;
+}
 
-const { suggestions } = usePlacesAutocomplete(location, {
-  apiOptions: {
-    version: 'weekly',
-    region: 'ISR'//TODO: FIX
-  },
-  debounce: 500,
-  minLengthAutocomplete: 3
-})
+function locationCleared(location: any) {
+  selectedFilters.location = null;
+}
 
 
 const categoryOptions = ref(['sublet', 'rent', 'animel sublet', 'switch', 'buy'])

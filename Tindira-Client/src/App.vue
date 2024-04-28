@@ -4,10 +4,8 @@ import Toolbar from '@/components/Toolbar.vue'
 import DynamicDialog from 'primevue/dynamicdialog';
 
 const script = document.createElement('script');
-script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=places`;
+script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&region=ISR&libraries=places`;
 document.head.appendChild(script);
-
-
 </script>
 
 <template>
