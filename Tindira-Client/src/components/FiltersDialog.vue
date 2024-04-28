@@ -1,9 +1,16 @@
 <template>
   <div class="flex items-center space-x-4">
+    <Chip label="Category" />
+    <Dropdown v-model="selectedFilters.category" :options="categoryOptions" placeholder="Choose a Category" />
+  </div>
+  <Divider />
+  
+  <div class="flex items-center space-x-4">
     <Chip label="Max Price/Month" />
     <InputNumber v-model="selectedFilters.maxPrice" inputId="currency-il" mode="currency" currency="ILS"
       locale="en-US" />
   </div>
+  <Divider />
   <div class="flex items-center space-x-4">
     <Chip label="Preferred Location" />
     <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
@@ -22,14 +29,12 @@
       </template>
     </InputNumber>
   </div>
-  <div class="flex items-center space-x-4">
-    <Chip label="Category" />
-    <Dropdown v-model="selectedFilters.category" :options="categoryOptions" placeholder="Choose a Category" />
-  </div>
+  <Divider />
   <div class="flex items-center space-x-4">
     <Chip label="Animal Friendly" />
     <Checkbox v-model="selectedFilters.isAnimalFriendly" :binary="true" />
   </div>
+  <Divider />
   <div class="flex items-center space-x-4">
     <Chip label="Min Parkings" />
     <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
@@ -41,6 +46,7 @@
       </template>
     </InputNumber>
   </div>
+  <Divider />
   <div class="flex items-center space-x-4">
     <Chip label="Min Rooms" />
     <InputNumber v-model="selectedFilters.minNumberOfRooms" showButtons :min="0" :max="10">
@@ -52,6 +58,7 @@
       </template>
     </InputNumber>
   </div>
+  <Divider />
   <div class="flex items-center space-x-4">
     <Chip label="Dates" />
 
@@ -63,6 +70,7 @@
     <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
   </div>
 
+  <Divider />
   <div class="flex items-center justify-center">
     <Button text rounded @click="userStore.updateFilters(selectedFilters), closeDialog()">
       <template #icon>
