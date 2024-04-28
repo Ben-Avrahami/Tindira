@@ -27,7 +27,7 @@ const { suggestions } = usePlacesAutocomplete(location, {
         version: 'weekly',
     },
     autocompletionRequest: {
-        region: 'IL',
+        // region: 'IL',
     },
     debounce: 500,
     minLengthAutocomplete: 3
