@@ -95,10 +95,10 @@ function onEnd(event: any) {
 
   if (clientX > startingX + sensitivity) {
     console.log('right');
-    swipe(true, clientX, clientY);
+    swipe(true);
   } else if (clientX < startingX - sensitivity) {
     console.log('left');
-    swipe(false, clientX, clientY);
+    swipe(false);
   }
 }
 
