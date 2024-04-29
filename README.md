@@ -1,43 +1,38 @@
-# SuperIntel Developers & Omer the Non-Intel Whiz
+# Tindira - Your Next Home A Swipe Away
 
 <p align="center">
   <img src="Media/logo5.png" alt="SuperIntel Logo" title="SuperIntel Logo" width="600" height="600">
 </p>
 
-## Welcome to Our Code Haven! 🚀
-Greetings, Earthlings! 🌍 Get ready to be captivated by the brilliance of Team SuperIntel Developers & Omer the Non-Intel Whiz. Join us on a coding odyssey as we embark on our Open University web app project, offering you a sneak peek into the enchanting world behind our screens.
 
-### Meet the Geniuses:
-#### Ben - The Brainiac:
-*Superpower:* Can turn tea into code. Seriously, we're convinced he's part machine. ☕💻
+Welcome to Tindira, where your next home is just a swipe away! Tindira is more than just an apartment searching app - it's your ultimate companion in finding the perfect place to call home. With Tindira, the process of finding suitable accommodation becomes not only effortless but also enjoyable.
 
-#### Gal - The Code Galactica:
-*Secret Weapon:* Multitasking. Can juggle more tasks than a circus performer on rollerblades. 🤹‍♀️
+## Why Choose Tindira?
 
-#### Mor - The Coding Maestro:
-*Claim to Fame:* Once debugged a colleague's dream. No nightmare-inducing bugs allowed. 🛌🐛
+### Seamless Apartment Searching
+Tindira simplifies the apartment hunting process with its intuitive swipe functionality. Quickly browse through available apartments and indicate your preferences with a simple gesture. Say goodbye to endless scrolling through listings - with Tindira, your next home is just a swipe away!
 
+### Personalized Experience
+Your preferences matter, and Tindira understands that. With user profile management, Tindira remembers your previous swipes and preferences, ensuring a personalized experience every time you use the app. Say hello to a tailored apartment hunting journey designed just for you.
 
-#### Yoni - The Chip Charmer:
-*Mood Booster:* Sings to the servers to keep them happy. A real-life server whisperer. 🎤🎶
+### Neighborhood Exploration
+Tindira allows you to find apartments based on specific addresses or areas. Simply input an address or radius from an address, and Tindira will show you apartments in the vicinity. With seamless integration with Google Maps, you can visualize apartment listings on the map and explore nearby amenities, schools, parks, and more.
 
-#### Omer - The Rebel Without an Intel Cause:
-*Battle Cry:* "No Intel inside, but plenty of innovation outside!" 🚫💡
+### Advanced Filtering Options
+Tindira offers advanced filtering options to refine your search results and find the perfect home. Filter apartments by price, number of parking spaces, number of rooms, pet-friendliness, and relevant dates for sublet or rent. With Tindira, you can customize your search to match your specific criteria and preferences.
 
-### Our Quest:
-To create a web app so epic that even the most seasoned developers will gaze upon it in awe. Intel Developers, brace yourselves for a journey filled with creativity, innovation, and perhaps a touch of rebelliousness from Omer.
+### Explore Different Categories
+Tindira offers a variety of accommodation options to suit your needs. Whether you're looking to rent, buy, sublet, or even swap apartments, Tindira has you covered. Explore different categories and find the perfect match for your lifestyle and preferences.
 
-### Ground Rules (or Lack Thereof):
-- Ben's keyboard is not to be touched without protective gear. The sheer speed of his typing may cause injury. ⚠️⌨️
-- Gal will be speaking in JavaScript. Don't worry; it's contagious and perfectly normal. 💬🚀
-- Mor's coding hat is non-negotiable. It's the source of his coding superpowers. 🎩💻
-- Yoni's servers have a taste for '80s rock. If they seem sluggish, play some Queen or AC/DC. 🎸🤘
-- Omer's rebellious spirit is untamed; beware of unexpected innovations and non-Intel adventures! ⚠️🔧
+## Technologies Used
+- **Frontend:** Vue, PrimeVue, Tailwind CSS, Pinia, TypeScript, PNPM
+- **Backend:** AWS
 
-### Communication Nexus:
-For official transmissions, we rely on a high-tech communication hub known as Whatsapp. For unofficial banter, we use carrier pigeons because we're classy like that. Omer, we'll teach you the pigeon-whispering technique soon. 📱🕊️
+## Team Members
+- Ben Avrahami
+- Yoni Simian
+- Gal Ben Artzi
+- Omer Komissrachik
+- Mor Simha
 
-### Laughter is Our Debugging Fuel:
-If in doubt, crack a joke. Laughter is our secret weapon against stubborn bugs. 😄🐞
-
-Now, buckle up, fellow coders, as we venture into the realms of coding greatness. Our code shall echo through the corridors of cyberspace for generations to come! 🚀💻 #SuperIntelDevelopersAndOmer
+Thank you for considering Tindira for your apartment hunting needs. Your next home is just a swipe away with Tindira!
