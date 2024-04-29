@@ -17,7 +17,7 @@ export interface SelectedFilters {
   isAnimalFriendly: boolean;
   city: string | null;
   location: Location | null;
-  radius: number | null;
+  radiusInKm: number | null;
 
 }
 

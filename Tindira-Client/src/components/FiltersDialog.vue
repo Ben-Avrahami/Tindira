@@ -20,7 +20,7 @@
 
   <div class="flex items-center space-x-4">
     <Chip label="Radius From Location(Km)" />
-    <InputNumber v-model="selectedFilters.radius" showButtons :min="1" :max="100">
+    <InputNumber v-model="selectedFilters.radiusInKm" showButtons :min="1" :max="100">
       <template #incrementbuttonicon>
         <Icon icon="mdi:plus"></Icon>
       </template>
@@ -103,7 +103,7 @@ function locationCleared(location: any) {
 
 
 const categoryOptions = ref(['sublet', 'rent', 'animel sublet', 'switch', 'buy'])
-let citiesInIsrael = ref(await getCities())
+// let citiesInIsrael = ref(await getCities()) TODO:Remove later, cuurently is not being used, but keeping it for being used maybe in future
 
 const dialogRef = inject('dialogRef')
 
