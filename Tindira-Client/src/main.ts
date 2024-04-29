@@ -118,7 +118,6 @@ import TreeTable from 'primevue/treetable'
 import TriStateCheckbox from 'primevue/tristatecheckbox'
 import VirtualScroller from 'primevue/virtualscroller'
 
-import VueGoogleMaps from 'vue-google-maps-community-fork'
 
 // Ignore error because '@/Presets/Lara/index.js' lacks type definitions.
 // @ts-ignore
@@ -237,14 +236,6 @@ app.component('TreeSelect', TreeSelect)
 app.component('TreeTable', TreeTable)
 app.component('TriStateCheckbox', TriStateCheckbox)
 app.component('VirtualScroller', VirtualScroller)
-
-app.use(VueGoogleMaps, {
-  load: {
-    // @ts-ignore
-    key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: 'places'
-  }
-})
 
 app.use(createPinia())
 app.use(router)
