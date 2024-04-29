@@ -1,5 +1,4 @@
 <template>
-  <!-- <Button label="Back" severity="secondary" icon="mdi:arrow-left" @click="onClick" /> -->
   <Button label="Back" severity="secondary" @click="onClick" />
 </template>
 

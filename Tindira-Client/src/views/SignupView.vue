@@ -93,8 +93,6 @@
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="Upload your profile picture" optional />
           <div class="flex justify-center">
-            <!-- <FileUpload name="profilePicture" accept="image/*" @upload="handleFileUpload" /> -->
-            <!-- <input type="file" @change="handleFileUpload" accept="image/*" /> -->
             <ProfilePicture :profilePicture :setProfilePicture :toast="toaster.toast" />
           </div>
         </div>
