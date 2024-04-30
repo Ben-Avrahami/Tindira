@@ -1,5 +1,6 @@
 <template>
-  <VueDraggable ref="el" v-model="dummyArrForSwiping" @end="onEnd" @start="onStart" handle=".drag-area">
+  <VueDraggable ref="el" v-model="dummyArrForSwiping" :disabled="disableDrag" @end="onEnd" @start="onStart"
+    handle=".drag-area">
     <transition name="swipe">
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
@@ -80,6 +81,7 @@ const userStore = useAppStore()
 const isBigScreen = computed(() => window.innerWidth > 768)
 
 const dummyArrForSwiping = ref([])
+let disableDrag = ref(false)
 
 let startingX = 0
 let sensitivity = 80
@@ -118,12 +120,14 @@ onMounted(() => {
     await userStore.getNextListing(1)
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
+    disableDrag.value = false;
   })
 })
 
 async function swipe(isLike: boolean) {
   const el = document.querySelector('.swipe-card')
   if (el) {
+    disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
 }
