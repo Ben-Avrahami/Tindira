@@ -21,7 +21,8 @@
             <template #item="slotProps">
               <div class="border-1 surface-border border-round m-2 p-3">
                 <div class="relative mx-auto">
-                  <Image alt="Apartment images" width="400" class="w-full border-round" :src="slotProps.data" preview />
+                  <Image alt="Apartment images" width="400" class="w-full border-round" :src="slotProps.data" preview
+                    style="max-height: 20vh;" />
                 </div>
               </div>
             </template>

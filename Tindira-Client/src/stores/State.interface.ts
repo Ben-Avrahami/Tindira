@@ -18,6 +18,7 @@ export interface SelectedFilters {
   city: string | null;
   location: Location | null;
   radiusInKm: number | null;
+  isWithPorchOrGarden:boolean;
 
 }
 

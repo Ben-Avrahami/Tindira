@@ -36,6 +36,11 @@
   </div>
   <Divider />
   <div class="flex items-center space-x-4">
+    <Chip label="Has Porch/Garden" />
+    <Checkbox v-model="selectedFilters.isWithPorchOrGarden" :binary="true" />
+  </div>
+  <Divider />
+  <div class="flex items-center space-x-4">
     <Chip label="Min Parkings" />
     <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
       <template #incrementbuttonicon>
