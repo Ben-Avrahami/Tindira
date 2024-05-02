@@ -18,8 +18,8 @@
           </div>
         </template>
         <template #subtitle>
-          <div class="drag-area flex justify-between items-center">
-            <div class="title flex-grow">
+          <div class="flex justify-between items-center">
+            <div class="drag-area title flex-grow">
               Full information
             </div>
             <div class="button">
