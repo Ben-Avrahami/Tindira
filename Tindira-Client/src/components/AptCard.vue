@@ -132,9 +132,9 @@ const showFullAptData = () => {
       modal: true,
       closable: true,
     },
-    onClose: (opt) => {
+    onClose: (isLike) => {
       setTimeout(() => {
-        swipe(opt?.data);
+        swipe(isLike?.data);
       }, 500);
     }
   })
