@@ -133,9 +133,11 @@ const showFullAptData = () => {
       closable: true,
     },
     onClose: (isLike) => {
-      setTimeout(() => {
-        swipe(isLike?.data);
-      }, 500);
+      if (isLike?.data !== undefined) {
+        setTimeout(() => {
+          swipe(isLike.data);
+        }, 500);
+      }
     }
   })
 }
