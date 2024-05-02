@@ -128,7 +128,7 @@ function updateLocation(location: any) {
   selectedFilters.location = location;
 }
 
-function locationCleared(location: any) {
+function locationCleared() {
   selectedFilters.location = null;
 }
 
