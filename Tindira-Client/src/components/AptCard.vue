@@ -59,6 +59,8 @@
 import { computed, defineAsyncComponent, getCurrentInstance, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { VueDraggable, type SortableEvent } from 'vue-draggable-plus'
+import AptImageCarousel from './AptImageCarousel.vue';
+import { useDialog } from 'primevue/usedialog'
 
 import { useAppStore } from '../stores/app'
 
@@ -115,9 +117,6 @@ async function swipe(isLike: boolean) {
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
 }
-
-import { useDialog } from 'primevue/usedialog'
-import AptImageCarousel from './AptImageCarousel.vue';
 
 const dialog = useDialog()
 const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))

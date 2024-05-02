@@ -52,7 +52,6 @@ import { useAppStore } from '../stores/app'
 import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
 
-const emit = defineEmits(['like', 'unlike'])
 
 const dialogRef = inject('dialogRef')
 

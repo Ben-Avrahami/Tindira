@@ -38,6 +38,9 @@ importers:
       vue-use-places-autocomplete:
         specifier: ^0.2.2
         version: 0.2.2(vue@3.4.23(typescript@5.4.5))
+      vue3-carousel:
+        specifier: ^0.3.3
+        version: 0.3.3(vue@3.4.23(typescript@5.4.5))
       vue3-google-map:
         specifier: ^0.20.0
         version: 0.20.0(vue@3.4.23(typescript@5.4.5))
@@ -2554,6 +2557,11 @@ packages:
 
   vue-use-places-autocomplete@0.2.2:
     resolution: {integrity: sha512-icYyGaXmZpZ9wb+vI5RuWYXPfCPSLguy8rQ4kcd0Tua7WQ7lGCYPwYhAhU2tHlH289rPPmgWlLlnJCWBH6yUGg==}
+    peerDependencies:
+      vue: ^3.2.0
+
+  vue3-carousel@0.3.3:
+    resolution: {integrity: sha512-VsuOBE4LG9lxAiYGR9U7ps4RyJ4oFQGzk79/49ybvoxzNpahPAVWIDHKK3a1lOv0CSplFq6u4FvaFLZ8x3FgWg==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -5298,6 +5306,10 @@ snapshots:
     dependencies:
       '@googlemaps/js-api-loader': 1.16.6
       perfect-debounce: 1.0.0
+      vue: 3.4.23(typescript@5.4.5)
+
+  vue3-carousel@0.3.3(vue@3.4.23(typescript@5.4.5)):
+    dependencies:
       vue: 3.4.23(typescript@5.4.5)
 
   vue3-google-map@0.20.0(vue@3.4.23(typescript@5.4.5)):
