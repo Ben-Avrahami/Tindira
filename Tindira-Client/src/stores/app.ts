@@ -17,8 +17,9 @@ export const useAppStore = defineStore('app', {
       city: null,
       radiusInKm: null,
       location: null,
-      isWithPorchOrGarden:false 
-       }
+      isWithPorchOrGarden: false ,
+      isWithElevator: false
+    }
   }),
   getters: {},
   actions: {

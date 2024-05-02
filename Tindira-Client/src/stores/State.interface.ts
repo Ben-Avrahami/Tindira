@@ -19,6 +19,7 @@ export interface SelectedFilters {
   location: Location | null;
   radiusInKm: number | null;
   isWithPorchOrGarden:boolean;
+  isWithElevator:boolean;
 
 }
 

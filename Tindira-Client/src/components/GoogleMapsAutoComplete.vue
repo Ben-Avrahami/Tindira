@@ -29,7 +29,7 @@ const { suggestions } = usePlacesAutocomplete(location, {
     autocompletionRequest: {
         // region: 'IL',
     },
-    debounce: 500,
+    debounce: 1000,
     minLengthAutocomplete: 3
 });
 
