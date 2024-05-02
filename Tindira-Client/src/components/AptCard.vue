@@ -31,14 +31,14 @@
           <p class="drag-area m-0">{{ userStore.nextListingsArr[0]?.description }}</p>
         </template>
         <template #footer>
-          <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
+          <div class="mx-auto space-x-24 flex justify-center">
             <Button severity="secondary" rounded aria-label="Like" @click="swipe(false)">
               <template #icon>
                 <Icon icon="mdi:times"></Icon>
               </template>
             </Button>
 
-            <Button class="text-rose-700 drag-area" rounded aria-label="Like" @click="swipe(true)">
+            <Button class="text-rose-700" rounded aria-label="Like" @click="swipe(true)">
               <template #icon>
                 <Icon icon="ph:heart"></Icon>
               </template>
@@ -130,7 +130,13 @@ const showFullAptData = () => {
         '640px': '90vw'
       },
       modal: true,
-      closable: true
+      closable: true,
+    },
+    onLike: () => {
+      swipe(true)
+    },
+    onUnlike: () => {
+      swipe(false)
     }
   })
 }
