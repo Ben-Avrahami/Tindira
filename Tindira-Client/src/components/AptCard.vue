@@ -4,29 +4,9 @@
     <transition name="swipe">
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
-          <Galleria v-if="isBigScreen" :value="userStore.nextListingsArr[0]?.images" :numVisible="3" :circular="true"
-            :showThumbnails="false" :showIndicators="true" :showItemNavigators="true" :changeItemOnIndicatorHover="true"
-            :fullscreen="true">
-            <template #item="slotProps">
-              <div class="relative mx-auto">
-                <Image alt="Apartment images" width="700" class="w-full border-round" :src="slotProps.item" />
-              </div>
-            </template>
-            <template #thumbnail="slotProps">
-              <img :src="slotProps.item" alt="Apartment images" style="display: block" />
-            </template>
-          </Galleria>
-
-          <Carousel v-else :value="userStore.nextListingsArr[0]?.images" :numVisible="1" :numScroll="1" circular>
-            <template #item="slotProps">
-              <div class="border-1 surface-border border-round m-2 p-3">
-                <div class="relative mx-auto">
-                  <Image alt="Apartment images" width="400" class="w-full border-round" :src="slotProps.data" preview
-                    style="max-height: 20vh;" />
-                </div>
-              </div>
-            </template>
-          </Carousel>
+          <div>
+            <AptImageCarousel />
+          </div>
         </template>
 
         <template #title>
@@ -40,7 +20,7 @@
         <template #subtitle>
           <div class="drag-area flex justify-between items-center">
             Full information
-            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl">
+            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl" @click="showFullAptData">
               <template #icon>
                 <Icon icon="ooui:info-filled"></Icon>
               </template>
@@ -71,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { VueDraggable, type SortableEvent } from 'vue-draggable-plus'
 
@@ -79,7 +59,6 @@ import { useAppStore } from '../stores/app'
 
 const userStore = useAppStore()
 
-const isBigScreen = computed(() => window.innerWidth > 768)
 
 const dummyArrForSwiping = ref([])
 let disableDrag = ref(false)
@@ -132,11 +111,35 @@ async function swipe(isLike: boolean) {
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
 }
+
+import { useDialog } from 'primevue/usedialog'
+import AptImageCarousel from './AptImageCarousel.vue';
+
+const dialog = useDialog()
+const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+
+const showFullAptData = () => {
+  dialog.open(ApartmentDialog, {
+    props: {
+      header: userStore.nextListingsArr[0]?.title,
+      style: {
+        width: '95vw'
+      },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      modal: true,
+      closable: true
+    }
+  })
+}
+
 </script>
 
 <style scoped>
 .animate-right {
-  animation: swipeRight 1s;
+  animation: swipeRight 0.8s;
 }
 
 @keyframes swipeRight {
@@ -152,7 +155,7 @@ async function swipe(isLike: boolean) {
 }
 
 .animate-left {
-  animation: swipeLeft 1s ease-out;
+  animation: swipeLeft 0.8s ease-out;
 }
 
 @keyframes swipeLeft {
