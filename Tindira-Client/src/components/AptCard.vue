@@ -142,10 +142,12 @@ async function swipe(isLike: boolean) {
 @keyframes swipeRight {
   0% {
     transform: translateX(0);
+    opacity: 1;
   }
 
   100% {
     transform: translateX(100%) translateY(-20%) rotate(20deg);
+    opacity: 0;
   }
 }
 
@@ -156,10 +158,12 @@ async function swipe(isLike: boolean) {
 @keyframes swipeLeft {
   0% {
     transform: translateX(0);
+    opacity: 1;
   }
 
   100% {
     transform: translateX(-100%) translateY(-20%) rotate(-20deg);
+    opacity: 0;
   }
 }
 </style>
