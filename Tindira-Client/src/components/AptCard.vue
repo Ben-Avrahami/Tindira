@@ -56,9 +56,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, getCurrentInstance, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { VueDraggable, type SortableEvent } from 'vue-draggable-plus'
+import { VueDraggable } from 'vue-draggable-plus'
 import AptImageCarousel from './AptImageCarousel.vue';
 import { useDialog } from 'primevue/usedialog'
 
@@ -122,7 +122,6 @@ async function swipe(isLike: boolean) {
 
 const dialog = useDialog()
 const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
-
 
 const showFullAptData = () => {
   dialog.open(ApartmentDialog, {
