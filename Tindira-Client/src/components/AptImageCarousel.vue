@@ -3,7 +3,7 @@
     <carousel ref="myCarousel" :items-to-show="1" wrapAround :modelValue="activeImage">
         <slide v-for="slide in userStore.nextListingsArr[0]?.images" :key="slide">
             <Image alt="Apartment images" :src="slide" :preview="!isBigScreen"
-                :style="isBigScreen ? '' : 'max-height: 20vh;'" />
+                :style="isBigScreen ? '' : 'max-height: 30vh;'" />
         </slide>
         <template #addons>
             <navigation />
