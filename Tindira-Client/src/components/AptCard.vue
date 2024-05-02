@@ -85,11 +85,9 @@ function onEnd(event: any) {
   if (clientX > startingX + sensitivity) {
     console.log('right');
     swipe(true);
-    rerenderer.value++;
   } else if (clientX < startingX - sensitivity) {
     console.log('left');
     swipe(false);
-    rerenderer.value++;
   }
 }
 
@@ -105,6 +103,7 @@ function onStart(event: any) {
 onMounted(() => {
   const el = document.querySelector('.swipe-card')
   el!.addEventListener('animationend', async () => {
+    rerenderer.value++;
     userStore.nextListingsArr.shift()
     await userStore.getNextListing(1)
     el!.classList.remove('animate-right')
