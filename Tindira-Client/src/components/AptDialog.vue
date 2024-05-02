@@ -28,7 +28,7 @@
 
         <Divider />
 
-        <div class=" mx-auto space-x-24 flex justify-center">
+        <div class=" mx-auto space-x-24 flex justify-center mt-1">
             <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
