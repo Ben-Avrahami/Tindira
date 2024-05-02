@@ -51,14 +51,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, getCurrentInstance, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { VueDraggable, type SortableEvent } from 'vue-draggable-plus'
 
 import { useAppStore } from '../stores/app'
 
 const userStore = useAppStore()
-
 
 const dummyArrForSwiping = ref([])
 let disableDrag = ref(false)
@@ -118,6 +117,7 @@ import AptImageCarousel from './AptImageCarousel.vue';
 const dialog = useDialog()
 const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
 
+
 const showFullAptData = () => {
   dialog.open(ApartmentDialog, {
     props: {
@@ -132,11 +132,12 @@ const showFullAptData = () => {
       modal: true,
       closable: true,
     },
-    onLike: () => {
-      swipe(true)
+    like: () => {
+      console.log("caught like")
+      swipe(true);
     },
-    onUnlike: () => {
-      swipe(false)
+    unlike: () => {
+      swipe(false);
     }
   })
 }
