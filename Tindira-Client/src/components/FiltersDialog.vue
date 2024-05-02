@@ -57,15 +57,6 @@
 
   <div class="lex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
-      <label class="font-bold block mb-2"> Must Be With Elevator </label>
-      <Checkbox v-model="selectedFilters.isWithElevator" :binary="true" />
-    </div>
-  </div>
-
-  <Divider />
-
-  <div class="lex flex-wrap gap-3 p-fluid">
-    <div class="flex-auto">
       <label class="font-bold block mb-2"> Min Parkings </label>
       <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
         <template #incrementbuttonicon>

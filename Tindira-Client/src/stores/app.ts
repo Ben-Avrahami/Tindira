@@ -18,7 +18,6 @@ export const useAppStore = defineStore('app', {
       radiusInKm: null,
       location: null,
       isWithPorchOrGarden: false ,
-      isWithElevator: false
     }
   }),
   getters: {},
