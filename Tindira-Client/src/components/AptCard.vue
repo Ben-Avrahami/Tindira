@@ -5,7 +5,7 @@
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
           <div>
-            <AptImageCarousel />
+            <AptImageCarousel ref="carouselRef" :key="rerenderer" />
           </div>
         </template>
 
@@ -68,9 +68,11 @@ const userStore = useAppStore()
 
 const dummyArrForSwiping = ref([])
 let disableDrag = ref(false)
+let rerenderer = ref(0)
 
 let startingX = 0
 let sensitivity = 80
+
 
 function onEnd(event: any) {
   console.log(event);
@@ -80,13 +82,14 @@ function onEnd(event: any) {
 
   const clientX = isTouchEvent ? originalEvent.changedTouches[0].clientX : originalEvent.clientX;
   const clientY = isTouchEvent ? originalEvent.changedTouches[0].clientY : originalEvent.clientY;
-
   if (clientX > startingX + sensitivity) {
     console.log('right');
     swipe(true);
+    rerenderer.value++;
   } else if (clientX < startingX - sensitivity) {
     console.log('left');
     swipe(false);
+    rerenderer.value++;
   }
 }
 
