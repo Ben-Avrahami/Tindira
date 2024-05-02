@@ -23,7 +23,8 @@
     "vue": "^3.4.23",
     "vue-draggable-plus": "^0.4.0",
     "vue-router": "^4.3.2",
-    "vue-use-places-autocomplete": "^0.2.2"
+    "vue-use-places-autocomplete": "^0.2.2",
+    "vue3-google-map": "^0.20.0"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",
@@ -40,7 +41,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.25.0",
     "jsdom": "^24.0.0",
-    "npm-run-all2":"6.1.2",
+    "npm-run-all2": "6.1.2",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "~5.4.5",
