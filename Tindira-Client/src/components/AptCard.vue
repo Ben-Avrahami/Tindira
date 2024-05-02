@@ -19,12 +19,17 @@
         </template>
         <template #subtitle>
           <div class="drag-area flex justify-between items-center">
-            Full information
-            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl" @click="showFullAptData">
-              <template #icon>
-                <Icon icon="ooui:info-filled"></Icon>
-              </template>
-            </Button>
+            <div class="title flex-grow">
+              Full information
+            </div>
+            <div class="button">
+              <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl"
+                @click="showFullAptData">
+                <template #icon>
+                  <Icon icon="ooui:info-filled"></Icon>
+                </template>
+              </Button>
+            </div>
           </div>
         </template>
         <template #content>
