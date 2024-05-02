@@ -151,7 +151,7 @@ const showFullAptData = () => {
 
 <style scoped>
 .animate-right {
-  animation: swipeRight 0.8s;
+  animation: swipeRight 0.8s ease-out;
 }
 
 @keyframes swipeRight {
