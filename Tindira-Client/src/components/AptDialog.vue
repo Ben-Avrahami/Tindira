@@ -28,13 +28,13 @@
         <Divider />
 
         <div class=" mx-auto space-x-24 flex justify-center">
-            <Button severity="secondary" rounded aria-label="Like" @click="unlike()">
+            <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
                 </template>
             </Button>
 
-            <Button class="text-rose-700" rounded aria-label="Like" @click="like()">
+            <Button class="text-rose-700" rounded aria-label="Like" @click="closeDialog(true)">
                 <template #icon>
                     <Icon icon="ph:heart"></Icon>
                 </template>
@@ -65,17 +65,8 @@ const userStore = useAppStore()
 let listing = ref(userStore.nextListingsArr[0]);
 
 
-function like() {
-    emit('like');
-    closeDialog();
-}
 
-function unlike() {
-    emit('unlike');
-    closeDialog();
-}
-
-function closeDialog() {
-    (dialogRef as any).value.close()
+function closeDialog(isLike: boolean) {
+    (dialogRef as any).value.close(isLike)
 }
 </script>

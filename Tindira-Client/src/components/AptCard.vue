@@ -132,12 +132,10 @@ const showFullAptData = () => {
       modal: true,
       closable: true,
     },
-    like: () => {
-      console.log("caught like")
-      swipe(true);
-    },
-    unlike: () => {
-      swipe(false);
+    onClose: (opt) => {
+      setTimeout(() => {
+        swipe(opt?.data);
+      }, 500);
     }
   })
 }
