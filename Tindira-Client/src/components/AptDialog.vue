@@ -1,4 +1,5 @@
 <template>
+
     <div>
         <AptImageCarousel />
     </div>
@@ -40,8 +41,8 @@
                 </template>
             </Button>
         </div>
-
     </div>
+
 </template>
 
 <script setup lang="ts">
@@ -63,8 +64,6 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const userStore = useAppStore()
 
 let listing = ref(userStore.nextListingsArr[0]);
-
-
 
 function closeDialog(isLike: boolean) {
     (dialogRef as any).value.close(isLike)
