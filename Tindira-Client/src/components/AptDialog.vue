@@ -1,0 +1,55 @@
+<template>
+    <div>
+        <AptImageCarousel />
+    </div>
+
+    <Divider />
+
+    <GoogleMap></GoogleMap>
+
+    <Divider />
+    <div class="text-center">
+        <label class="font-bold block">Adress:</label>
+        <p>{{ listing.address.street }},{{ listing.address.city }}</p>
+        <label class="font-bold block">Description:</label>
+        <p>{{ listing.description }}</p>
+        <label class="font-bold block">Price:</label>
+        <p>{{ listing.price }}₪ </p>
+        <label class="font-bold block">Number Of Rooms:</label>
+        <p>{{ listing.numberOfRooms }} </p>
+        <label class="font-bold block">Amount Of Parkings:</label>
+        <p>{{ listing.parking }} </p>
+        <label v-if="listing.isAnimalFriendly" class="font-bold block">Apartment Is Animel Friendly!</label>
+        <label class="font-bold block">contract Starting Date:</label>
+        <p>{{ listing.contractStartingDate }} </p>
+        <label class="font-bold block">Post Upload Date:</label>
+        <p>{{ listing.postUploadDate }} </p>
+
+
+    </div>
+</template>
+
+<script setup lang="ts">
+import { inject, ref } from 'vue'
+import { Icon } from '@iconify/vue'
+import { useAppStore } from '../stores/app'
+import AptImageCarousel from './AptImageCarousel.vue';
+import GoogleMap from './GoogleMap.vue';
+
+const center = { lat: 40.689247, lng: -74.044502 }
+const markerOptions = { position: center, label: 'L', title: 'LADY LIBERTY' }
+
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+const userStore = useAppStore()
+
+let listing = ref(userStore.nextListingsArr[0]);
+
+
+
+const dialogRef = inject('dialogRef')
+
+function closeDialog() {
+    (dialogRef as any).value.close()
+}
+</script>
