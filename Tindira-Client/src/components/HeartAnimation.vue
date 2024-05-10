@@ -4,7 +4,7 @@
     </transition>
 </template>
 
-<script setup lang="ts">F
+<script setup lang="ts">
 import { ref } from 'vue';
 
 const showHeart = ref(false);
