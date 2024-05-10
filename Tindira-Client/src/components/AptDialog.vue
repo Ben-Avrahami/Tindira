@@ -46,25 +46,24 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { inject, ref, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
 import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
+import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 
+const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
-const dialogRef = inject('dialogRef')
+const listing = dialogRef?.value.data.listing;
 
 const center = { lat: 40.689247, lng: -74.044502 }
 const markerOptions = { position: center, label: 'L', title: 'LADY LIBERTY' }
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-const userStore = useAppStore()
-
-let listing = ref(userStore.nextListingsArr[0]);
 
 function closeDialog(isLike: boolean) {
-    (dialogRef as any).value.close(isLike)
+    dialogRef?.value.close(isLike)
 }
 </script>
