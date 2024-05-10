@@ -44,6 +44,12 @@ class _API {
         return response.data;
     }
 
+    async tagListing(listingId: string, username: string, isLike: boolean) {
+        const response = await this.service.get(`/listings/tag?username=galben&amount=${listingId}&isLike=${isLike.toString()}`);
+        console.log(response)
+        return response.data;
+    }
+
     //dummy method to check connection to backend
     //to be removed later
     async checkLogin() {
