@@ -18,7 +18,6 @@ const props = defineProps({
 const emit = defineEmits(['locationChosen', 'locationCleared'])
 let location: Ref<any>;
 location = ref(props.locationString);
-console.log("location", location.value)
 
 const { suggestions } = usePlacesAutocomplete(location, {
     apiOptions: {
