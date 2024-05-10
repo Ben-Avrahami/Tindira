@@ -127,10 +127,13 @@ const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialo
 
 const showFullAptData = () => {
   dialog.open(ApartmentDialog, {
+    data: {
+      listing: userStore.nextListingsArr[0]
+    },
     props: {
       header: userStore.nextListingsArr[0]?.title,
       style: {
-        width: '95vw'
+        width: '100vw'
       },
       breakpoints: {
         '960px': '75vw',
