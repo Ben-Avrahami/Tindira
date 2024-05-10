@@ -4,6 +4,7 @@ export interface State {
   isLoading: boolean
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
+  categoryOptions: SelectedFilters["category"][]
 
 }
 
