@@ -1,5 +1,5 @@
 <template>
-    <DataView :value="products">
+    <!-- <DataView :value="products">
         <template #list="slotProps">
             <div class="grid grid-nogutter">
                 <div v-for="(item, index) in slotProps.items" :key="index" class="col-12">
@@ -12,14 +12,10 @@
                             class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
                             <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
                                 <div>
-                                    <!-- <span class="font-medium text-secondary text-sm">{{ item.title }}</span> -->
+
                                     <div class="text-lg font-medium text-900 mt-2">{{ item.title }}</div>
                                 </div>
                                 <div class="surface-100 p-1" style="border-radius: 30px">
-                                    <!-- <div class="surface-0 flex align-items-center gap-2 justify-content-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                                    <span class="text-900 font-medium text-sm">{{ item.rating }}</span>
-                                    <i class="pi pi-star-fill text-yellow-500"></i>
-                                </div> -->
                                     <div class="text-lg font-medium text-900 mt-2">{{ item.description }}</div>
                                 </div>
                             </div>
@@ -31,28 +27,30 @@
                                         <template #icon>
                                             <Icon icon="ooui:info-filled"></Icon>
                                         </template>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </DataView>
+</Button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</template>
+</DataView> -->
 
 </template>
 
 <script setup lang="ts">
 
-import { ref, type PropType, type Ref } from 'vue';
+import { useDialog } from 'primevue/usedialog';
+import { defineAsyncComponent, ref, type PropType, type Ref } from 'vue';
 
 const props = defineProps({});
 const emit = defineEmits(['locationChosen', 'locationCleared'])
 
+const dialog = useDialog()
 const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
 
-const showFullAptData = (item) => {
+const showFullAptData = (item: any) => {
     dialog.open(ApartmentDialog, {
         data: {
             listing: item
@@ -69,13 +67,13 @@ const showFullAptData = (item) => {
             modal: true,
             closable: true,
         },
-        onClose: (isLike) => {
-            if (isLike?.data !== undefined) {
-                setTimeout(() => {
-                    // swipe(isLike.data); TODO: tag the listing through api without animation
-                }, 500);
-            }
-        }
+        // onClose: (isLike) => {
+        //     if (isLike?.data !== undefined) {
+        //         setTimeout(() => {
+        //             // swipe(isLike.data); TODO: tag the listing through api without animation
+        //         }, 500);
+        //     }
+        // }
     })
 }
 
