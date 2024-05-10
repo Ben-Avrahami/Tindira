@@ -20,7 +20,7 @@
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Preferred Location </label>
       <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
-        :modelValue="selectedFilters.location as string | Location | undefined">
+        :locationString="selectedFilters.location?.formatted_address">
       </GoogleMapsAutoComplete>
     </div>
   </div>
@@ -117,7 +117,7 @@ import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
 import { getCities } from '@/api/GetCitiesApi'
 import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
-import type { Location } from '@/stores/State.interface';
+import type { GeoCodeGoogleLocation, Location } from '@/stores/State.interface';
 
 
 const userStore = useAppStore()
@@ -126,6 +126,7 @@ const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 function updateLocation(location: any) {
   selectedFilters.location = location;
+  console.log("updated location", selectedFilters.location)
 }
 
 function locationCleared() {

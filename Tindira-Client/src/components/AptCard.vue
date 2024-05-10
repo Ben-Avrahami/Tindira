@@ -63,6 +63,7 @@ import AptImageCarousel from './AptImageCarousel.vue';
 import { useDialog } from 'primevue/usedialog'
 
 import { useAppStore } from '../stores/app'
+import API from '@/api';
 
 const userStore = useAppStore()
 
@@ -118,6 +119,7 @@ async function swipe(isLike: boolean) {
     disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
+  API.tagListing(userStore.nextListingsArr[0]?.listingId, "", isLike);
 }
 
 const dialog = useDialog()
