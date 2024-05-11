@@ -6,14 +6,14 @@
 
     <div class="flex justify-center items-center space-x-4 mt-5">
       <div class="w-1/2 px-2">
-        <Button class="w-full" label="Swiping History" @click="redirectToSwipingHistory">
+        <Button class="w-full" label="Swiping History" rounded @click="redirectToSwipingHistory">
           <template #icon>
             <Icon icon="material-symbols:history"></Icon>
           </template>
         </Button>
       </div>
       <div class="w-1/2 px-2">
-        <Button class="w-full" label="Manage Posts" @click="redirectToManagePosts">
+        <Button class="w-full" label="Manage Posts" rounded @click="redirectToManagePosts">
           <template #icon>
             <Icon icon="mdi:post-it-note-edit-outline"></Icon>
           </template>
