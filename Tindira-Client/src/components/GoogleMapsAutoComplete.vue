@@ -32,7 +32,7 @@ const { suggestions } = usePlacesAutocomplete(location, {
 
 async function updateLocation() {
     const geoCode = await geocodeByPlaceId((location.value as Location).place_id);
-    const result = geoCode.length === 1 ? geoCode[0] : geoCode;
+    const result = geoCode.length === 1 ? geoCode[0] : geoCode as any;
     
     const { location_type, ...geometryWithoutLocationType } = result.geometry;
     const logObject = {
