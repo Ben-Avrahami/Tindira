@@ -81,6 +81,27 @@ class _API {
     })
     return response
   }
+
+  async registerUser(
+    username: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string,
+    phoneNumber: string,
+    roles: string[]
+  ) {
+    const response = await this.service.post('/register', {
+      username: username,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+      phoneNumber: phoneNumber,
+      roles: roles
+    })
+    return response
+  }
 }
 
 const API = new _API()

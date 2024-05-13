@@ -197,7 +197,8 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
-import axios from 'axios'
+
+import API from '@/api'
 
 const toaster = useToaster() as Toaster // temp, will be moved to a global component
 
@@ -323,20 +324,27 @@ const sendSignUpRequest = async () => {
 
   const data = {
     email: email.value,
-    password: password.value,
-    phone: phone.value, // remove the dashes?
-    roles: {
-      rent: rent.value,
-      lease: lease.value
-    },
     firstName: name.value.split(' ')[0],
     lastName: name.value.split(' ')[1],
+    password: password.value,
+    phone: phone.value, // remove the dashes?
+    roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
     profilePicture: profilePicture.value ?? '',
     description: description.value ?? ''
   }
 
   try {
-    await axios.post(`/users/${phone.value}`, data)
+    await API.registerUser(
+      data.firstName,
+      data.email,
+      data.firstName,
+      data.lastName,
+      data.password,
+      data.phone,
+      data.roles
+      // data.profilePicture,
+      // data.description
+    ) // TODO: Handle error according to the error message (e.g. user already exists)
     toaster.add({
       severity: 'success',
       summary: 'Sign Up Successful',
