@@ -1,7 +1,7 @@
 <template>
   <Toolbar>
     <template #start>
-      <img src="../assets/logo.png" alt="Image" width="100" />
+      <img src="../assets/logo.png" alt="Image" width="35" class="mr-4" />
 
       <Button class="text-2xl" text aria-label="Home" @click="navigateTo('/')">
         <template #icon>
