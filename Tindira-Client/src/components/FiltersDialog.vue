@@ -1,73 +1,105 @@
 <template>
-  <div class="flex items-center space-x-4">
-    <Chip label="Category" />
-    <Dropdown v-model="selectedFilters.category" :options="categoryOptions" placeholder="Choose a Category" />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Category </label>
+      <Dropdown v-model="selectedFilters.category" :options="userStore.categoryOptions"
+        placeholder="Choose a Category" />
+    </div>
   </div>
   <Divider />
-  
-  <div class="flex items-center space-x-4">
-    <Chip label="Max Price/Month" />
-    <InputNumber v-model="selectedFilters.maxPrice" inputId="currency-il" mode="currency" currency="ILS"
-      locale="en-US" />
-  </div>
-  <Divider />
-  <div class="flex items-center space-x-4">
-    <Chip label="Preferred Location" />
-    <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
-      :modelValue="selectedFilters.location as string | Location | undefined">
-    </GoogleMapsAutoComplete>
+
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Max Price/Month </label>
+      <InputNumber v-model="selectedFilters.maxPrice" inputId="currency-il" mode="currency" currency="ILS"
+        locale="en-US" />
+    </div>
   </div>
 
-  <div class="flex items-center space-x-4">
-    <Chip label="Radius From Location(Km)" />
-    <InputNumber v-model="selectedFilters.radiusInKm" showButtons :min="1" :max="100">
-      <template #incrementbuttonicon>
-        <Icon icon="mdi:plus"></Icon>
-      </template>
-      <template #decrementbuttonicon>
-        <Icon icon="mdi:minus"></Icon>
-      </template>
-    </InputNumber>
-  </div>
   <Divider />
-  <div class="flex items-center space-x-4">
-    <Chip label="Animal Friendly" />
-    <Checkbox v-model="selectedFilters.isAnimalFriendly" :binary="true" />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Preferred Location </label>
+      <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
+        :locationString="selectedFilters.location?.formatted_address">
+      </GoogleMapsAutoComplete>
+    </div>
   </div>
-  <Divider />
-  <div class="flex items-center space-x-4">
-    <Chip label="Min Parkings" />
-    <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
-      <template #incrementbuttonicon>
-        <Icon icon="mdi:plus"></Icon>
-      </template>
-      <template #decrementbuttonicon>
-        <Icon icon="mdi:minus"></Icon>
-      </template>
-    </InputNumber>
-  </div>
-  <Divider />
-  <div class="flex items-center space-x-4">
-    <Chip label="Min Rooms" />
-    <InputNumber v-model="selectedFilters.minNumberOfRooms" showButtons :min="0" :max="10">
-      <template #incrementbuttonicon>
-        <Icon icon="mdi:plus"></Icon>
-      </template>
-      <template #decrementbuttonicon>
-        <Icon icon="mdi:minus"></Icon>
-      </template>
-    </InputNumber>
-  </div>
-  <Divider />
-  <div class="flex items-center space-x-4">
-    <Chip label="Dates" />
 
-    <Calendar v-model="selectedFilters.dates" selectionMode="range" showButtonBar :manualInput="false"
-      dateFormat="dd/mm/yy" />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Radius From Location(Km) </label>
+      <InputNumber v-model="selectedFilters.radiusInKm" style="max-width: 40vw;" showButtons :min="1" :max="100">
+        <template #incrementbuttonicon>
+          <Icon icon="mdi:plus"></Icon>
+        </template>
+        <template #decrementbuttonicon>
+          <Icon icon="mdi:minus"></Icon>
+        </template>
+      </InputNumber>
+    </div>
   </div>
-  <div class="flex items-center space-x-4" v-if="selectedFilters.dates">
-    <Chip label="Only display aparetments that are avilable for the whole time?" />
-    <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
+
+  <Divider />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Must Be Animal Friendly </label>
+      <Checkbox v-model="selectedFilters.isAnimalFriendly" :binary="true" />
+    </div>
+  </div>
+  <Divider />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Must Be With Porch Or Garden </label>
+      <Checkbox v-model="selectedFilters.isWithPorchOrGarden" :binary="true" />
+    </div>
+  </div>
+  <Divider />
+
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Min Parkings </label>
+      <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
+        <template #incrementbuttonicon>
+          <Icon icon="mdi:plus"></Icon>
+        </template>
+        <template #decrementbuttonicon>
+          <Icon icon="mdi:minus"></Icon>
+        </template>
+      </InputNumber>
+    </div>
+  </div>
+
+  <Divider />
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Min Rooms </label>
+
+      <InputNumber v-model="selectedFilters.minNumberOfRooms" showButtons :min="0" :max="10">
+        <template #incrementbuttonicon>
+          <Icon icon="mdi:plus"></Icon>
+        </template>
+        <template #decrementbuttonicon>
+          <Icon icon="mdi:minus"></Icon>
+        </template>
+      </InputNumber>
+    </div>
+  </div>
+
+  <Divider />
+
+  <div class="flex flex-wrap gap-3 p-fluid">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Dates </label>
+      <Calendar v-model="selectedFilters.dates" selectionMode="range" showButtonBar :manualInput="false"
+        dateFormat="dd/mm/yy" />
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-3 p-fluid" v-if="selectedFilters.dates">
+    <div class="flex-auto">
+      <label class="font-bold block mb-2"> Only display aparetments that are avilable for the whole time? </label>
+      <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
+    </div>
   </div>
 
   <Divider />
@@ -86,7 +118,7 @@ import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
 import { getCities } from '@/api/GetCitiesApi'
 import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
-import type { Location } from '@/stores/State.interface';
+import type { GeoCodeGoogleLocation, Location } from '@/stores/State.interface';
 
 
 const userStore = useAppStore()
@@ -95,14 +127,13 @@ const selectedFilters = reactive({ ...userStore.SelectedFilters })
 
 function updateLocation(location: any) {
   selectedFilters.location = location;
+  console.log("updated location", selectedFilters.location)
 }
 
-function locationCleared(location: any) {
+function locationCleared() {
   selectedFilters.location = null;
 }
 
-
-const categoryOptions = ref(['sublet', 'rent', 'animel sublet', 'switch', 'buy'])
 // let citiesInIsrael = ref(await getCities()) TODO:Remove later, cuurently is not being used, but keeping it for being used maybe in future
 
 const dialogRef = inject('dialogRef')

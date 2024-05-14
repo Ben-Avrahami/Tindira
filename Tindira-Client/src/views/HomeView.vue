@@ -39,7 +39,4 @@ const showFilters = () => {
   })
 }
 
-const categoryOptions = ref(['sublet', 'rent', 'animel sublet', 'switch', 'buy'])
-
-const selectedCategory = ref('sublet')
 </script>

@@ -4,24 +4,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Location } from '@/stores/State.interface';
+import type { GeoCodeGoogleLocation, Location } from '@/stores/State.interface';
 import { ref, type PropType, type Ref } from 'vue';
-import { usePlacesAutocomplete } from 'vue-use-places-autocomplete';
+import { usePlacesAutocomplete, geocodeByPlaceId } from 'vue-use-places-autocomplete';
 
 
 const props = defineProps({
-    modelValue: {
-        type: Object as PropType<Location | string>,
+    locationString: {
+        type: String,
         default: '',
     },
 });
-const emit = defineEmits(['locationChosen','locationCleared'])
-let location: Ref<string>;
-if (typeof props.modelValue === 'string') {
-    location = ref(props.modelValue);
-} else {
-    location = ref(props.modelValue?.description || '');
-}
+const emit = defineEmits(['locationChosen', 'locationCleared'])
+let location: Ref<any>;
+location = ref(props.locationString);
+
 const { suggestions } = usePlacesAutocomplete(location, {
     apiOptions: {
         version: 'weekly',
@@ -29,15 +26,17 @@ const { suggestions } = usePlacesAutocomplete(location, {
     autocompletionRequest: {
         // region: 'IL',
     },
-    debounce: 500,
+    debounce: 1000,
     minLengthAutocomplete: 3
 });
 
-function updateLocation() {
-    emit('locationChosen', location);
+async function updateLocation() {
+    const geoCode = await geocodeByPlaceId((location.value as Location).place_id);
+    const result = geoCode.length === 1 ? geoCode[0] : geoCode;
+    emit('locationChosen', result);
 };
 function cleared() {
-    emit('locationCleared', location);
+    emit('locationCleared');
 };
 
 </script>

@@ -16,8 +16,10 @@ export const useAppStore = defineStore('app', {
       isAnimalFriendly: false,
       city: null,
       radiusInKm: null,
-      location: null
-    }
+      location: null,
+      isWithPorchOrGarden: false,
+    },
+    categoryOptions: ['sublet', 'rent', 'animel sublet', 'switch', 'buy']
   }),
   getters: {},
   actions: {
