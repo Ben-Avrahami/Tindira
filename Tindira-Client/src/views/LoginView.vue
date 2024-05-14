@@ -4,15 +4,17 @@
       Welcome to Tindira
     </h1>
     <div class="flex flex-col items-center justify-center h-full">
-      <LoginButtons
-        v-if="method === LoginMethod.UNDEFINED"
-        :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
-        :loginWithPhoneNumber="() => (method = LoginMethod.PHONE_NUMBER)"
-        :loginWithUsername="() => (method = LoginMethod.USERNAME)"
-      />
-      <KeepAlive v-else>
-        <component :is="methods[method]" :attemptLogin :back />
-      </KeepAlive>
+      <Transition name="fade" mode="out-in">
+        <KeepAlive>
+          <LoginButtons
+            v-if="method === LoginMethod.UNDEFINED"
+            :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
+            :loginWithPhoneNumber="() => (method = LoginMethod.PHONE_NUMBER)"
+            :loginWithUsername="() => (method = LoginMethod.USERNAME)"
+          />
+          <component v-else :is="methods[method]" :attemptLogin :back />
+        </KeepAlive>
+      </Transition>
     </div>
   </div>
 </template>
@@ -91,4 +93,13 @@ const back = () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
