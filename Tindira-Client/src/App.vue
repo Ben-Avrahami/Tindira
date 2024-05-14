@@ -4,7 +4,7 @@
     <ToastService>
       <Suspense>
         <template #default>
-          <StoreService />
+          <StoreInitializer />
         </template>
         <template #fallback>
           <div class="flex items-center justify-center h-full">
@@ -27,7 +27,9 @@ script.src = `https://maps.googleapis.com/maps/api/js?key=${
 }&region=ISR&libraries=places`
 document.head.appendChild(script)
 
-const StoreService = defineAsyncComponent(() => import('./components/global/StoreService.vue'))
+const StoreInitializer = defineAsyncComponent(
+  () => import('./components/global/StoreInitializer.vue')
+)
 </script>
 
 <style scoped></style>
