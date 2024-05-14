@@ -21,6 +21,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
+import { useAppStore } from '@/stores/app'
 
 import LoginButtons from '@/components/login/LoginButtons.vue'
 import WithGoogle from '@/components/login/WithGoogle.vue'
@@ -32,6 +33,8 @@ import API from '@/api'
 const router = useRouter()
 
 const toast = injectToast()
+
+const appStore = useAppStore()
 
 const defaultErrorMessage = 'An error occurred while logging in. Please try again later.'
 
@@ -73,6 +76,7 @@ const attemptLogin = async (username: string, password: string) => {
         detail: 'You have successfully logged in',
         life: 3000
       })
+      appStore.connectUser(response.data.user.username)
       login()
     } else {
       printError()

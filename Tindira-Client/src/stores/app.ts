@@ -5,6 +5,7 @@ import API from '@/api/index.js'
 export const useAppStore = defineStore('app', {
   state: (): State => ({
     isLoading: false,
+    connectedUser: null,
     nextListingsArr: [],
     SelectedFilters: {
       category: 'rent',
@@ -21,12 +22,20 @@ export const useAppStore = defineStore('app', {
     },
     categoryOptions: ['sublet', 'rent', 'animel sublet', 'switch', 'buy']
   }),
-  getters: {},
+  getters: {
+    isUserConnected: (state) => state.connectedUser !== null
+  },
   actions: {
     async initializeState() {
       this.isLoading = true
       this.nextListingsArr = await API.getNextListings(5, this.SelectedFilters, 'galben', [])
       this.isLoading = false
+    },
+    connectUser(userId: string) {
+      this.connectedUser = userId
+    },
+    disconnectUser() {
+      this.connectedUser = null
     },
     async getNextListing(amount: number) {
       const newListing = await API.getNextListings(amount, this.SelectedFilters, 'galben', [])

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <SiteHeader />
+    <SiteHeader v-if="appStore.isUserConnected" />
 
     <main class="container flex flex-col flex-1 h-full mx-auto">
       <RouterView v-slot="{ Component }">
@@ -14,6 +14,9 @@
 
 <script setup lang="ts">
 import SiteHeader from '@/components/global/SiteHeader.vue'
+import { useAppStore } from '@/stores/app'
+
+const appStore = useAppStore()
 </script>
 
 <style scoped>

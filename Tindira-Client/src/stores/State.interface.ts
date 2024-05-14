@@ -2,6 +2,7 @@ import type { Listing } from '@/interfaces/listing.interface'
 
 export interface State {
   isLoading: boolean
+  connectedUser: string | null
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
   categoryOptions: SelectedFilters['category'][]
