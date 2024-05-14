@@ -1,18 +1,22 @@
 <template>
   <Button :class="buttonClasses" @click="loginWithGoogle" disabled>
     <Icon icon="mdi:google" :class="iconsClasses" />
-    Continue with Google
+    Log in with Google
   </Button>
 
   <Button :class="buttonClasses" @click="loginWithPhoneNumber" disabled>
     <Icon icon="mdi:phone" :class="iconsClasses" />
-    Continue with Phone Number
+    Log in with Phone Number
   </Button>
 
   <Button :class="buttonClasses" @click="loginWithUsername">
     <Icon icon="mdi:user" :class="iconsClasses" />
-    Continue with Username
+    Log in with Username
   </Button>
+
+  <Divider layout="horizontal" align="center" nobg>
+    <span class="mx-1">or</span>
+  </Divider>
 
   <RouterLink class="w-full" to="/signup">
     <Button severity="success" :class="buttonClasses">
@@ -25,7 +29,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
-const buttonClasses = 'my-1.5 w-full px-12'
+const buttonClasses = 'my-1.5 w-full pl-10'
 const iconsClasses = 'absolute left-3'
 
 defineProps<{
