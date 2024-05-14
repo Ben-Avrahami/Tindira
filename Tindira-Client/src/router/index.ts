@@ -1,3 +1,4 @@
+import { useAppStore } from '@/stores/app'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -34,6 +35,27 @@ const router = createRouter({
       component: () => import('@/views/SwipingHistoryView.vue')
     }
   ]
+})
+
+const routesAllowedWithoutLogin = ['/login', '/signup']
+
+router.beforeResolve((to, _, next) => {
+  const store = useAppStore()
+  const isLoggedIn = store.isUserConnected
+
+  if (!routesAllowedWithoutLogin.includes(to.path) && !isLoggedIn) {
+    // Redirect to login page if user is not logged in
+    next('/login')
+    return
+  }
+
+  if (routesAllowedWithoutLogin.includes(to.path) && isLoggedIn) {
+    // Redirect to home page if user is logged in
+    next('/')
+    return
+  }
+
+  next()
 })
 
 export default router
