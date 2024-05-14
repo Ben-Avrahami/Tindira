@@ -37,20 +37,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import type { ToastServiceMethods } from 'primevue/toastservice'
+import { injectToast } from '@/functions/toast'
 
 const props = defineProps<{
   profilePicture: string
   setProfilePicture: (image: string) => void
 }>()
 
-const toastService = inject<ToastServiceMethods>('toast')
-if (!toastService) {
-  console.warn('Toast service not found')
-}
-const toast = toastService!
+const toast = injectToast()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 

@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { ToastServiceMethods } from 'primevue/toastservice'
+import { injectToast } from '@/functions/toast'
 
 import LoginButtons from '@/components/login/LoginButtons.vue'
 import WithGoogle from '@/components/login/WithGoogle.vue'
@@ -31,11 +31,7 @@ import API from '@/api'
 
 const router = useRouter()
 
-const toastService = inject<ToastServiceMethods>('toast')
-if (!toastService) {
-  console.warn('Toast service not found')
-}
-const toast = toastService!
+const toast = injectToast()
 
 const defaultErrorMessage = 'An error occurred while logging in. Please try again later.'
 
@@ -89,10 +85,6 @@ const attemptLogin = async (username: string, password: string) => {
 const back = () => {
   method.value = LoginMethod.UNDEFINED
 }
-
-// const loginWithGoogle = () => {
-//   attemptLogin('Yehonatan', '123ASDasd')
-// }
 </script>
 
 <style scoped></style>

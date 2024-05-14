@@ -188,9 +188,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import type { ToastServiceMethods } from 'primevue/toastservice'
+import { injectToast } from '@/functions/toast'
 
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
@@ -201,11 +201,7 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import API from '@/api'
 
-const toastService = inject<ToastServiceMethods>('toast')
-if (!toastService) {
-  console.warn('Toast service not found')
-}
-const toast = toastService!
+const toast = injectToast()
 
 const active = ref<number>(0)
 
