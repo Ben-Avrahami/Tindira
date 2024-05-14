@@ -1,6 +1,9 @@
 import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 
+type OptionalField = 'firstName' | 'history' | 'lastName' | 'listings' | 'phoneNumber' | 'profileDescription' | 'profilePicture' | 'reviews' | 'roles';
+
+
 ////////////////////////////////////////////////
 //                API SECTION
 ////////////////////////////////////////////////
@@ -50,12 +53,28 @@ class _API {
     }
 
     async tagListing(listingId: string, username: string, category: string, isLike: boolean) {
-        const response = await this.service.put(`/listings/tag?userName=galben&listingId=${listingId}&category=${category}&isLike=${isLike.toString()}`);
+        const response = await this.service.put(`/listings/tag?username=galben&listingId=${listingId}&category=${category}&isLike=${isLike.toString()}`);
         console.log(response)
         return response.data;
     }
     async getCategoryHistory(category: string, username: string, showLikes: boolean, page: number = 1, items: number = 10) {
-        const response = await this.service.get(`/user/getHistory?userName=galben&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`);
+        const response = await this.service.get(`/user/getHistory?username=galben&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`);
+        console.log(response)
+        return response.data;
+    }
+
+
+
+    async getUsersByUserName(usernames: string[], optionalFields: OptionalField[] = []) {
+        let usernamesString = usernames.join(',');
+        let optionalFieldsString = optionalFields.join(',');
+        const response = await this.service.get(`/user?username=${usernamesString}`);
+        console.log(response)
+        return response.data;
+    }
+    async getListingsById(ids: string[]) {
+        let idsString = ids.join(',');
+        const response = await this.service.get(`listings?id=${idsString}`);
         console.log(response)
         return response.data;
     }
