@@ -18,9 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToaster, type Toaster } from '@/stores/toaster'
+import type { ToastServiceMethods } from 'primevue/toastservice'
+
 import LoginButtons from '@/components/login/LoginButtons.vue'
 import WithGoogle from '@/components/login/WithGoogle.vue'
 import WithPhone from '@/components/login/WithPhone.vue'
@@ -28,9 +29,13 @@ import WithUsername from '@/components/login/WithUsername.vue'
 
 import API from '@/api'
 
-const toaster = useToaster() as Toaster // temp, will be moved to a global component
-
 const router = useRouter()
+
+const toastService = inject<ToastServiceMethods>('toast')
+if (!toastService) {
+  console.warn('Toast service not found')
+}
+const toast = toastService!
 
 const defaultErrorMessage = 'An error occurred while logging in. Please try again later.'
 
@@ -50,7 +55,7 @@ const methods = {
 }
 
 const printError = (message: string = defaultErrorMessage) => {
-  toaster.add({
+  toast.add({
     severity: 'error',
     summary: 'Login Error',
     detail: message,
@@ -66,7 +71,7 @@ const attemptLogin = async (username: string, password: string) => {
   try {
     const response = await API.loginUser(username, password)
     if (response.status === 200) {
-      toaster.add({
+      toast.add({
         severity: 'success',
         summary: 'Success!',
         detail: 'You have successfully logged in',

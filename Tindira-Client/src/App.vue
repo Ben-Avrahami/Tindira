@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import Toolbar from '@/components/Toolbar.vue'
-import DynamicDialog from 'primevue/dynamicdialog'
+import ToastService from '@/components/global/ToastService.vue'
 
 const script = document.createElement('script')
 script.src = `https://maps.googleapis.com/maps/api/js?key=${
@@ -12,17 +12,18 @@ document.head.appendChild(script)
 
 <template>
   <div class="dark:bg-gray-600 flex flex-col h-screen">
-    <Toast />
-    <Toolbar />
+    <ToastService>
+      <Toolbar />
 
-    <main class="container mx-auto flex-1">
-      <Suspense>
-        <RouterView />
-      </Suspense>
-      <Suspense>
-        <DynamicDialog />
-      </Suspense>
-    </main>
+      <main class="container mx-auto flex-1">
+        <Suspense>
+          <RouterView />
+        </Suspense>
+        <Suspense>
+          <DynamicDialog />
+        </Suspense>
+      </main>
+    </ToastService>
   </div>
 </template>
 

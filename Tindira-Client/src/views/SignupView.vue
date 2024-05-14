@@ -94,7 +94,7 @@
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="Upload your profile picture" optional />
           <div class="flex justify-center">
-            <ProfilePicture :profilePicture :setProfilePicture :toast="toaster.toast" />
+            <ProfilePicture :profilePicture :setProfilePicture />
           </div>
         </div>
         <div class="flex pt-4 justify-between">
@@ -188,9 +188,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { useToaster, type Toaster } from '@/stores/toaster'
+import type { ToastServiceMethods } from 'primevue/toastservice'
 
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
@@ -201,7 +201,11 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import API from '@/api'
 
-const toaster = useToaster() as Toaster // temp, will be moved to a global component
+const toastService = inject<ToastServiceMethods>('toast')
+if (!toastService) {
+  console.warn('Toast service not found')
+}
+const toast = toastService!
 
 const active = ref<number>(0)
 
@@ -234,7 +238,7 @@ const isPasswordStrong = (): boolean => {
 
 const validateBasicInfo = (): boolean => {
   if (!isPhoneValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Phone Number',
       detail: 'Please enter a valid phone number',
@@ -243,7 +247,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isNameValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Name',
       detail: 'Please enter your full name',
@@ -252,7 +256,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isEmailValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Email',
       detail: 'Please enter a valid email address',
@@ -261,7 +265,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isPasswordStrong()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Weak Password',
       detail: 'Please enter a strong password',
@@ -292,7 +296,7 @@ const lease = ref<boolean>(false)
 
 const validateRoles = (): boolean => {
   if (!rent.value && !lease.value) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'No Role Selected',
       detail: 'Please select at least one role',
@@ -314,7 +318,7 @@ const sendSignUpRequest = async () => {
     !(rent.value || lease.value)
   ) {
     // This should never happen because the NextButton is disabled, but just in case
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Missing Information',
       detail: 'Please fill in all required fields',
@@ -346,14 +350,14 @@ const sendSignUpRequest = async () => {
       // data.profilePicture,
       // data.description
     ) // TODO: Handle error according to the error message (e.g. user already exists)
-    toaster.add({
+    toast.add({
       severity: 'success',
       summary: 'Sign Up Successful',
       detail: 'You have successfully signed up!',
       life: 3000
     })
   } catch (error) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
       detail: 'An error occurred while signing up',
