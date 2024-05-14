@@ -39,15 +39,23 @@ const router = createRouter({
 
 const routesAllowedWithoutLogin = ['/login', '/signup']
 
-router.beforeEach((to, _, next) => {
+router.beforeResolve((to, _, next) => {
   const store = useAppStore()
   const isLoggedIn = store.isUserConnected
 
-  if (isLoggedIn || routesAllowedWithoutLogin.includes(to.path)) {
-    next()
-  } else {
+  if (!routesAllowedWithoutLogin.includes(to.path) && !isLoggedIn) {
+    // Redirect to login page if user is not logged in
     next('/login')
+    return
   }
+
+  if (routesAllowedWithoutLogin.includes(to.path) && isLoggedIn) {
+    // Redirect to home page if user is logged in
+    next('/')
+    return
+  }
+
+  next()
 })
 
 export default router
