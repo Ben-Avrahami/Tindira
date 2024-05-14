@@ -102,6 +102,14 @@ class _API {
     })
     return response
   }
+
+  async loginUser(username: string, password: string) {
+    const response = await this.service.post('/login', {
+      username: username,
+      password: password
+    })
+    return response
+  }
 }
 
 const API = new _API()

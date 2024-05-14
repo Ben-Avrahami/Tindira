@@ -1,34 +1,93 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full">
-    <h1 class="text-3xl font-bold text-center text-surface-300 pt-8">Welcome to Tindira</h1>
+    <h1 class="text-3xl font-bold text-center text-surface-300 pt-8 select-none">
+      Welcome to Tindira
+    </h1>
     <div class="flex flex-col items-center justify-center h-full">
-      <Button class="my-2 w-full" @click="loginWithGoogle">
-        <Icon icon="mdi:google" class="mr-2" />
-        Continue with Google
-      </Button>
-      <Button class="my-2 w-full" @click="loginWithPhoneNumber">
-        <Icon icon="mdi:phone" class="mr-2" />
-        Continue with Phone Number
-      </Button>
+      <LoginButtons
+        v-if="method === LoginMethod.UNDEFINED"
+        :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
+        :loginWithPhoneNumber="() => (method = LoginMethod.PHONE_NUMBER)"
+        :loginWithUsername="() => (method = LoginMethod.USERNAME)"
+      />
+      <KeepAlive v-else>
+        <component :is="methods[method]" :attemptLogin :back />
+      </KeepAlive>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Icon } from '@iconify/vue'
+import { useToaster, type Toaster } from '@/stores/toaster'
+import LoginButtons from '@/components/login/LoginButtons.vue'
+import WithGoogle from '@/components/login/WithGoogle.vue'
+import WithPhone from '@/components/login/WithPhone.vue'
+import WithUsername from '@/components/login/WithUsername.vue'
+
+import API from '@/api'
+
+const toaster = useToaster() as Toaster // temp, will be moved to a global component
 
 const router = useRouter()
+
+const defaultErrorMessage = 'An error occurred while logging in. Please try again later.'
+
+enum LoginMethod {
+  UNDEFINED = 'undefined',
+  GOOGLE = 'WithGoogle',
+  PHONE_NUMBER = 'WithPhone',
+  USERNAME = 'WithUsername'
+}
+
+const method = ref<LoginMethod>(LoginMethod.UNDEFINED)
+
+const methods = {
+  WithGoogle,
+  WithPhone,
+  WithUsername
+}
+
+const printError = (message: string = defaultErrorMessage) => {
+  toaster.add({
+    severity: 'error',
+    summary: 'Login Error',
+    detail: message,
+    life: 3000
+  })
+}
 
 const login = () => {
   router.push('/')
 }
-const loginWithGoogle = () => {
-  login()
+
+const attemptLogin = async (username: string, password: string) => {
+  try {
+    const response = await API.loginUser(username, password)
+    if (response.status === 200) {
+      toaster.add({
+        severity: 'success',
+        summary: 'Success!',
+        detail: 'You have successfully logged in',
+        life: 3000
+      })
+      login()
+    } else {
+      printError()
+    }
+  } catch (error: any) {
+    printError(error.response.data.message)
+  }
 }
-const loginWithPhoneNumber = () => {
-  login()
+
+const back = () => {
+  method.value = LoginMethod.UNDEFINED
 }
+
+// const loginWithGoogle = () => {
+//   attemptLogin('Yehonatan', '123ASDasd')
+// }
 </script>
 
 <style scoped></style>

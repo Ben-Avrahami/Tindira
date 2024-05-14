@@ -72,6 +72,7 @@
           </div>
         </div>
         <div class="flex pt-4 justify-end">
+          <!-- TODO: add "Back to home/login page" button here -->
           <NextButton
             :disabled="!(phone && name && email && password)"
             @click="
