@@ -1,6 +1,24 @@
+<template>
+  <!-- TODO: find alternative to min-h-dvh, it's not functioning properly -->
+  <div class="dark:bg-gray-600 flex flex-col min-h-dvh h-dvh">
+    <ToastService>
+      <Suspense>
+        <template #default>
+          <StoreService />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" />
+          </div>
+        </template>
+      </Suspense>
+      <DynamicDialog />
+    </ToastService>
+  </div>
+</template>
+
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import Toolbar from '@/components/Toolbar.vue'
+import { defineAsyncComponent } from 'vue'
 import ToastService from '@/components/global/ToastService.vue'
 
 const script = document.createElement('script')
@@ -8,23 +26,8 @@ script.src = `https://maps.googleapis.com/maps/api/js?key=${
   import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 }&region=ISR&libraries=places`
 document.head.appendChild(script)
+
+const StoreService = defineAsyncComponent(() => import('./components/global/StoreService.vue'))
 </script>
-
-<template>
-  <div class="dark:bg-gray-600 flex flex-col h-screen">
-    <ToastService>
-      <Toolbar />
-
-      <main class="container mx-auto flex-1">
-        <Suspense>
-          <RouterView />
-        </Suspense>
-        <Suspense>
-          <DynamicDialog />
-        </Suspense>
-      </main>
-    </ToastService>
-  </div>
-</template>
 
 <style scoped></style>

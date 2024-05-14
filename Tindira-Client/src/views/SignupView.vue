@@ -190,7 +190,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { injectToast } from '@/functions/toast'
+import { injectToast } from '@/functions/inject'
 
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'

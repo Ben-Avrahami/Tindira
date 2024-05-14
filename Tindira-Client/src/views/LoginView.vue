@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { injectToast } from '@/functions/toast'
+import { injectToast } from '@/functions/inject'
 
 import LoginButtons from '@/components/login/LoginButtons.vue'
 import WithGoogle from '@/components/login/WithGoogle.vue'

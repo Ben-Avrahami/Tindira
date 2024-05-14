@@ -1,23 +1,20 @@
 <template>
-  <main>
+  <div>
     <Button text rounded label="Filters" @click="showFilters()">
       <template #icon>
         <Icon icon="tabler:adjustments-alt"></Icon>
       </template>
     </Button>
     <AptCard />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '../stores/app'
-import { defineAsyncComponent, ref, watch } from 'vue'
-const userStore = useAppStore()
+import { defineAsyncComponent } from 'vue'
+
 import AptCard from '@/components/AptCard.vue'
 import { Icon } from '@iconify/vue'
 import { useDialog } from 'primevue/usedialog'
-
-await userStore.initializeState()
 
 const dialog = useDialog()
 const FiltersDialog = defineAsyncComponent(() => import('@/components/FiltersDialog.vue'))
@@ -38,5 +35,4 @@ const showFilters = () => {
     }
   })
 }
-
 </script>
