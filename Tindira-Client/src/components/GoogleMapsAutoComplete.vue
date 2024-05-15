@@ -4,8 +4,8 @@
 </template>
 
 <script setup lang="ts">
-import type { GeoCodeGoogleLocation, Location } from '@/stores/State.interface';
-import { ref, type PropType, type Ref } from 'vue';
+import type { Location } from '@/interfaces/geolocation.interface';
+import { ref, type Ref } from 'vue';
 import { usePlacesAutocomplete, geocodeByPlaceId } from 'vue-use-places-autocomplete';
 
 
@@ -33,14 +33,14 @@ const { suggestions } = usePlacesAutocomplete(location, {
 async function updateLocation() {
     const geoCode = await geocodeByPlaceId((location.value as Location).place_id);
     const result = geoCode.length === 1 ? geoCode[0] : geoCode as any;
-    
+
     const { location_type, ...geometryWithoutLocationType } = result.geometry;
     const logObject = {
         formatted_address: result.formatted_address,
         geometry: geometryWithoutLocationType,
         place_id: result.place_id
     };
-    console.log("geoCode object", JSON.stringify(logObject));
+    // console.log("geoCode object", JSON.stringify(logObject));// TODO: REMOVE LATER, for now keep it commented maybe for future listing address objects for backend use
     emit('locationChosen', result);
 };
 function cleared() {
