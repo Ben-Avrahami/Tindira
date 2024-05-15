@@ -43,9 +43,10 @@ export const useAppStore = defineStore('app', {
       }
       this.isLoading = false
     },
-    connectUser(userId: string) {
+    async connectUser(userId: string) {
       this.connectedUser = userId
       localStorage.setItem(LOCAL_STORAGE_USER_KEY, userId)
+      this.nextListingsArr = await API.getNextListings(5, this.SelectedFilters, userId, [])
     },
     disconnectUser() {
       this.connectedUser = null
