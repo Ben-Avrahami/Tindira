@@ -3,6 +3,7 @@
     <h1 class="text-3xl font-bold text-center text-surface-300 pt-8 select-none">
       Welcome to Tindira
     </h1>
+    <img src="@/assets/logo.png" alt="Image" width="100" class="mt-10" />
     <div class="flex flex-col items-center justify-center h-full">
       <Transition name="fade" mode="out-in">
         <KeepAlive>
