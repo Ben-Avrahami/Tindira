@@ -50,8 +50,8 @@ export default {
 
             // Color
             {
-                'before:border-t before:border-surface-200 before:dark:border-surface-600': props.layout == 'horizontal',
-                'before:border-l before:border-surface-200 before:dark:border-surface-600': props.layout == 'vertical'
+                'before:border-t before:border-surface-200 before:dark:border-surface-700': props.layout == 'horizontal',
+                'before:border-l before:border-surface-200 before:dark:border-surface-700': props.layout == 'vertical'
             }
         ]
     }),
@@ -61,7 +61,7 @@ export default {
             'px-1 z-10',
 
             // Color
-            'bg-surface-0 dark:bg-surface-800'
+            'bg-surface-0 dark:bg-surface-600'
         ]
     }
 };

@@ -72,6 +72,7 @@
           </div>
         </div>
         <div class="flex pt-4 justify-end">
+          <!-- TODO: add "Back to home/login page" button here -->
           <NextButton
             :disabled="!(phone && name && email && password)"
             @click="
@@ -93,7 +94,7 @@
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="Upload your profile picture" optional />
           <div class="flex justify-center">
-            <ProfilePicture :profilePicture :setProfilePicture :toast="toaster.toast" />
+            <ProfilePicture :profilePicture :setProfilePicture />
           </div>
         </div>
         <div class="flex pt-4 justify-between">
@@ -189,7 +190,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { useToaster, type Toaster } from '@/stores/toaster'
+import { injectToast } from '@/functions/inject'
 
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
@@ -197,9 +198,10 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
-import axios from 'axios'
 
-const toaster = useToaster() as Toaster // temp, will be moved to a global component
+import API from '@/api'
+
+const toast = injectToast()
 
 const active = ref<number>(0)
 
@@ -232,7 +234,7 @@ const isPasswordStrong = (): boolean => {
 
 const validateBasicInfo = (): boolean => {
   if (!isPhoneValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Phone Number',
       detail: 'Please enter a valid phone number',
@@ -241,7 +243,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isNameValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Name',
       detail: 'Please enter your full name',
@@ -250,7 +252,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isEmailValid()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Invalid Email',
       detail: 'Please enter a valid email address',
@@ -259,7 +261,7 @@ const validateBasicInfo = (): boolean => {
     return false
   }
   if (!isPasswordStrong()) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Weak Password',
       detail: 'Please enter a strong password',
@@ -290,7 +292,7 @@ const lease = ref<boolean>(false)
 
 const validateRoles = (): boolean => {
   if (!rent.value && !lease.value) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'No Role Selected',
       detail: 'Please select at least one role',
@@ -312,7 +314,7 @@ const sendSignUpRequest = async () => {
     !(rent.value || lease.value)
   ) {
     // This should never happen because the NextButton is disabled, but just in case
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Missing Information',
       detail: 'Please fill in all required fields',
@@ -323,28 +325,35 @@ const sendSignUpRequest = async () => {
 
   const data = {
     email: email.value,
-    password: password.value,
-    phone: phone.value, // remove the dashes?
-    roles: {
-      rent: rent.value,
-      lease: lease.value
-    },
     firstName: name.value.split(' ')[0],
     lastName: name.value.split(' ')[1],
+    password: password.value,
+    phone: phone.value, // remove the dashes?
+    roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
     profilePicture: profilePicture.value ?? '',
     description: description.value ?? ''
   }
 
   try {
-    await axios.post(`/users/${phone.value}`, data)
-    toaster.add({
+    await API.registerUser(
+      data.firstName,
+      data.email,
+      data.firstName,
+      data.lastName,
+      data.password,
+      data.phone,
+      data.roles
+      // data.profilePicture,
+      // data.description
+    ) // TODO: Handle error according to the error message (e.g. user already exists)
+    toast.add({
       severity: 'success',
       summary: 'Sign Up Successful',
       detail: 'You have successfully signed up!',
       life: 3000
     })
   } catch (error) {
-    toaster.add({
+    toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
       detail: 'An error occurred while signing up',
