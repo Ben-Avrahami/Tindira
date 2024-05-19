@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const axios = require("axios");
 AWS.config.update({
   region: "us-east-2",
 });
@@ -6,10 +7,12 @@ AWS.config.update({
 const util = require("../utils/util");
 const bcrypt = require("bcryptjs");
 
-const { error } = require("console");
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const userTable = "TindiraUsers";
 const auth = require("../utils/auth");
+
+const getUserByUserNameEndpoint =
+  "https://aa94or46cc.execute-api.us-east-2.amazonaws.com/prod/user";
 
 async function login(user) {
   const username = user.username;
@@ -31,18 +34,27 @@ async function login(user) {
     });
   }
 
-  const userInfo = {
-    username: dynamoUser.username,
-    fullName: dynamoUser.fullName,
-    profilePicture: dynamoUser.profilePicture,
-    profileDescription: dynamoUser.profileDescription,
-  };
-  const token = auth.generateToken(userInfo);
-  const response = {
-    user: userInfo,
-    token: token,
-  };
-  return util.buildResponse(200, response);
+  // Call the external Lambda function after successful login
+  try {
+    const externalUser = await getUserFromExternalService(username);
+    const userInfo = {
+      username: externalUser.username,
+      fullName: externalUser.fullName,
+      profilePicture: externalUser.profilePicture,
+      profileDescription: externalUser.profileDescription,
+    };
+    const token = auth.generateToken(userInfo);
+    const response = {
+      user: userInfo,
+      token: token,
+    };
+    return util.buildResponse(200, response);
+  } catch (error) {
+    console.error("Error calling external service: ", error);
+    return util.buildResponse(500, {
+      message: "An error occurred while fetching user details",
+    });
+  }
 }
 
 async function getUser(username) {
@@ -56,13 +68,17 @@ async function getUser(username) {
     .get(params)
     .promise()
     .then(
-      (response) => {
-        return response.Item;
-      },
+      (response) => response.Item,
       (error) => {
         console.error("There is an error getting user: ", error);
       }
     );
+}
+
+async function getUserFromExternalService(username) {
+  const url = `${getUserByUserNameEndpoint}?username=${username}`;
+  const response = await axios.get(url);
+  return response.data;
 }
 
 module.exports.login = login;
