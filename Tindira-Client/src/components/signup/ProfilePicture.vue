@@ -39,13 +39,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import type { ToastServiceMethods } from 'primevue/toastservice'
+import { injectToast } from '@/functions/inject'
 
 const props = defineProps<{
   profilePicture: string
   setProfilePicture: (image: string) => void
-  toast: ToastServiceMethods
 }>()
+
+const toast = injectToast()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -66,7 +67,7 @@ const handleFileUpload = (event: Event) => {
   const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
   const MAX_FILE_SIZE_MB = MAX_FILE_SIZE / 1024 / 1024
   if (file.size > MAX_FILE_SIZE) {
-    props.toast.add({
+    toast.add({
       severity: 'error',
       summary: 'File size is too large',
       detail: `Please upload a file smaller than ${MAX_FILE_SIZE_MB}MB.`,

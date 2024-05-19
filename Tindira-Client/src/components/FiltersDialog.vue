@@ -29,14 +29,8 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Radius From Location(Km) </label>
-      <InputNumber v-model="selectedFilters.radiusInKm" style="max-width: 40vw;" showButtons :min="1" :max="100">
-        <template #incrementbuttonicon>
-          <Icon icon="mdi:plus"></Icon>
-        </template>
-        <template #decrementbuttonicon>
-          <Icon icon="mdi:minus"></Icon>
-        </template>
-      </InputNumber>
+      <Slider v-model="selectedFilters.radiusInKm" class="w-14rem" />
+      <p>Kms: {{ selectedFilters.radiusInKm }}</p>
     </div>
   </div>
 
@@ -59,14 +53,8 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Min Parkings </label>
-      <InputNumber v-model="selectedFilters.minNumberOfParkings" showButtons :min="0" :max="10">
-        <template #incrementbuttonicon>
-          <Icon icon="mdi:plus"></Icon>
-        </template>
-        <template #decrementbuttonicon>
-          <Icon icon="mdi:minus"></Icon>
-        </template>
-      </InputNumber>
+      <Slider v-model="selectedFilters.minNumberOfParkings" :min="0" :max="10" class="w-14rem" />
+      <p>Parkings: {{ selectedFilters.minNumberOfParkings }}</p>
     </div>
   </div>
 
@@ -74,15 +62,8 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Min Rooms </label>
-
-      <InputNumber v-model="selectedFilters.minNumberOfRooms" showButtons :min="0" :max="10">
-        <template #incrementbuttonicon>
-          <Icon icon="mdi:plus"></Icon>
-        </template>
-        <template #decrementbuttonicon>
-          <Icon icon="mdi:minus"></Icon>
-        </template>
-      </InputNumber>
+      <Slider v-model="selectedFilters.minNumberOfRooms" :min="0" :max="10" class="w-14rem" />
+      <p>Rooms: {{ selectedFilters.minNumberOfRooms }}</p>
     </div>
   </div>
 
@@ -116,13 +97,12 @@
 import { reactive, ref, inject, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
-import { getCities } from '@/api/GetCitiesApi'
 import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
-import type { GeoCodeGoogleLocation, Location } from '@/stores/State.interface';
 
 
 const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
+let radiusInKm = ref(0);
 
 
 function updateLocation(location: any) {
@@ -133,8 +113,6 @@ function updateLocation(location: any) {
 function locationCleared() {
   selectedFilters.location = null;
 }
-
-// let citiesInIsrael = ref(await getCities()) TODO:Remove later, cuurently is not being used, but keeping it for being used maybe in future
 
 const dialogRef = inject('dialogRef')
 
