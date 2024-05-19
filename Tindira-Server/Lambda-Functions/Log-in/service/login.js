@@ -104,7 +104,8 @@ async function getUser(username) {
 
 async function getUserFromExternalService(username) {
   // Define the additional query parameters
-  const fields = "username,history";
+  const fields =
+    "username,fullName,history,listings,phoneNumber,profileDescription,profilePicture,reviews,roles";
   const url = `${getUserByUserNameEndpoint}?username=${username}&fields=${fields}`;
 
   try {
