@@ -27,13 +27,15 @@ async function login(user) {
   }
   if (!bcrypt.compareSync(password, dynamoUser.password)) {
     return util.buildResponse(403, {
-      message: "Password is incorrent",
+      message: "Password is incorrect",
     });
   }
 
   const userInfo = {
     username: dynamoUser.username,
-    name: dynamoUser.name,
+    fullName: dynamoUser.fullName,
+    profilePicture: dynamoUser.profilePicture,
+    profileDescription: dynamoUser.profileDescription,
   };
   const token = auth.generateToken(userInfo);
   const response = {
