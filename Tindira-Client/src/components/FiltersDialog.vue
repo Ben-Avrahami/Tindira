@@ -107,7 +107,6 @@ let radiusInKm = ref(0);
 
 function updateLocation(location: any) {
   selectedFilters.location = location;
-  console.log("updated location", selectedFilters.location)
 }
 
 function locationCleared() {

@@ -45,7 +45,6 @@ async function loadHistory(page: number = 1) {
     if (typeof page !== 'number') {
         page = 1;
     }
-    console.log("page is", page)
     const response = await API.getCategoryHistory(selectedCategory.value, userStore.connectedUser!, showLikes.value, page, itemsPerPage.value);
     history.value = response;
     // totalItems.value = response.total;
