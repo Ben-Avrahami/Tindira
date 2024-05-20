@@ -1,5 +1,5 @@
 <template>
-    <DataView :value="history" dataKey="listingId" paginator :rows="5">
+    <DataView :value="history" dataKey="listingId">
         <template #list="slotProps">
             <div class="grid grid-nogutter">
                 <div v-for="(item, index) in slotProps.items" :key="index" class="col-12 bg-red-300 mb-5">
@@ -17,7 +17,7 @@
                                     <div class="flex items-center">
                                         <icon icon="mdi:address-marker-outline"></icon>
                                         <p class="drag-area m-0 ">{{
-                                            userStore.nextListingsArr[0].coordinates.formatted_address }}</p>
+                                            item.coordinates.formatted_address }}</p>
                                     </div>
                                     <div class="text-lg font-medium text-surface-700 dark:text-surface-0/80 mt-2">
                                         {{ item.description }}</div>
@@ -38,6 +38,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </template>
+        <template #empty>
+            <div class="flex text-center justify-center text-2xl">
+                No History To Display At this Category!<br />
+                What Are You Waiting For?
             </div>
         </template>
     </DataView>
