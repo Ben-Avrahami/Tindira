@@ -12,9 +12,13 @@
                         </div>
                         <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
                             <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-
                                 <div>
                                     <span class="font-medium text-secondary text-sm">{{ item.title }}</span>
+                                    <div class="flex items-center">
+                                        <icon icon="mdi:address-marker-outline"></icon>
+                                        <p class="drag-area m-0 ">{{
+                                            userStore.nextListingsArr[0].coordinates.formatted_address }}</p>
+                                    </div>
                                     <div class="text-lg font-medium text-surface-700 dark:text-surface-0/80 mt-2">
                                         {{ item.description }}</div>
                                 </div>
@@ -95,7 +99,6 @@ const showFullAptData = (item: any) => {
             if (isLike?.data !== undefined) {
                 await API.tagListing(item.listingId, userStore.connectedUser!, isLike.data);
                 emit('refreshHistory');
-                
             }
         }
     })
