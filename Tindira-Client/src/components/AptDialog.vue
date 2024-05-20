@@ -9,7 +9,7 @@
     <GoogleMap :center="listing.coordinates.geometry.location" :name="listing.title"></GoogleMap>
 
     <Divider />
-    <div class="text-center">
+    <div class="text-center dark:text-white">
         <label class="font-bold block">Adress:</label>
         <p>{{ listing.coordinates.formatted_address}}</p>
         <label class="font-bold block">Description:</label>
