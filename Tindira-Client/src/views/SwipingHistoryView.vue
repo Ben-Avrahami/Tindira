@@ -1,25 +1,27 @@
 <template>
-    <div class="flex flex-col items-center justify-center">
-        <div class="flex items-center justify-center">
-            <Chip>Category:</Chip>
-            <Dropdown @change="loadHistory()" v-model="selectedCategory" :options="userStore.categoryOptions"
-                placeholder="Choose a Category" />
+    <div>
+        <div class="flex flex-col items-center justify-center">
+            <div class="flex items-center justify-center">
+                <Chip>Category:</Chip>
+                <Dropdown @change="loadHistory()" v-model="selectedCategory" :options="userStore.categoryOptions"
+                    placeholder="Choose a Category" />
+            </div>
+            <div class="flex items-center justify-center mb-4">
+                <Chip>showLikes/Dislikes:</Chip>
+                <Button class="text-2xl" text aria-label="Add" @click="showLikes = !showLikes, loadHistory()">
+                    <template #icon>
+                        <Icon v-if="showLikes" icon="mdi:like"></Icon>
+                        <Icon v-if="!showLikes" icon="mdi:dislike"></Icon>
+                    </template>
+                </Button>
+            </div>
         </div>
-        <div class="flex items-center justify-center mb-4">
-            <Chip>showLikes/Dislikes:</Chip>
-            <Button class="text-2xl" text aria-label="Add" @click="showLikes = !showLikes, loadHistory()">
-                <template #icon>
-                    <Icon v-if="showLikes" icon="mdi:like"></Icon>
-                    <Icon v-if="!showLikes" icon="mdi:dislike"></Icon>
-                </template>
-            </Button>
-        </div>
+        <HistoryList :history="history" :isLike="showLikes" @refresh-history="loadHistory"></HistoryList>
+        <Paginator template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            :rows="itemsPerPage" :totalRecords="totalItems"
+            currentPageReportTemplate="{first} to {last} of {totalRecords}" @page="changePage">
+        </Paginator>
     </div>
-    <HistoryList :history="history" :isLike="showLikes" @refresh-history="loadHistory"></HistoryList>
-    <Paginator template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink" :rows="itemsPerPage"
-        :totalRecords="totalItems" currentPageReportTemplate="{first} to {last} of {totalRecords}" @page="changePage">
-    </Paginator>
-
 </template>
 
 <script setup lang="ts">
