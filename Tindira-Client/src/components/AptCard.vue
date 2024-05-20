@@ -106,7 +106,7 @@ onMounted(() => {
   el!.addEventListener('animationend', async () => {
     rerenderer.value++;
     userStore.nextListingsArr.shift()
-    await userStore.getNextListing(1)
+    await userStore.getAndPushNextListing(1)
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
     disableDrag.value = false;
@@ -119,7 +119,7 @@ async function swipe(isLike: boolean) {
     disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
-  // API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser! , isLike);
+  API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser! , isLike);
 }
 
 const dialog = useDialog()
