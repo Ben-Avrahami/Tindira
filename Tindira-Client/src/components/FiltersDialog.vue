@@ -29,7 +29,7 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Radius From Location(Km) </label>
-      <Slider v-model="selectedFilters.radiusInKm" class="w-14rem" />
+      <Slider v-model="selectedFilters.radiusInKm" />
       <p>Kms: {{ selectedFilters.radiusInKm }}</p>
     </div>
   </div>
@@ -53,7 +53,7 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Min Parkings </label>
-      <Slider v-model="selectedFilters.minNumberOfParkings" :min="0" :max="10" class="w-14rem" />
+      <Slider v-model="selectedFilters.minNumberOfParkings" :min="0" :max="10" />
       <p>Parkings: {{ selectedFilters.minNumberOfParkings }}</p>
     </div>
   </div>
@@ -62,7 +62,7 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Min Rooms </label>
-      <Slider v-model="selectedFilters.minNumberOfRooms" :min="0" :max="10" class="w-14rem" />
+      <Slider v-model="selectedFilters.minNumberOfRooms" :min="0" :max="10" />
       <p>Rooms: {{ selectedFilters.minNumberOfRooms }}</p>
     </div>
   </div>
