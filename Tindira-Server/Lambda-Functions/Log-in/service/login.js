@@ -105,7 +105,7 @@ async function getUser(username) {
 async function getUserFromExternalService(username) {
   // Define the additional query parameters
   const fields =
-    "username,fullName,history,listings,phoneNumber,profileDescription,profilePicture,reviews,roles";
+    "username,fullName,listings,phoneNumber,profileDescription,profilePicture,reviews,roles";
   const url = `${getUserByUserNameEndpoint}?username=${username}&fields=${fields}`;
 
   try {
@@ -124,13 +124,7 @@ async function getUserFromExternalService(username) {
 
       // Check if user exists
       if (user) {
-        // Extract user's history
-        const { history } = user;
-
-        // Optionally, you can process the user's history here
-        // For example, you can return the entire history object or extract specific data
-
-        return history;
+        return user; // Return the full user object
       } else {
         throw new Error("User not found in external service response");
       }
