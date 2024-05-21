@@ -22,7 +22,7 @@ export const useAppStore = defineStore('app', {
       location: null,
       isWithPorchOrGarden: false
     },
-    categoryOptions: ['sublet', 'rent', 'animel sublet', 'switch', 'buy'],
+    categoryOptions: ['sublet', 'rent'],
   }),
   getters: {
     isUserConnected: (state) => state.connectedUser !== null,

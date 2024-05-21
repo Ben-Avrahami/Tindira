@@ -10,7 +10,7 @@ export interface State {
 }
 
 export interface SelectedFilters {
-  category: 'sublet' | 'rent' | 'animel sublet' | 'switch' | 'buy'
+  category: 'sublet' | 'rent'
   dates: Date | null
   isWholeDateRangeOnly: boolean
   maxPrice: number | null
