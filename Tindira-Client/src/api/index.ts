@@ -52,8 +52,8 @@ class _API {
         return response.data
     }
 
-    async tagListing(listingId: string, username: string, category: string, isLike: boolean) {
-        const response = await this.service.put(`/listings/tag?username=galben&listingId=${listingId}&category=${category}&isLike=${isLike.toString()}`);
+    async tagListing(listingId: string, username: string, isLike: boolean) {
+        const response = await this.service.put(`/listings/tag?username=${username}&listingId=${listingId}&isLike=${isLike.toString()}`);
         console.log(response)
         return response.data;
     }

@@ -119,7 +119,7 @@ async function swipe(isLike: boolean) {
     disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
-  API.tagListing(userStore.nextListingsArr[0]?.listingId, "", userStore.SelectedFilters.category, isLike);
+  // API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser! , isLike);
 }
 
 const dialog = useDialog()
