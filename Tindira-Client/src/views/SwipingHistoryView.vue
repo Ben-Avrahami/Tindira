@@ -39,15 +39,15 @@ let selectedCategory = ref('')
 let showLikes = ref(true)
 let history = ref()
 let itemsPerPage = ref(5)
-let totalItems = ref(120)
+let totalItems = ref(0)
 
 async function loadHistory(page: number = 1) {
     if (typeof page !== 'number') {
         page = 1;
     }
     const response = await API.getCategoryHistory(selectedCategory.value, userStore.connectedUser!, showLikes.value, page, itemsPerPage.value);
-    history.value = response;
-    // totalItems.value = response.total;
+    history.value = response.history.filter((item: any) => typeof item === 'object');
+    totalItems.value = response.total;
 }
 async function changePage(event: PageState) {
     await loadHistory(event.page + 1)
