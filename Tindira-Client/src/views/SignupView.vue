@@ -25,7 +25,7 @@
               <InputIcon>
                 <Icon icon="mdi:user" />
               </InputIcon>
-              <InputText id="input" v-model="name" type="text" placeholder="Name" />
+              <InputText id="input" v-model="name" type="text" placeholder="Full Name" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -34,6 +34,14 @@
                 <Icon icon="mdi:email" />
               </InputIcon>
               <InputText id="email" v-model="email" type="email" placeholder="Email" />
+            </IconField>
+          </div>
+          <div class="mb-4">
+            <IconField>
+              <InputIcon>
+                <Icon icon="mdi:rename" />
+              </InputIcon>
+              <InputText id="input" v-model="username" type="text" placeholder="Username" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -209,6 +217,7 @@ const active = ref<number>(0)
 
 const phone = ref<string>('')
 const name = ref<string>('')
+const username = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
 
@@ -218,6 +227,11 @@ const isPhoneValid = (): boolean => {
 
 const isNameValid = (): boolean => {
   return !!name.value && name.value.trim().split(/\s+/).length === 2
+}
+
+const isUsernameValid = (): boolean => {
+  // TODO: Implement username validation through API
+  return !!username.value && !username.value.includes(' ')
 }
 
 const isEmailValid = (): boolean => {
@@ -247,6 +261,15 @@ const validateBasicInfo = (): boolean => {
       severity: 'error',
       summary: 'Invalid Name',
       detail: 'Please enter your full name',
+      life: 3000
+    })
+    return false
+  }
+  if (!isUsernameValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Username',
+      detail: 'Username must include no spaces',
       life: 3000
     })
     return false
@@ -327,6 +350,7 @@ const sendSignUpRequest = async () => {
     email: email.value,
     firstName: name.value.split(' ')[0],
     lastName: name.value.split(' ')[1],
+    username: username.value,
     password: password.value,
     phone: phone.value, // remove the dashes?
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
@@ -336,7 +360,7 @@ const sendSignUpRequest = async () => {
 
   try {
     await API.registerUser(
-      data.firstName,
+      data.username,
       data.email,
       data.firstName,
       data.lastName,
@@ -345,7 +369,7 @@ const sendSignUpRequest = async () => {
       data.roles
       // data.profilePicture,
       // data.description
-    ) // TODO: Handle error according to the error message (e.g. user already exists)
+    )
     toast.add({
       severity: 'success',
       summary: 'Sign Up Successful',
