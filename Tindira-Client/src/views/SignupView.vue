@@ -221,6 +221,8 @@ const username = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
 
+const USERNAME_MIN_LENGTH = 4
+
 const isPhoneValid = (): boolean => {
   return !!phone.value && phone.value.trim().length === 12
 }
@@ -231,7 +233,11 @@ const isNameValid = (): boolean => {
 
 const isUsernameValid = (): boolean => {
   // TODO: Implement username validation through API
-  return !!username.value && !username.value.includes(' ')
+  return (
+    !!username.value &&
+    !username.value.includes(' ') &&
+    username.value.length >= USERNAME_MIN_LENGTH
+  )
 }
 
 const isEmailValid = (): boolean => {
@@ -269,7 +275,7 @@ const validateBasicInfo = (): boolean => {
     toast.add({
       severity: 'error',
       summary: 'Invalid Username',
-      detail: 'Username must include no spaces',
+      detail: `Username must include no spaces and at least ${USERNAME_MIN_LENGTH} characters`,
       life: 3000
     })
     return false
