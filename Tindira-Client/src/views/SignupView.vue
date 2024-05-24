@@ -25,7 +25,7 @@
               <InputIcon>
                 <Icon icon="mdi:user" />
               </InputIcon>
-              <InputText id="input" v-model="name" type="text" placeholder="Full Name" />
+              <InputText id="name" v-model="name" type="text" placeholder="Full Name" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -41,7 +41,7 @@
               <InputIcon>
                 <Icon icon="mdi:rename" />
               </InputIcon>
-              <InputText id="input" v-model="username" type="text" placeholder="Username" />
+              <InputText id="username" v-model="username" type="text" placeholder="Username" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -357,27 +357,25 @@ const sendSignUpRequest = async () => {
 
   const data = {
     email: email.value,
-    firstName: name.value.split(' ')[0],
-    lastName: name.value.split(' ')[1],
+    fullName: name.value,
     username: username.value,
     password: password.value,
     phone: phone.value, // remove the dashes?
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: profilePicture.value ?? '',
-    description: description.value ?? ''
+    profilePicture: profilePicture.value || 'a',
+    description: description.value || 'a'
   }
 
   try {
     await API.registerUser(
       data.username,
       data.email,
-      data.firstName,
-      data.lastName,
+      data.fullName,
       data.password,
       data.phone,
-      data.roles
-      // data.profilePicture,
-      // data.description
+      data.roles,
+      data.profilePicture,
+      data.description
     )
     toast.add({
       severity: 'success',
@@ -386,11 +384,11 @@ const sendSignUpRequest = async () => {
       life: 3000
     })
     router.push('/login')
-  } catch (error) {
+  } catch (error: any) {
     toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
-      detail: 'An error occurred while signing up',
+      detail: error.response.data.message,
       life: 3000
     })
   }
