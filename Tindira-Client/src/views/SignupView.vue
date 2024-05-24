@@ -25,7 +25,7 @@
               <InputIcon>
                 <Icon icon="mdi:user" />
               </InputIcon>
-              <InputText id="input" v-model="name" type="text" placeholder="Full Name" />
+              <InputText id="name" v-model="name" type="text" placeholder="Full Name" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -41,7 +41,7 @@
               <InputIcon>
                 <Icon icon="mdi:rename" />
               </InputIcon>
-              <InputText id="input" v-model="username" type="text" placeholder="Username" />
+              <InputText id="username" v-model="username" type="text" placeholder="Username" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -306,7 +306,7 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<string>('')
+const profilePicture = ref<string>('a')
 
 const setProfilePicture = (image: string) => {
   profilePicture.value = image
@@ -314,7 +314,7 @@ const setProfilePicture = (image: string) => {
 
 // ==== Profile Description Panel ==== //
 
-const description = ref<string>('')
+const description = ref<string>('a')
 const MAX_DESCRIPTION_LENGTH = 500
 
 // ==== Interests Panel ==== //
@@ -357,8 +357,7 @@ const sendSignUpRequest = async () => {
 
   const data = {
     email: email.value,
-    firstName: name.value.split(' ')[0],
-    lastName: name.value.split(' ')[1],
+    fullName: name.value,
     username: username.value,
     password: password.value,
     phone: phone.value, // remove the dashes?
@@ -371,13 +370,12 @@ const sendSignUpRequest = async () => {
     await API.registerUser(
       data.username,
       data.email,
-      data.firstName,
-      data.lastName,
+      data.fullName,
       data.password,
       data.phone,
-      data.roles
-      // data.profilePicture,
-      // data.description
+      data.roles,
+      data.profilePicture,
+      data.description
     )
     toast.add({
       severity: 'success',
@@ -386,11 +384,11 @@ const sendSignUpRequest = async () => {
       life: 3000
     })
     router.push('/login')
-  } catch (error) {
+  } catch (error: any) {
     toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
-      detail: 'An error occurred while signing up',
+      detail: error.response.data.message,
       life: 3000
     })
   }
