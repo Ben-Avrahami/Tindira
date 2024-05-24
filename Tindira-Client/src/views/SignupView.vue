@@ -306,7 +306,7 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<string>('')
+const profilePicture = ref<string>('a')
 
 const setProfilePicture = (image: string) => {
   profilePicture.value = image
@@ -314,7 +314,7 @@ const setProfilePicture = (image: string) => {
 
 // ==== Profile Description Panel ==== //
 
-const description = ref<string>('')
+const description = ref<string>('a')
 const MAX_DESCRIPTION_LENGTH = 500
 
 // ==== Interests Panel ==== //
