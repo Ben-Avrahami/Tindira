@@ -79,10 +79,10 @@
             </Password>
           </div>
         </div>
-        <div class="flex pt-4 justify-end">
-          <!-- TODO: add "Back to home/login page" button here -->
+        <div class="flex pt-4 justify-between">
+          <Button label="To Login" severity="secondary" @click="() => router.push('/login')" />
           <NextButton
-            :disabled="!(phone && name && email && password)"
+            :disabled="!(phone && name && username && email && password)"
             @click="
                 (event: Event) => {
                   if (validateBasicInfo()) {
@@ -198,6 +198,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
 
 import NextButton from '@/components/signup/NextButton.vue'
@@ -208,6 +209,8 @@ import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import API from '@/api'
+
+const router = useRouter()
 
 const toast = injectToast()
 
@@ -382,6 +385,7 @@ const sendSignUpRequest = async () => {
       detail: 'You have successfully signed up!',
       life: 3000
     })
+    router.push('/login')
   } catch (error) {
     toast.add({
       severity: 'error',
