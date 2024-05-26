@@ -18,18 +18,19 @@
           </div>
         </template>
         <template #subtitle>
+          <div class="flex items-center">
+            <icon icon="mdi:address-marker-outline"></icon>
+            <p class="drag-area m-0 text-slate-400">{{ userStore.nextListingsArr[0].coordinates.formatted_address }}</p>
+          </div>
           <div class="flex justify-between items-center">
             <div class="drag-area title flex-grow">
               Full information
             </div>
-            <div class="button">
-              <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl"
-                @click="showFullAptData">
-                <template #icon>
-                  <Icon icon="ooui:info-filled"></Icon>
-                </template>
-              </Button>
-            </div>
+            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl" @click="showFullAptData">
+              <template #icon>
+                <Icon icon="ooui:info-filled"></Icon>
+              </template>
+            </Button>
           </div>
         </template>
         <template #content>
@@ -106,7 +107,7 @@ onMounted(() => {
   el!.addEventListener('animationend', async () => {
     rerenderer.value++;
     userStore.nextListingsArr.shift()
-    await userStore.getNextListing(1)
+    await userStore.getAndPushNextListing(1)
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
     disableDrag.value = false;
@@ -119,7 +120,7 @@ async function swipe(isLike: boolean) {
     disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
-  // API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser! , isLike);
+  API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser!, isLike);
 }
 
 const dialog = useDialog()
