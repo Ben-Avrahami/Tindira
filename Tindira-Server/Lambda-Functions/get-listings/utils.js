@@ -9,7 +9,7 @@ async function queryListings(category, filters, listingId) {
     TableName: "TindiraListings",
     FilterExpression: "#category = :category and #isActive = :isActive",
     ExpressionAttributeNames: {
-      "#category": "category",
+      "#category": "category", //rent/sublet
       "#isActive": "isActive",
       "#listingId": "listingId",
     },
