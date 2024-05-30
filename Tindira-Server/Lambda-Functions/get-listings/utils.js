@@ -38,12 +38,12 @@ async function queryListings(category, filters, listingId) {
     params.ExpressionAttributeNames["#price"] = "price";
     params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
   }
-  if (filters.minNumberOfParkings) {
-    params.FilterExpression += " and #numberOfParkings >= :minNumberOfParkings";
-    params.ExpressionAttributeNames["#numberOfParkings"] = "numberOfParkings";
+  if (filters.minNumberOfParkings !== undefined) {
+    params.FilterExpression += " and #parking >= :minNumberOfParkings";
+    params.ExpressionAttributeNames["#parking"] = "parking";
     params.ExpressionAttributeValues[":minNumberOfParkings"] = filters.minNumberOfParkings;
   }
-  if (filters.minNumberOfRooms) {
+  if (filters.minNumberOfRooms !== undefined) {
     params.FilterExpression += " and #numberOfRooms >= :minNumberOfRooms";
     params.ExpressionAttributeNames["#numberOfRooms"] = "numberOfRooms";
     params.ExpressionAttributeValues[":minNumberOfRooms"] = filters.minNumberOfRooms;
@@ -53,7 +53,7 @@ async function queryListings(category, filters, listingId) {
     params.ExpressionAttributeNames["#isAnimalFriendly"] = "isAnimalFriendly";
     params.ExpressionAttributeValues[":isAnimalFriendly"] = filters.isAnimalFriendly;
   }
-  if (filters.isWithGardenOrPorch) {
+  if (filters.isWithGardenOrPorch !== undefined) {
     params.FilterExpression += " and #isWithGardenOrPorch = :isWithGardenOrPorch";
     params.ExpressionAttributeNames["#isWithGardenOrPorch"] = "isWithGardenOrPorch";
     params.ExpressionAttributeValues[":isWithGardenOrPorch"] = filters.isWithGardenOrPorch;
