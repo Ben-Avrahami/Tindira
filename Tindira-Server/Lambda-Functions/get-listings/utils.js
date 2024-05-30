@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+// Queries the listings table based on category, filters, and listingId.
 async function queryListings(category, filters, listingId) {
   const params = {
     TableName: "TindiraListings",
@@ -38,6 +39,7 @@ async function queryListings(category, filters, listingId) {
   }
 }
 
+// Fetches the user history based on the username.
 async function getUserHistory(username) {
   const params = {
     TableName: "TindiraUsers",
@@ -55,6 +57,7 @@ async function getUserHistory(username) {
   }
 }
 
+// Filters out listings that are in the user's history.
 function filterListingsByUserHistory(listings, userHistory) {
   const likedListings = Object.values(userHistory).reduce(
     (acc, categoryHistory) => {
@@ -68,6 +71,7 @@ function filterListingsByUserHistory(listings, userHistory) {
   );
 }
 
+// Converts all filter values to lowercase.
 function convertFiltersToLowercase(filters) {
   if (typeof filters === "object") {
     for (const key in filters) {

@@ -12,12 +12,14 @@ exports.handler = async (event, context) => {
 
     const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
-    let lowerCaseFilters = {};
+    let lowerCaseFilters = {}; //probably should be an object
 
     lowerCaseFilters = convertFiltersToLowercase(filters);
 
+    // Get user's history based on the username.
     const userHistory = await getUserHistory(lowerCaseUserName);
 
+    // fetches the listings from the database or listings source based on the provided category, filters, and listing ID.
     const listings = await queryListings(
       lowerCaseCategory,
       lowerCaseFilters,
@@ -40,6 +42,7 @@ exports.handler = async (event, context) => {
   } catch (error) {
     console.error("Error:", error);
     return {
+      
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
