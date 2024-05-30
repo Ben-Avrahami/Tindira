@@ -1,7 +1,9 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-// Queries the listings table based on category, filters, and listingId.
+/**
+ * Query listings from DynamoDB based on category and filters.
+ */
 async function queryListings(category, filters, listingId) {
   const params = {
     TableName: "TindiraListings",
@@ -17,11 +19,49 @@ async function queryListings(category, filters, listingId) {
     },
   };
 
+  console.log("Initial Params:", params);
+
   // Add additional filter expressions based on filters provided
-  for (const key in filters) {
-    params.FilterExpression += ` and #${key} = :${key}`;
-    params.ExpressionAttributeNames[`#${key}`] = key.toLowerCase();
-    params.ExpressionAttributeValues[`:${key}`] = filters[key];
+  if (filters.city) {
+    params.FilterExpression += " and #city = :city";
+    params.ExpressionAttributeNames["#city"] = "city";
+    params.ExpressionAttributeValues[":city"] = filters.city;
+  }
+  if (filters.dates && filters.dates.length === 2) {
+    params.FilterExpression += " and #date between :startDate and :endDate";
+    params.ExpressionAttributeNames["#date"] = "date";
+    params.ExpressionAttributeValues[":startDate"] = filters.dates[0];
+    params.ExpressionAttributeValues[":endDate"] = filters.dates[1];
+  }
+  if (filters.maxPrice) {
+    params.FilterExpression += " and #price <= :maxPrice";
+    params.ExpressionAttributeNames["#price"] = "price";
+    params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
+  }
+  if (filters.minNumberOfParkings) {
+    params.FilterExpression += " and #numberOfParkings >= :minNumberOfParkings";
+    params.ExpressionAttributeNames["#numberOfParkings"] = "numberOfParkings";
+    params.ExpressionAttributeValues[":minNumberOfParkings"] = filters.minNumberOfParkings;
+  }
+  if (filters.minNumberOfRooms) {
+    params.FilterExpression += " and #numberOfRooms >= :minNumberOfRooms";
+    params.ExpressionAttributeNames["#numberOfRooms"] = "numberOfRooms";
+    params.ExpressionAttributeValues[":minNumberOfRooms"] = filters.minNumberOfRooms;
+  }
+  if (filters.isAnimalFriendly !== undefined) {
+    params.FilterExpression += " and #isAnimalFriendly = :isAnimalFriendly";
+    params.ExpressionAttributeNames["#isAnimalFriendly"] = "isAnimalFriendly";
+    params.ExpressionAttributeValues[":isAnimalFriendly"] = filters.isAnimalFriendly;
+  }
+  if (filters.isWithGardenOrPorch) {
+    params.FilterExpression += " and #isWithGardenOrPorch = :isWithGardenOrPorch";
+    params.ExpressionAttributeNames["#isWithGardenOrPorch"] = "isWithGardenOrPorch";
+    params.ExpressionAttributeValues[":isWithGardenOrPorch"] = filters.isWithGardenOrPorch;
+  }
+  if (filters.location && filters.radiusInKm) {
+    // Add geolocation filter logic if necessary
+    // This is a placeholder as DynamoDB doesn't support geospatial queries natively
+    console.log("Location filters are not directly supported by DynamoDB.");
   }
 
   // Add a condition to filter by listingId if provided
@@ -30,8 +70,11 @@ async function queryListings(category, filters, listingId) {
     params.ExpressionAttributeValues[":listingId"] = listingId;
   }
 
+  console.log("Final Params:", JSON.stringify(params, null, 2));
+
   try {
     const data = await dynamodb.scan(params).promise();
+    console.log("DynamoDB Scan Data:", data);
     return data.Items;
   } catch (error) {
     console.error("Error querying listings:", error);
@@ -39,7 +82,9 @@ async function queryListings(category, filters, listingId) {
   }
 }
 
-// Fetches the user history based on the username.
+/**
+ * Fetch user history from DynamoDB based on username.
+ */
 async function getUserHistory(username) {
   const params = {
     TableName: "TindiraUsers",
@@ -50,6 +95,7 @@ async function getUserHistory(username) {
 
   try {
     const data = await dynamodb.get(params).promise();
+    console.log("User History Data:", data);
     return data.Item.history || {};
   } catch (error) {
     console.error("Error fetching user history:", error);
@@ -57,7 +103,9 @@ async function getUserHistory(username) {
   }
 }
 
-// Filters out listings that are in the user's history.
+/**
+ * Filter listings based on user's history to remove already seen listings.
+ */
 function filterListingsByUserHistory(listings, userHistory) {
   const likedListings = Object.values(userHistory).reduce(
     (acc, categoryHistory) => {
@@ -66,12 +114,16 @@ function filterListingsByUserHistory(listings, userHistory) {
     []
   );
 
+  console.log("Liked Listings:", likedListings);
+
   return listings.filter(
     (listing) => !likedListings.includes(listing.listingId)
   );
 }
 
-// Converts all filter values to lowercase.
+/**
+ * Convert filter keys and values to lowercase.
+ */
 function convertFiltersToLowercase(filters) {
   if (typeof filters === "object") {
     for (const key in filters) {
