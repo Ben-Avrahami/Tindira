@@ -4,14 +4,13 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 /**
  * Query listings from DynamoDB based on category and filters.
  */
-async function queryListings(category, filters, listingId) {
+async function queryListings(category, filters, listingIds) {
   const params = {
     TableName: "TindiraListings",
     FilterExpression: "#category = :category and #isActive = :isActive",
     ExpressionAttributeNames: {
-      "#category": "category", //rent/sublet
+      "#category": "category",
       "#isActive": "isActive",
-      "#listingId": "listingId",
     },
     ExpressionAttributeValues: {
       ":category": category.toLowerCase(),
@@ -64,10 +63,16 @@ async function queryListings(category, filters, listingId) {
     console.log("Location filters are not directly supported by DynamoDB.");
   }
 
-  // Add a condition to filter by listingId if provided
-  if (listingId) {
-    params.FilterExpression += " and #listingId <> :listingId";
-    params.ExpressionAttributeValues[":listingId"] = listingId;
+  // Add conditions to filter out multiple listingIds if provided and not '0'
+  if (listingIds && listingIds.length > 0) {
+    const placeholderKeys = listingIds.map((id, index) => `:listingId${index}`);
+    const filterExpression = placeholderKeys.map(key => `#listingId <> ${key}`).join(" and ");
+
+    params.FilterExpression += ` and ${filterExpression}`;
+    listingIds.forEach((id, index) => {
+      params.ExpressionAttributeNames[`#listingId`] = "listingId";
+      params.ExpressionAttributeValues[`:listingId${index}`] = id;
+    });
   }
 
   console.log("Final Params:", JSON.stringify(params, null, 2));

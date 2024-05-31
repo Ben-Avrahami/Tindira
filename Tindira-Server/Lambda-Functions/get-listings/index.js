@@ -12,22 +12,30 @@ exports.handler = async (event, context) => {
 
     console.log("Received Parameters:", { username, amount, category, listingId, filters });
 
-    const lowerCaseUserName = username.toLowerCase();
     const lowerCaseCategory = category.toLowerCase();
     let lowerCaseFilters = filters ? convertFiltersToLowercase(JSON.parse(filters)) : {};
 
     console.log("Converted Filters:", lowerCaseFilters);
 
-    // Get user's history based on the username.
-    const userHistory = await getUserHistory(lowerCaseUserName);
-    console.log("User History:", userHistory);
+    let listingIdsToIgnore = [];
+    if (listingId && listingId !== '0') {
+      listingIdsToIgnore = listingId.split(',').map(id => id.trim().toLowerCase());
+    }
+
+    let userHistory = [];
+    if (username && username !== '0') {
+      const lowerCaseUserName = username.toLowerCase();
+      // Get user's history based on the username.
+      userHistory = await getUserHistory(lowerCaseUserName);
+      console.log("User History:", userHistory);
+    }
 
     // Fetches the listings from the database or listings source based on the provided category, filters, and listing ID.
-    const listings = await queryListings(lowerCaseCategory, lowerCaseFilters, listingId);
+    const listings = await queryListings(lowerCaseCategory, lowerCaseFilters, listingIdsToIgnore);
     console.log("Queried Listings:", listings);
 
-    // Filter out listings that are in user's history
-    let filteredListings = filterListingsByUserHistory(listings, userHistory);
+    // Filter out listings that are in user's history if username is provided and not '0'
+    let filteredListings = username !== '0' ? filterListingsByUserHistory(listings, userHistory) : listings;
     console.log("Filtered Listings:", filteredListings);
 
     const nextListings = filteredListings.slice(0, parseInt(amount, 10));
