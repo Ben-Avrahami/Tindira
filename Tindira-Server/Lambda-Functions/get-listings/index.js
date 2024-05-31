@@ -8,11 +8,13 @@ const {
 exports.handler = async (event, context) => {
   console.log("Lambda function invoked with event:", JSON.stringify(event, null, 2));
   try {
-    const { username, amount, ignoreListings, filters } = event.queryStringParameters;
+    const { username, amount, ignoreListings } = event.queryStringParameters;
+    const body = JSON.parse(event.body);
+    const filters = body.filters;
 
     console.log("Received Parameters:", { username, amount, ignoreListings, filters });
 
-    let lowerCaseFilters = filters ? convertFiltersToLowercase(JSON.parse(filters)) : {};
+    let lowerCaseFilters = filters ? convertFiltersToLowercase(filters) : {};
 
     console.log("Converted Filters:", lowerCaseFilters);
 
