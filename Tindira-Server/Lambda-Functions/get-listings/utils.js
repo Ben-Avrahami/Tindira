@@ -2,18 +2,16 @@ const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 /**
- * Query listings from DynamoDB based on category and filters.
+ * Query listings from DynamoDB based on filters.
  */
-async function queryListings(category, filters, listingIds) {
+async function queryListings(filters, listingIds) {
   const params = {
     TableName: "TindiraListings",
-    FilterExpression: "#category = :category and #isActive = :isActive",
+    FilterExpression: "#isActive = :isActive",
     ExpressionAttributeNames: {
-      "#category": "category",
       "#isActive": "isActive",
     },
     ExpressionAttributeValues: {
-      ":category": category.toLowerCase(),
       ":isActive": true,
     },
   };
@@ -21,6 +19,11 @@ async function queryListings(category, filters, listingIds) {
   console.log("Initial Params:", params);
 
   // Add additional filter expressions based on filters provided
+  if (filters.category) {
+    params.FilterExpression += " and #category = :category";
+    params.ExpressionAttributeNames["#category"] = "category";
+    params.ExpressionAttributeValues[":category"] = filters.category.toLowerCase();
+  }
   if (filters.city) {
     params.FilterExpression += " and #city = :city";
     params.ExpressionAttributeNames["#city"] = "city";

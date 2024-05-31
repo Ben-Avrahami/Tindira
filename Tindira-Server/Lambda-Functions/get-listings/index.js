@@ -8,11 +8,10 @@ const {
 exports.handler = async (event, context) => {
   console.log("Lambda function invoked with event:", JSON.stringify(event, null, 2));
   try {
-    const { username, amount, category, listingId, filters } = event.queryStringParameters;
+    const { username, amount, listingId, filters } = event.queryStringParameters;
 
-    console.log("Received Parameters:", { username, amount, category, listingId, filters });
+    console.log("Received Parameters:", { username, amount, listingId, filters });
 
-    const lowerCaseCategory = category.toLowerCase();
     let lowerCaseFilters = filters ? convertFiltersToLowercase(JSON.parse(filters)) : {};
 
     console.log("Converted Filters:", lowerCaseFilters);
@@ -30,8 +29,8 @@ exports.handler = async (event, context) => {
       console.log("User History:", userHistory);
     }
 
-    // Fetches the listings from the database or listings source based on the provided category, filters, and listing ID.
-    const listings = await queryListings(lowerCaseCategory, lowerCaseFilters, listingIdsToIgnore);
+    // Fetches the listings from the database or listings source based on the provided filters and listing ID.
+    const listings = await queryListings(lowerCaseFilters, listingIdsToIgnore);
     console.log("Queried Listings:", listings);
 
     // Filter out listings that are in user's history if username is provided and not '0'
