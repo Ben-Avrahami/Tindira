@@ -8,17 +8,17 @@ const {
 exports.handler = async (event, context) => {
   console.log("Lambda function invoked with event:", JSON.stringify(event, null, 2));
   try {
-    const { username, amount, listingId, filters } = event.queryStringParameters;
+    const { username, amount, ignoreListings, filters } = event.queryStringParameters;
 
-    console.log("Received Parameters:", { username, amount, listingId, filters });
+    console.log("Received Parameters:", { username, amount, ignoreListings, filters });
 
     let lowerCaseFilters = filters ? convertFiltersToLowercase(JSON.parse(filters)) : {};
 
     console.log("Converted Filters:", lowerCaseFilters);
 
     let listingIdsToIgnore = [];
-    if (listingId && listingId !== '0') {
-      listingIdsToIgnore = listingId.split(',').map(id => id.trim().toLowerCase());
+    if (ignoreListings && ignoreListings !== '0') {
+      listingIdsToIgnore = ignoreListings.split(',').map(id => id.trim().toLowerCase());
     }
 
     let userHistory = [];
@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
       console.log("User History:", userHistory);
     }
 
-    // Fetches the listings from the database or listings source based on the provided filters and listing ID.
+    // Fetches the listings from the database or listings source based on the provided filters and ignoreListings.
     const listings = await queryListings(lowerCaseFilters, listingIdsToIgnore);
     console.log("Queried Listings:", listings);
 
