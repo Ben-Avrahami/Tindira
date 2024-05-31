@@ -24,11 +24,7 @@ async function queryListings(filters, listingIds) {
     params.ExpressionAttributeNames["#category"] = "category";
     params.ExpressionAttributeValues[":category"] = filters.category.toLowerCase();
   }
-  if (filters.city) {
-    params.FilterExpression += " and #city = :city";
-    params.ExpressionAttributeNames["#city"] = "city";
-    params.ExpressionAttributeValues[":city"] = filters.city;
-  }
+
   if (filters.dates && filters.dates.length === 2) {
     params.FilterExpression += " and #date between :startDate and :endDate";
     params.ExpressionAttributeNames["#date"] = "date";
