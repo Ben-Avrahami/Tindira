@@ -24,12 +24,29 @@ async function queryListings(filters, listingIds) {
     params.ExpressionAttributeNames["#category"] = "category";
     params.ExpressionAttributeValues[":category"] = filters.category.toLowerCase();
   }
-  if (filters.dates && filters.dates.length === 2) {
-    params.FilterExpression += " and #date between :startDate and :endDate";
-    params.ExpressionAttributeNames["#date"] = "date";
-    params.ExpressionAttributeValues[":startDate"] = filters.dates[0];
-    params.ExpressionAttributeValues[":endDate"] = filters.dates[1];
+
+  // Handle date filters based on the category
+  if (filters.category === 'rent' && filters.dates && filters.dates.length > 0) {
+    const startDate = new Date(filters.dates[0]).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    params.FilterExpression += " and #contractStartingDate >= :startDate";
+    params.ExpressionAttributeNames["#contractStartingDate"] = "contractStartingDate";
+    params.ExpressionAttributeValues[":startDate"] = startDate;
   }
+
+  if (filters.category === 'sublet' && filters.dates && filters.dates.length === 2) {
+    const startDate = new Date(filters.dates[0]).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    const endDate = new Date(filters.dates[1]).toISOString().split('T')[0];   // Format date as YYYY-MM-DD
+    if (filters.isWholeDateRangeOnly) {
+      params.FilterExpression += " and #contractStartingDate <= :startDate and #contractEndDate >= :endDate";
+      params.ExpressionAttributeValues[":startDate"] = startDate;
+      params.ExpressionAttributeValues[":endDate"] = endDate;
+    } else {
+      params.FilterExpression += " and #contractEndDate >= :startDate and #contractStartingDate <= :endDate";
+      params.ExpressionAttributeValues[":startDate"] = startDate;
+      params.ExpressionAttributeValues[":endDate"] = endDate;
+    }
+  }
+
   if (filters.maxPrice) {
     params.FilterExpression += " and #price <= :maxPrice";
     params.ExpressionAttributeNames["#price"] = "price";
@@ -142,7 +159,7 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
   const R = 6371; // Radius of the Earth in kilometers
   const dLat = Math.abs(lat2 - lat1) * Math.PI / 180;
   const dLng = Math.abs(lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLng / 2) +
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
             Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -152,7 +169,6 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
   // console.log(`Calculated distance: ${distance} km`);
   return distance;
 }
-
 
 module.exports = {
   queryListings,
