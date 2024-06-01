@@ -36,12 +36,16 @@ async function queryListings(filters, listingIds) {
   if (filters.category === 'sublet' && filters.dates && filters.dates.length === 2) {
     const startDate = new Date(filters.dates[0]).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
     const endDate = new Date(filters.dates[1]).toISOString().split('T')[0];   // Format date as YYYY-MM-DD
+    params.ExpressionAttributeNames["#contractStartingDate"] = "contractStartingDate";
+    params.ExpressionAttributeNames["#contractEndDate"] = "contractEndDate";
+
     if (filters.isWholeDateRangeOnly) {
       params.FilterExpression += " and #contractStartingDate <= :startDate and #contractEndDate >= :endDate";
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     } else {
-      params.FilterExpression += " and #contractEndDate >= :startDate and #contractStartingDate <= :endDate";
+      // not using the second = because we dont want to include the last day of a sublet as a checkin day
+      params.FilterExpression += " and #contractEndDate > :startDate and #contractStartingDate < :endDate";
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     }
