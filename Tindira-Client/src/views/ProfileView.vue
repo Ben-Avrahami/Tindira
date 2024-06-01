@@ -10,7 +10,7 @@
 
     <div class="flex justify-center items-center space-x-4 my-4">
       <RouterLink class="w-1/2 px-2" to="/history">
-        <Button class="w-full" label="Swiping History">
+        <Button class="w-full" rounded label="Swiping History">
           <template #icon>
             <Icon icon="material-symbols:history" />
           </template>
@@ -18,7 +18,7 @@
       </RouterLink>
 
       <RouterLink class="w-1/2 px-2" to="/manage">
-        <Button class="w-full" label="Manage Posts">
+        <Button class="w-full" rounded label="Manage Posts">
           <template #icon>
             <Icon icon="mdi:post-it-note-edit-outline" />
           </template>
@@ -28,7 +28,7 @@
 
     <div class="flex justify-end items-center space-x-4">
       <div class="w-1/3 px-2">
-        <Button class="w-full" label="Log Out" @click="logout">
+        <Button class="w-full" rounded label="Log Out" @click="logout">
           <template #icon>
             <Icon icon="mdi:logout" />
           </template>

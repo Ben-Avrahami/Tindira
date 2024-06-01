@@ -6,12 +6,12 @@
 
     <Divider />
 
-    <GoogleMap></GoogleMap>
+    <GoogleMap :center="listing.coordinates.geometry.location" :name="listing.title"></GoogleMap>
 
     <Divider />
-    <div class="text-center">
+    <div class="text-center dark:text-white">
         <label class="font-bold block">Adress:</label>
-        <p>{{ listing.address.street }},{{ listing.address.city }}</p>
+        <p>{{ listing.coordinates.formatted_address}}</p>
         <label class="font-bold block">Description:</label>
         <p>{{ listing.description }}</p>
         <label class="font-bold block">Price:</label>
@@ -52,10 +52,11 @@ import { useAppStore } from '../stores/app'
 import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
+import type { Listing } from '../interfaces/listing.interface';
 
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
-const listing = dialogRef?.value.data.listing;
+const listing = dialogRef?.value.data.listing as Listing;
 
 const center = { lat: 40.689247, lng: -74.044502 }
 const markerOptions = { position: center, label: 'L', title: 'LADY LIBERTY' }

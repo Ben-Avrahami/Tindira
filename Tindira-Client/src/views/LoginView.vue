@@ -3,15 +3,13 @@
     <h1 class="text-3xl font-bold text-center text-surface-300 pt-8 select-none">
       Welcome to Tindira
     </h1>
+    <img src="@/assets/logo.png" alt="Image" width="100" class="mt-10" />
     <div class="flex flex-col items-center justify-center h-full">
       <Transition name="fade" mode="out-in">
         <KeepAlive>
-          <LoginButtons
-            v-if="method === LoginMethod.UNDEFINED"
-            :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
+          <LoginButtons v-if="method === LoginMethod.UNDEFINED" :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
             :loginWithPhoneNumber="() => (method = LoginMethod.PHONE_NUMBER)"
-            :loginWithUsername="() => (method = LoginMethod.USERNAME)"
-          />
+            :loginWithUsername="() => (method = LoginMethod.USERNAME)" />
           <component v-else :is="methods[method]" :attemptLogin :back />
         </KeepAlive>
       </Transition>
@@ -78,7 +76,7 @@ const attemptLogin = async (username: string, password: string) => {
         detail: 'You have successfully logged in',
         life: 3000
       })
-      appStore.connectUser(response.data.user.username)
+      await appStore.connectUser(response.data.user.username)
       login()
     } else {
       printError()
@@ -98,6 +96,7 @@ const back = () => {
 .fade-leave-active {
   transition: opacity 0.5s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

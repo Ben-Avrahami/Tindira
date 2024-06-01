@@ -1,12 +1,10 @@
+import type { SavedGeoCodeGoogleLocation } from "./geolocation.interface";
+
+
 interface Address {
     city: string;
     number: string;
     street: string;
-  }
-  
-  interface Coordinates {
-    x_coordinate: string;
-    y_coordinate: string;
   }
   
   export interface Listing {
@@ -16,6 +14,7 @@ interface Address {
     contractEndDate: Date;
     numberOfRooms: number;
     address: Address;
+    coordinates:SavedGeoCodeGoogleLocation;
     parking: number;
     ownerId: string;
     contractStartingDate: string;
@@ -26,7 +25,6 @@ interface Address {
     contractLength: string;
     description: string;
     price: number;
-    coordinates: Coordinates;
     title: string;
     postUploadDate: string;
   }

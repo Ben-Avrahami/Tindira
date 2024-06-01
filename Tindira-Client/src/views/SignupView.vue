@@ -25,7 +25,7 @@
               <InputIcon>
                 <Icon icon="mdi:user" />
               </InputIcon>
-              <InputText id="input" v-model="name" type="text" placeholder="Name" />
+              <InputText id="name" v-model="name" type="text" placeholder="Full Name" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -34,6 +34,14 @@
                 <Icon icon="mdi:email" />
               </InputIcon>
               <InputText id="email" v-model="email" type="email" placeholder="Email" />
+            </IconField>
+          </div>
+          <div class="mb-4">
+            <IconField>
+              <InputIcon>
+                <Icon icon="mdi:rename" />
+              </InputIcon>
+              <InputText id="username" v-model="username" type="text" placeholder="Username" />
             </IconField>
           </div>
           <div class="mb-4">
@@ -71,10 +79,10 @@
             </Password>
           </div>
         </div>
-        <div class="flex pt-4 justify-end">
-          <!-- TODO: add "Back to home/login page" button here -->
+        <div class="flex pt-4 justify-between">
+          <Button label="To Login" severity="secondary" @click="() => router.push('/login')" />
           <NextButton
-            :disabled="!(phone && name && email && password)"
+            :disabled="!(phone && name && username && email && password)"
             @click="
                 (event: Event) => {
                   if (validateBasicInfo()) {
@@ -190,6 +198,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
 
 import NextButton from '@/components/signup/NextButton.vue'
@@ -201,6 +210,8 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import API from '@/api'
 
+const router = useRouter()
+
 const toast = injectToast()
 
 const active = ref<number>(0)
@@ -209,8 +220,11 @@ const active = ref<number>(0)
 
 const phone = ref<string>('')
 const name = ref<string>('')
+const username = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
+
+const USERNAME_MIN_LENGTH = 4
 
 const isPhoneValid = (): boolean => {
   return !!phone.value && phone.value.trim().length === 12
@@ -218,6 +232,15 @@ const isPhoneValid = (): boolean => {
 
 const isNameValid = (): boolean => {
   return !!name.value && name.value.trim().split(/\s+/).length === 2
+}
+
+const isUsernameValid = (): boolean => {
+  // TODO: Implement username validation through API
+  return (
+    !!username.value &&
+    !username.value.includes(' ') &&
+    username.value.length >= USERNAME_MIN_LENGTH
+  )
 }
 
 const isEmailValid = (): boolean => {
@@ -251,6 +274,15 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
+  if (!isUsernameValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Username',
+      detail: `Username must include no spaces and at least ${USERNAME_MIN_LENGTH} characters`,
+      life: 3000
+    })
+    return false
+  }
   if (!isEmailValid()) {
     toast.add({
       severity: 'error',
@@ -274,7 +306,7 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<string>('')
+const profilePicture = ref<string>('a')
 
 const setProfilePicture = (image: string) => {
   profilePicture.value = image
@@ -282,7 +314,7 @@ const setProfilePicture = (image: string) => {
 
 // ==== Profile Description Panel ==== //
 
-const description = ref<string>('')
+const description = ref<string>('a')
 const MAX_DESCRIPTION_LENGTH = 500
 
 // ==== Interests Panel ==== //
@@ -325,38 +357,38 @@ const sendSignUpRequest = async () => {
 
   const data = {
     email: email.value,
-    firstName: name.value.split(' ')[0],
-    lastName: name.value.split(' ')[1],
+    fullName: name.value,
+    username: username.value,
     password: password.value,
     phone: phone.value, // remove the dashes?
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: profilePicture.value ?? '',
-    description: description.value ?? ''
+    profilePicture: profilePicture.value || 'a',
+    description: description.value || 'a'
   }
 
   try {
     await API.registerUser(
-      data.firstName,
+      data.username,
       data.email,
-      data.firstName,
-      data.lastName,
+      data.fullName,
       data.password,
       data.phone,
-      data.roles
-      // data.profilePicture,
-      // data.description
-    ) // TODO: Handle error according to the error message (e.g. user already exists)
+      data.roles,
+      data.profilePicture,
+      data.description
+    )
     toast.add({
       severity: 'success',
       summary: 'Sign Up Successful',
       detail: 'You have successfully signed up!',
       life: 3000
     })
-  } catch (error) {
+    router.push('/login')
+  } catch (error: any) {
     toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
-      detail: 'An error occurred while signing up',
+      detail: error.response.data.message,
       life: 3000
     })
   }

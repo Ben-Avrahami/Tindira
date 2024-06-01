@@ -1,6 +1,17 @@
 import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 
+type OptionalField =
+  | 'firstName'
+  | 'history'
+  | 'lastName'
+  | 'listings'
+  | 'phoneNumber'
+  | 'profileDescription'
+  | 'profilePicture'
+  | 'reviews'
+  | 'roles'
+
 ////////////////////////////////////////////////
 //                API SECTION
 ////////////////////////////////////////////////
@@ -51,13 +62,12 @@ class _API {
   }
 
   async tagListing(listingId: string, username: string, isLike: boolean) {
-    const response = await this.service.get(
-      `/listings/tag?username=galben&amount=${listingId}&isLike=${isLike.toString()}`
+    const response = await this.service.put(
+      `/listings/tag?username=${username}&listingId=${listingId}&isLike=${isLike.toString()}`
     )
     console.log(response)
     return response.data
   }
-
   async getCategoryHistory(
     category: string,
     username: string,
@@ -72,33 +82,39 @@ class _API {
     return response.data
   }
 
-  //dummy method to check connection to backend
-  //to be removed later
-  async checkLogin() {
-    const response = await this.service.post('/login', {
-      username: 'galben',
-      password: 'abc'
-    })
-    return response
+  async getUsersByUserName(usernames: string[], optionalFields: OptionalField[] = []) {
+    let usernamesString = usernames.join(',')
+    let optionalFieldsString = optionalFields.join(',')
+    const response = await this.service.get(`/user?username=${usernamesString}`)
+    console.log(response)
+    return response.data
+  }
+  async getListingsById(ids: string[]) {
+    let idsString = ids.join(',')
+    const response = await this.service.get(`listings?id=${idsString}`)
+    console.log(response)
+    return response.data
   }
 
   async registerUser(
     username: string,
     email: string,
-    firstName: string,
-    lastName: string,
+    fullName: string,
     password: string,
     phoneNumber: string,
-    roles: string[]
+    roles: string[],
+    profilePicture: string,
+    profileDescription: string
   ) {
     const response = await this.service.post('/register', {
       username: username,
       email: email,
-      firstName: firstName,
-      lastName: lastName,
+      fullName: fullName,
       password: password,
       phoneNumber: phoneNumber,
-      roles: roles
+      roles: roles,
+      profilePicture: profilePicture,
+      profileDescription: profileDescription
     })
     return response
   }

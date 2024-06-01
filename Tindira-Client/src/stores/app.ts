@@ -18,11 +18,11 @@ export const useAppStore = defineStore('app', {
       minNumberOfRooms: 0,
       isAnimalFriendly: false,
       city: null,
-      radiusInKm: null,
+      radiusInKm: undefined,
       location: null,
       isWithPorchOrGarden: false
     },
-    categoryOptions: ['sublet', 'rent', 'animel sublet', 'switch', 'buy']
+    categoryOptions: ['sublet', 'rent'],
   }),
   getters: {
     isUserConnected: (state) => state.connectedUser !== null,
@@ -39,38 +39,42 @@ export const useAppStore = defineStore('app', {
       const userId = localStorage.getItem(LOCAL_STORAGE_USER_KEY)
       if (userId) {
         this.connectedUser = userId
-        this.nextListingsArr = await API.getNextListings(5, this.SelectedFilters, userId, [])
+        await this.getNextListingsAndReplace(5)
       }
       this.isLoading = false
     },
-    connectUser(userId: string) {
+    async connectUser(userId: string) {
       this.connectedUser = userId
       localStorage.setItem(LOCAL_STORAGE_USER_KEY, userId)
+      await this.getNextListingsAndReplace(5);
     },
     disconnectUser() {
       this.connectedUser = null
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
     },
     async getNextListing(amount: number) {
-      const newListing = await API.getNextListings(
+      const newListings = await API.getNextListings(
         amount,
         this.SelectedFilters,
         this.getOrThrowConnectedUser,
         []
       )
-      this.nextListingsArr.push(...newListing)
+      return newListings;
+    },
+    async getNextListingsAndReplace(amount: number) {
+      const newListing = await this.getNextListing(amount);
+      this.nextListingsArr = newListing;
+    },
+    async getAndPushNextListing(amount: number) {
+      const newListing = await this.getNextListing(amount);
+      this.nextListingsArr.push(...newListing);
     },
     async updateFilters(newFilters: SelectedFilters) {
       if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
         console.log('filters', JSON.stringify(newFilters))
         this.SelectedFilters = newFilters
         this.isLoading = true
-        this.nextListingsArr = await API.getNextListings(
-          5,
-          newFilters,
-          this.getOrThrowConnectedUser,
-          []
-        )
+        await this.getNextListingsAndReplace(5);
         this.isLoading = false
       }
     }

@@ -1,51 +1,85 @@
 <template>
-    <!-- <DataView :value="products">
+    <DataView :value="history" dataKey="listingId">
         <template #list="slotProps">
             <div class="grid grid-nogutter">
-                <div v-for="(item, index) in slotProps.items" :key="index" class="col-12">
-                    <div class="flex flex-column sm:flex-row sm:align-items-center p-4 gap-3"
-                        :class="{ 'border-top-1 surface-border': index !== 0 }">
-                        <div class="md:w-10rem relative">
-                            <img class="block xl:block mx-auto border-round w-full" :src="item.images[0]" />
+                <div v-for="(item, index) in slotProps.items" :key="index" class="col-12 bg-red-300 mb-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3"
+                        :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
+                        <div class="md:w-[10rem] relative">
+                            <img class="block xl:block mx-auto rounded-md w-full" :src="item.images[0]" />
+                            <Tag :value="tagText" :severity="getSeverity" class="absolute" style="left: 4px; top: 4px">
+                            </Tag>
                         </div>
-                        <div
-                            class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
-                            <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
+                            <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                                 <div>
-
-                                    <div class="text-lg font-medium text-900 mt-2">{{ item.title }}</div>
-                                </div>
-                                <div class="surface-100 p-1" style="border-radius: 30px">
-                                    <div class="text-lg font-medium text-900 mt-2">{{ item.description }}</div>
+                                    <span class="font-medium text-secondary text-sm">{{ item.title }}</span>
+                                    <div class="flex items-center">
+                                        <icon icon="mdi:address-marker-outline"></icon>
+                                        <p class="drag-area m-0 ">{{
+                                            item.coordinates.formatted_address }}</p>
+                                    </div>
+                                    <div class="text-lg font-medium text-surface-700 dark:text-surface-0/80 mt-2">
+                                        {{ item.description }}</div>
                                 </div>
                             </div>
-                            <div class="flex flex-column md:align-items-end gap-5">
-                                <span class="text-xl font-semibold text-900">${{ item.price }}</span>
+                            <div class="flex flex-col md:items-end gap-5">
+                                <span class="text-xl font-semibold text-surface-700 dark:text-surface-0/80">{{
+                                    item.price }}₪</span>
                                 <div class="flex flex-row-reverse md:flex-row gap-2">
                                     <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl"
-                                        @click="showFullAptData">
+                                        @click="showFullAptData(item)">
                                         <template #icon>
                                             <Icon icon="ooui:info-filled"></Icon>
                                         </template>
-</Button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</template>
-</DataView> -->
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template #empty>
+            <div class="flex text-center justify-center text-2xl">
+                No History To Display At this Category!<br />
+                What Are You Waiting For?
+            </div>
+        </template>
+    </DataView>
 
 </template>
 
 <script setup lang="ts">
 
+import type { Listing } from '@/interfaces/listing.interface';
 import { useDialog } from 'primevue/usedialog';
-import { defineAsyncComponent, ref, type PropType, type Ref } from 'vue';
+import { computed, defineAsyncComponent, type PropType } from 'vue';
+import { Icon } from '@iconify/vue'
+import { useAppStore } from '../stores/app'
+import API from '@/api';
 
-const props = defineProps({});
-const emit = defineEmits(['locationChosen', 'locationCleared'])
+const userStore = useAppStore()
+
+const props = defineProps({
+    history: {
+        type: Array as PropType<Listing[]>,
+        required: true
+    },
+    isLike: {
+        type: Boolean,
+        required: true
+    }
+});
+const emit = defineEmits(['refreshHistory'])
+
+const tagText = computed(() =>
+    props.isLike ? 'Liked' : 'Disliked'
+)
+
+const getSeverity = computed(() =>
+    props.isLike ? 'success' : 'danger'
+)
 
 const dialog = useDialog()
 const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
@@ -58,7 +92,7 @@ const showFullAptData = (item: any) => {
         props: {
             header: item.title,
             style: {
-                width: '100vw'
+                width: '100vw',
             },
             breakpoints: {
                 '960px': '75vw',
@@ -67,13 +101,12 @@ const showFullAptData = (item: any) => {
             modal: true,
             closable: true,
         },
-        // onClose: (isLike) => {
-        //     if (isLike?.data !== undefined) {
-        //         setTimeout(() => {
-        //             // swipe(isLike.data); TODO: tag the listing through api without animation
-        //         }, 500);
-        //     }
-        // }
+        onClose: async (isLike) => {
+            if (isLike?.data !== undefined) {
+                await API.tagListing(item.listingId, userStore.connectedUser!, isLike.data);
+                emit('refreshHistory');
+            }
+        }
     })
 }
 
