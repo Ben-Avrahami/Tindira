@@ -66,12 +66,14 @@ async function queryListings(filters, listingIds) {
     params.ExpressionAttributeNames["#numberOfRooms"] = "numberOfRooms";
     params.ExpressionAttributeValues[":minNumberOfRooms"] = filters.minNumberOfRooms;
   }
-  if (filters.isAnimalFriendly !== undefined) {
+  // false or none att all will give back all the listings
+  if (filters.isAnimalFriendly) {
     params.FilterExpression += " and #isAnimalFriendly = :isAnimalFriendly";
     params.ExpressionAttributeNames["#isAnimalFriendly"] = "isAnimalFriendly";
     params.ExpressionAttributeValues[":isAnimalFriendly"] = filters.isAnimalFriendly;
   }
-  if (filters.isWithGardenOrPorch !== undefined) {
+  // i think it doesnt exist in the database
+  if (filters.isWithGardenOrPorch) {
     params.FilterExpression += " and #isWithGardenOrPorch = :isWithGardenOrPorch";
     params.ExpressionAttributeNames["#isWithGardenOrPorch"] = "isWithGardenOrPorch";
     params.ExpressionAttributeValues[":isWithGardenOrPorch"] = filters.isWithGardenOrPorch;
