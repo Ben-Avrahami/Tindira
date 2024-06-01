@@ -44,18 +44,26 @@ async function queryListings(filters, listingIds) {
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     } else {
-      // not using the second = because we dont want to include the last day of a sublet as a checkin day
       params.FilterExpression += " and #contractEndDate > :startDate and #contractStartingDate < :endDate";
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     }
   }
 
+  // Handle price filtering
+  // i think PricePerWholeTime attribute doesnt exist in the database
   if (filters.maxPrice) {
-    params.FilterExpression += " and #price <= :maxPrice";
-    params.ExpressionAttributeNames["#price"] = "price";
-    params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
+    if (filters.isPricePerWholeTime && filters.category === 'sublet') {
+      params.FilterExpression += " and #pricePerWholeTime <= :maxPrice";
+      params.ExpressionAttributeNames["#pricePerWholeTime"] = "pricePerWholeTime";
+      params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
+    } else {
+      params.FilterExpression += " and #price <= :maxPrice";
+      params.ExpressionAttributeNames["#price"] = "price";
+      params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
+    }
   }
+
   if (filters.minNumberOfParkings !== undefined) {
     params.FilterExpression += " and #parking >= :minNumberOfParkings";
     params.ExpressionAttributeNames["#parking"] = "parking";
