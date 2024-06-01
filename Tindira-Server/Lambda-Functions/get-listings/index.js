@@ -3,6 +3,7 @@ const {
   getUserHistory,
   filterListingsByUserHistory,
   convertFiltersToLowercase,
+  calculateDistance
 } = require("./utils");
 
 exports.handler = async (event, context) => {
@@ -32,8 +33,18 @@ exports.handler = async (event, context) => {
     }
 
     // Fetches the listings from the database or listings source based on the provided filters and ignoreListings.
-    const listings = await queryListings(lowerCaseFilters, listingIdsToIgnore);
+    let listings = await queryListings(lowerCaseFilters, listingIdsToIgnore);
     console.log("Queried Listings:", listings);
+
+    // Filter listings by radius if location and radiusInKm are provided
+    if (filters.location && filters.radiusInKm) {
+      const { lat, lng } = filters.location.geometry.location;
+      listings = listings.filter(listing => {
+        const { lat: listingLat, lng: listingLng } = listing.coordinates.geometry.location;
+        const distance = calculateDistance(lat, lng, listingLat, listingLng);
+        return distance <= filters.radiusInKm;
+      });
+    }
 
     // Filter out listings that are in user's history if username is provided and not '0'
     let filteredListings = username !== '0' ? filterListingsByUserHistory(listings, userHistory) : listings;
