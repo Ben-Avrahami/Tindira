@@ -13,20 +13,22 @@ const userTable = "TindiraUsers";
 async function register(userInfo) {
   const username = userInfo.username;
   const email = userInfo.email;
-  const firstName = userInfo.firstName;
-  const lastName = userInfo.lastName;
+  const fullName = userInfo.fullName;
   const password = userInfo.password;
   const phoneNumber = userInfo.phoneNumber;
   const roles = userInfo.roles;
+  const profilePicture = userInfo.profilePicture;
+  const profileDescription = userInfo.profileDescription;
 
   if (
     !username ||
     !email ||
-    !firstName ||
-    !lastName ||
+    !fullName ||
     !password ||
     !phoneNumber ||
-    !roles
+    !roles ||
+    !profilePicture ||
+    !profileDescription
   ) {
     return util.buildResponse(401, {
       message: "All fields are required",
@@ -43,13 +45,12 @@ async function register(userInfo) {
   const user = {
     username: username.toLowerCase().trim(),
     email: email,
-    firstName: firstName,
-    lastName: lastName,
+    fullName: fullName,
     password: encryptedPassword,
     phoneNumber: phoneNumber,
     roles: roles,
-    profilePicture: "",
-    profileDescription: "",
+    profilePicture: profilePicture,
+    profileDescription: profileDescription,
     history: {
       rent: {
         liked: [],
