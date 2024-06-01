@@ -42,6 +42,7 @@ exports.handler = async (event, context) => {
       listings = listings.filter(listing => {
         const { lat: listingLat, lng: listingLng } = listing.coordinates.geometry.location;
         const distance = calculateDistance(lat, lng, listingLat, listingLng);
+        console.log(`Calculated distance from ${listing.listingId}: ${distance.toFixed(2)} km`);
         return distance <= filters.radiusInKm;
       });
     }
