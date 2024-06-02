@@ -5,7 +5,7 @@ import os
 s3 = boto3.client('s3')
 
 # Local directory containing listing images
-local_directory = 'C:\\temp\\CloudNetWorkshopUni\\Tindira-Server\\datebase\\Images\\Listings'
+local_directory = 'C:\\Users\\galbenar\\OneDrive - Intel Corporation\\Desktop\\Work\\clones\\CloudNetWorkshopUni\\Tindira-Server\\datebase\\Images\\Listings'
 
 # S3 bucket name
 bucket_name = 'tindira'
