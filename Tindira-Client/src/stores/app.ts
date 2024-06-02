@@ -53,13 +53,14 @@ export const useAppStore = defineStore('app', {
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
     },
     async getNextListing(amount: number) {
-      const newListings = await API.getNextListings(
-        amount,
-        this.SelectedFilters,
-        this.getOrThrowConnectedUser,
-        []
-      )
-      return newListings;
+      // const newListings = await API.getNextListings(
+      //   amount,
+      //   this.SelectedFilters,
+      //   this.getOrThrowConnectedUser,
+      //   []
+      // )
+      // return newListings;
+      return [];
     },
     async getNextListingsAndReplace(amount: number) {
       const newListing = await this.getNextListing(amount);
