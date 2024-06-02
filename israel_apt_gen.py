@@ -34,14 +34,14 @@ sample_listing = {
     "description": "An exquisite penthouse offering luxurious amenities and breathtaking views.",
     "price": 5000,
     "coordinates": {
-        "formatted_address": "Hess St, Tel Aviv-Yafo, Israel",
+        "formatted_address": "Sderot Nordau 44, Tel Aviv-Yafo, Israel",
         "geometry": {
             "location": {
-                "lng": 34.7698472,
-                "lat": 32.0728056
+                "lng": 34.777260,
+                "lat": 32.092140
             }
         },
-        "place_id": "EiJIZXNzIFN0cmVldCwgVGVsIEF2aXYtWWFmbywgSXJhZWwi4qLAoUChIJRyEC6YBMHRURn_y4KduY74wSFAoSCR98OxmmTB0VEZA_lsCicvvB"
+        "place_id": "ChIJn_R_K4tLHRUResW0E7oowl0"
     },
     "postUploadDate": "2024-04-03",
     "title": "Luxury Penthouse with Stunning Views",
@@ -62,15 +62,10 @@ def get_random_tel_aviv_address():
         lng = random.uniform(34.7501, 34.8303)  # Tel Aviv's approximate longitude range
         reverse_geocode_result = gmaps.reverse_geocode((lat, lng))
         if reverse_geocode_result:
-            for component in reverse_geocode_result[0]['address_components']:
-                if 'route' in component['types']:
-                    street = component['long_name']
-                if 'locality' in component['types']:
-                    city = component['long_name']
-            formatted_address = f"{street}, {city}"
-            if 'Tel Aviv-Yafo' in formatted_address:
+            address = reverse_geocode_result[0]['formatted_address']
+            if 'Tel Aviv-Yafo' in address:
                 return {
-                    "formatted_address": formatted_address,
+                    "formatted_address": address,
                     "geometry": reverse_geocode_result[0]['geometry'],
                     "place_id": reverse_geocode_result[0]['place_id']
                 }
@@ -130,7 +125,7 @@ def generate_listing(index):
     listing['hasPorch'] = random.choice([True, False])
     return listing
 
-listings = [generate_listing(i) for i in range(100, 105)]  # Generate 5 listings starting from 100
+listings = [generate_listing(i) for i in range(100, 103)]  # Generate 100 listings starting from 100
 
 # Convert to JSON
 json_output = json.dumps(listings, indent=4, default=default_serializer)
