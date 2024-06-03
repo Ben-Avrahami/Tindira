@@ -14,10 +14,10 @@ export const useAppStore = defineStore('app', {
       dates: null,
       isWholeDateRangeOnly: false,
       maxPrice: null,
+      isPricePerWholeTime: false,
       minNumberOfParkings: 0,
       minNumberOfRooms: 0,
       isAnimalFriendly: false,
-      city: null,
       radiusInKm: undefined,
       location: null,
       isWithPorchOrGarden: false
@@ -53,31 +53,31 @@ export const useAppStore = defineStore('app', {
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
     },
     async getNextListing(amount: number) {
-      // const newListings = await API.getNextListings(
-      //   amount,
-      //   this.SelectedFilters,
-      //   this.getOrThrowConnectedUser,
-      //   []
-      // )
-      // return newListings;
-      return [];
+      let ignoreIds=this.nextListingsArr.map(listing => listing.listingId);
+      const newListings = await API.getNextListings(
+        amount,
+        this.SelectedFilters,
+        this.getOrThrowConnectedUser,
+        ignoreIds
+      )
+return newListings;
     },
     async getNextListingsAndReplace(amount: number) {
-      const newListing = await this.getNextListing(amount);
-      this.nextListingsArr = newListing;
-    },
+  const newListing = await this.getNextListing(amount);
+  this.nextListingsArr = newListing;
+},
     async getAndPushNextListing(amount: number) {
-      const newListing = await this.getNextListing(amount);
-      this.nextListingsArr.push(...newListing);
-    },
+  const newListing = await this.getNextListing(amount);
+  this.nextListingsArr.push(...newListing);
+},
     async updateFilters(newFilters: SelectedFilters) {
-      if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
-        console.log('filters', JSON.stringify(newFilters))
-        this.SelectedFilters = newFilters
-        this.isLoading = true
-        await this.getNextListingsAndReplace(5);
-        this.isLoading = false
-      }
-    }
+  if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
+    console.log('filters', JSON.stringify(newFilters))
+    this.SelectedFilters = newFilters
+    this.isLoading = true
+    await this.getNextListingsAndReplace(5);
+    this.isLoading = false
+  }
+}
   }
 })

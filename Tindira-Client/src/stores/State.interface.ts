@@ -1,4 +1,4 @@
-import type { GeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
+import type { GeoCodeGoogleLocation, SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import type { Listing } from '@/interfaces/listing.interface'
 
 export interface State {
@@ -14,11 +14,11 @@ export interface SelectedFilters {
   dates: Date | null
   isWholeDateRangeOnly: boolean
   maxPrice: number | null
+  isPricePerWholeTime:boolean
   minNumberOfParkings: number
   minNumberOfRooms: number
   isAnimalFriendly: boolean
-  city: string | null
-  location: GeoCodeGoogleLocation | null
+  location: SavedGeoCodeGoogleLocation | null
   radiusInKm: number | number[] | undefined
   isWithPorchOrGarden: boolean
 }
