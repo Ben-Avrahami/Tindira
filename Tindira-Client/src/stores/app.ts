@@ -54,13 +54,14 @@ export const useAppStore = defineStore('app', {
     },
     async getNextListing(amount: number) {
       let ignoreIds=this.nextListingsArr.map(listing => listing.listingId);
-      const newListings = await API.getNextListings(
-        amount,
-        this.SelectedFilters,
-        this.getOrThrowConnectedUser,
-        ignoreIds
-      )
-return newListings;
+//       const newListings = await API.getNextListings(
+//         amount,
+//         this.SelectedFilters,
+//         this.getOrThrowConnectedUser,
+//         ignoreIds
+//       )
+// return newListings;
+return [];
     },
     async getNextListingsAndReplace(amount: number) {
   const newListing = await this.getNextListing(amount);
