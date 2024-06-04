@@ -40,7 +40,7 @@ async function updateLocation() {
         geometry: geometryWithoutLocationType,
         place_id: result.place_id
     };
-    console.log("geoCode object for gal ben artzi the king", JSON.stringify(logObject));// TODO: REMOVE LATER, for now keep it commented maybe for future listing address objects for backend use
+    console.log(JSON.stringify(logObject));// TODO: REMOVE LATER, for now keep it commented maybe for future listing address objects for backend use
     emit('locationChosen', result);
 };
 function cleared() {
