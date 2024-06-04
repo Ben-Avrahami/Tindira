@@ -91,7 +91,7 @@
   </div>
   <div class="flex flex-wrap gap-3 p-fluid" v-if="selectedFilters.dates">
     <div class="flex-auto"  v-if="selectedFilters.category === 'sublet'">
-      <label class="font-bold block mb-2"> Only display aparetments that are avilable for the whole time? </label>
+      <label class="font-bold block mb-2"> Only display apartments that are available for the whole time? </label>
       <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
     </div>
   </div>
