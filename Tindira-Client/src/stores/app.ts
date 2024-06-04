@@ -61,7 +61,6 @@ export const useAppStore = defineStore('app', {
         ignoreIds
       )
       return newListings;
-      // return [];
     },
     async getNextListingsAndReplace(amount: number) {
       const newListing = await this.getNextListing(amount);
