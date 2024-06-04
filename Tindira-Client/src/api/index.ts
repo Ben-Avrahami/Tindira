@@ -55,7 +55,9 @@ class _API {
     const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : '';
     const response = await this.service.post(
       `/listings/getNext?username=${username}&amount=${amount.toString()}&ignoreListings=${ignoreListings}`,
-      filters
+      {
+        "filters": filters
+      }
     )
     console.log(response)
     return response.data
