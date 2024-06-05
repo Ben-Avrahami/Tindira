@@ -28,6 +28,7 @@ async function queryListings(filters, listingIds) {
     const startDateObj = new Date(filters.dates[0]);
     startDateObj.setDate(startDateObj.getDate() + 1); // Add one day to the start date
     const startDate = startDateObj.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
     params.FilterExpression += " and #contractStartDate >= :startDate";
     params.ExpressionAttributeNames["#contractStartDate"] = "contractStartDate";
     params.ExpressionAttributeValues[":startDate"] = startDate;
@@ -131,18 +132,23 @@ async function getUserHistory(username) {
 }
 
 /**
- * Filter listings based on user's history to remove already seen listings.
+ * Filter listings based on user's history to remove already seen or unliked listings.
  */
 function filterListingsByUserHistory(listings, userHistory) {
-  const likedListings = Object.values(userHistory).reduce(
+  const { liked, unliked } = Object.values(userHistory).reduce(
     (acc, categoryHistory) => {
-      return acc.concat(categoryHistory.liked);
+      return {
+        liked: acc.liked.concat(categoryHistory.liked),
+        unliked: acc.unliked.concat(categoryHistory.unliked)
+      };
     },
-    []
+    { liked: [], unliked: [] }
   );
 
+  const allFilteredOutListings = [...new Set([...liked, ...unliked])];
+
   return listings.filter(
-    (listing) => !likedListings.includes(listing.listingId)
+    (listing) => !allFilteredOutListings.includes(listing.listingId)
   );
 }
 
