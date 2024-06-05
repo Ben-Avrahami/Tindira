@@ -52,10 +52,12 @@ class _API {
     username: string,
     ignoreIds: string[]
   ) {
-    const response = await this.service.get(
-      `/listings/getNext?username=${username}&amount=${amount.toString()}&category=${
-        filters.category
-      }&listingId=0`
+    const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : '';
+    const response = await this.service.post(
+      `/listings/getNext?username=${username}&amount=${amount.toString()}&ignoreListings=${ignoreListings}`,
+      {
+        "filters": filters
+      }
     )
     console.log(response)
     return response.data
@@ -76,7 +78,7 @@ class _API {
     items: number = 10
   ) {
     const response = await this.service.get(
-      `/user/getHistory?username=galben&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`
+      `/user/getHistory?username=${username}&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`
     )
     console.log(response)
     return response.data

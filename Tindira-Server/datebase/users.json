@@ -1,12 +1,11 @@
 [
   {
-    "UserId": "user1",
+    "username": "user1",
     "email": "john.doe@example.com",
     "password": "password123",
     "phoneNumber": "123456789",
     "roles": ["lessor", "renter"],
-    "firstName": "John",
-    "lastName": "Doe",
+    "fullName": "John Doe",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user1/image1.jpg",
     "profileDescription": "I'm John Doe, a lessor interested in renting out properties.",
     "history": {
@@ -23,13 +22,12 @@
     "listings": []
   },
   {
-    "UserId": "user2",
+    "username": "user2",
     "email": "jane.smith@example.com",
     "password": "password456",
     "phoneNumber": "987654321",
     "roles": ["renter"],
-    "firstName": "Jane",
-    "lastName": "Smith",
+    "fullName": "Jane Smith",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user2/image1.jpg",
     "profileDescription": "I'm Jane Smith, a renter looking for properties to rent.",
     "history": {
@@ -46,13 +44,12 @@
     "listings": []
   },
   {
-    "UserId": "user3",
+    "username": "user3",
     "email": "alice.jones@example.com",
     "password": "password789",
     "phoneNumber": "456789123",
     "roles": ["lessor"],
-    "firstName": "Alice",
-    "lastName": "Jones",
+    "fullName": "Alice Jones",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user3/image1.jpg",
     "profileDescription": "I'm Alice Jones, a lessor with properties available for rent.",
     "history": {
@@ -64,19 +61,17 @@
         "liked": [],
         "unliked": []
       }
-
     },
     "reviews": {},
     "listings": []
   },
   {
-    "UserId": "user4",
+    "username": "user4",
     "email": "bob.white@example.com",
     "password": "password123",
     "phoneNumber": "789123456",
     "roles": ["renter"],
-    "firstName": "Bob",
-    "lastName": "White",
+    "fullName": "Bob White",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user4/image1.jpg",
     "profileDescription": "I'm Bob White, a renter searching for a new apartment.",
     "history": {
@@ -88,19 +83,17 @@
         "liked": [],
         "unliked": []
       }
-
     },
     "reviews": {},
     "listings": []
   },
   {
-    "UserId": "user5",
+    "username": "user5",
     "email": "emma.davis@example.com",
     "password": "password456",
     "phoneNumber": "321654987",
     "roles": ["admin"],
-    "firstName": "Emma",
-    "lastName": "Davis",
+    "fullName": "Emma Davis",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user5/image1.jpg",
     "profileDescription": "I'm Emma Davis, an admin overseeing property listings.",
     "history": {
@@ -112,19 +105,17 @@
         "liked": [],
         "unliked": []
       }
-
     },
     "reviews": {},
     "listings": []
   },
   {
-    "UserId": "user6",
+    "username": "user6",
     "email": "charlie.brown@example.com",
     "password": "password123",
     "phoneNumber": "456789321",
     "roles": ["lessor", "renter"],
-    "firstName": "Charlie",
-    "lastName": "Brown",
+    "fullName": "Charlie Brown",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user6/image1.jpg",
     "profileDescription": "I'm Charlie Brown, a renter interested in finding a cozy apartment.",
     "history": {
@@ -141,13 +132,12 @@
     "listings": []
   },
   {
-    "UserId": "user7",
+    "username": "user7",
     "email": "sarah.jones@example.com",
     "password": "password789",
     "phoneNumber": "987654321",
     "roles": ["lessor"],
-    "firstName": "Sarah",
-    "lastName": "Jones",
+    "fullName": "Sarah Jones",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user7/image1.jpg",
     "profileDescription": "I'm Sarah Jones, a lessor offering various rental properties.",
     "history": {
@@ -164,13 +154,12 @@
     "listings": []
   },
   {
-    "UserId": "user8",
+    "username": "user8",
     "email": "mike.smith@example.com",
     "password": "password123",
     "phoneNumber": "654987321",
     "roles": ["renter"],
-    "firstName": "Mike",
-    "lastName": "Smith",
+    "fullName": "Mike Smith",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user8/image1.jpg",
     "profileDescription": "I'm Mike Smith, a renter looking for a spacious apartment.",
     "history": {
@@ -187,13 +176,12 @@
     "listings": []
   },
   {
-    "UserId": "user9",
+    "username": "user9",
     "email": "lisa.white@example.com",
     "password": "password456",
     "phoneNumber": "321987654",
     "roles": ["lessor"],
-    "firstName": "Lisa",
-    "lastName": "White",
+    "fullName": "Lisa White",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user9/image1.jpg",
     "profileDescription": "I'm Lisa White, a lessor with beautiful rental properties.",
     "history": {
@@ -210,13 +198,12 @@
     "listings": []
   },
   {
-    "UserId": "user10",
+    "username": "user10",
     "email": "peter.davis@example.com",
     "password": "password123",
     "phoneNumber": "987321654",
     "roles": ["renter"],
-    "firstName": "Peter",
-    "lastName": "Davis",
+    "fullName": "Peter Davis",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user10/image1.jpg",
     "profileDescription": "I'm Peter Davis, a renter looking for a comfortable apartment.",
     "history": {
@@ -233,13 +220,12 @@
     "listings": []
   },
   {
-    "UserId": "user11",
+    "username": "user11",
     "email": "amy.johnson@example.com",
     "password": "password789",
     "phoneNumber": "654321987",
     "roles": ["admin"],
-    "firstName": "Amy",
-    "lastName": "Johnson",
+    "fullName": "Amy Johnson",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user11/image1.jpg",
     "profileDescription": "I'm Amy Johnson, an admin responsible for managing user accounts.",
     "history": {
@@ -256,13 +242,12 @@
     "listings": []
   },
   {
-    "UserId": "user12",
+    "username": "user12",
     "email": "tom.brown@example.com",
     "password": "password123",
     "phoneNumber": "321654987",
     "roles": ["renter"],
-    "firstName": "Tom",
-    "lastName": "Brown",
+    "fullName": "Tom Brown",
     "profilePicture": "https://tindira.s3.us-east-2.amazonaws.com/users/user12/image1.jpg",
     "profileDescription": "I'm Tom Brown, a renter seeking a modern apartment.",
     "history": {

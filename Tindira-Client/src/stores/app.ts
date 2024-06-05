@@ -14,10 +14,10 @@ export const useAppStore = defineStore('app', {
       dates: null,
       isWholeDateRangeOnly: false,
       maxPrice: null,
+      isPricePerWholeTime: false,
       minNumberOfParkings: 0,
       minNumberOfRooms: 0,
       isAnimalFriendly: false,
-      city: null,
       radiusInKm: undefined,
       location: null,
       isWithPorchOrGarden: false
@@ -53,11 +53,12 @@ export const useAppStore = defineStore('app', {
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
     },
     async getNextListing(amount: number) {
+      let ignoreIds = this.nextListingsArr.map(listing => listing.listingId);
       const newListings = await API.getNextListings(
         amount,
         this.SelectedFilters,
         this.getOrThrowConnectedUser,
-        []
+        ignoreIds
       )
       return newListings;
     },

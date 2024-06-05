@@ -20,7 +20,7 @@
         <template #subtitle>
           <div class="flex items-center">
             <icon icon="mdi:address-marker-outline"></icon>
-            <p class="drag-area m-0 text-slate-400">{{ userStore.nextListingsArr[0].coordinates.formatted_address }}</p>
+            <p class="drag-area m-0 text-slate-400">{{ userStore.nextListingsArr[0]?.coordinates?.formatted_address }}</p>
           </div>
           <div class="flex justify-between items-center">
             <div class="drag-area title flex-grow">
