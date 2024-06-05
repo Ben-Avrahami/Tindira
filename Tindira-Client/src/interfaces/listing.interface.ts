@@ -13,18 +13,19 @@ interface Address {
     postExpireDate: Date;
     contractEndDate: Date;
     numberOfRooms: number;
-    address: Address;
     coordinates:SavedGeoCodeGoogleLocation;
-    parking: number;
+    parkingSpaces: number;
     ownerId: string;
-    contractStartingDate: string;
+    contractStartDate: string;
+    isWithGardenOrPorch:boolean;
     isAnimalFriendly: boolean;
+    isPricePerWholeTime:boolean;
+    pricePerMonth:number;
+    pricePerWholeTime:number;
     isActive: boolean;
     category: string;
     images: string[];
-    contractLength: string;
     description: string;
-    price: number;
     title: string;
     postUploadDate: string;
   }

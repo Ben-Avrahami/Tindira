@@ -90,7 +90,7 @@
     </div>
   </div>
   <div class="flex flex-wrap gap-3 p-fluid" v-if="selectedFilters.dates">
-    <div class="flex-auto"  v-if="selectedFilters.category === 'sublet'">
+    <div class="flex-auto" v-if="selectedFilters.category === 'sublet'">
       <label class="font-bold block mb-2"> Only display apartments that are available for the whole time? </label>
       <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
     </div>
@@ -115,22 +115,21 @@ import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
 
 const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
-let priceTime = ref('Month');
+let priceTime = ref(selectedFilters.isPricePerWholeTime ? "Whole Time" : "Month");
 let priceTimeOptions = ref(['Month', 'Whole Time']);
 
 function priceTimeChanged(event: any) {
   selectedFilters.isPricePerWholeTime = event.value === 'Whole Time';
 }
 
-
 function updateLocation(location: any) {
   selectedFilters.location = location;
 }
 
-function changeCategory(){
+function changeCategory() {
   selectedFilters.isPricePerWholeTime = false;
   priceTime.value = 'Month';
-  selectedFilters.dates=null;
+  selectedFilters.dates = null;
   selectedFilters.isWholeDateRangeOnly = false;
 }
 
