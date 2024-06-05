@@ -47,6 +47,22 @@ exports.handler = async (event, context) => {
       });
     }
 
+    // Handle isPricePerWholeTime filter for sublet category
+    if (filters.category === 'sublet' && filters.isPricePerWholeTime && filters.dates && filters.dates.length === 2) {
+      const startDate = new Date(filters.dates[0]);
+      const endDate = new Date(filters.dates[1]);
+      const numberOfDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // +1 to include both start and end date
+      console.log(`startDate: ${startDate}`);
+      console.log(`Calculated number of days: ${numberOfDays}`);
+
+      listings = listings.filter(listing => {
+        const pricePerDay = listing.pricePerMonth / 30; // Assuming 30 days in a month for simplicity
+        const totalPrice = pricePerDay * numberOfDays;
+        console.log(`Calculated total price for listing ${listing.listingId} over ${numberOfDays} days: ${totalPrice}`);
+        return totalPrice <= filters.maxPrice;
+      });
+    }
+
     // Filter out listings that are in user's history if username is provided and not '0'
     let filteredListings = username !== '0' ? filterListingsByUserHistory(listings, userHistory) : listings;
     console.log("Filtered Listings:", filteredListings);

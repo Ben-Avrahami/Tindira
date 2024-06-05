@@ -16,8 +16,6 @@ async function queryListings(filters, listingIds) {
     },
   };
 
-  console.log("Initial Params:", params);
-
   // Add additional filter expressions based on filters provided
   if (filters.category) {
     params.FilterExpression += " and #category = :category";
@@ -27,46 +25,50 @@ async function queryListings(filters, listingIds) {
 
   // Handle date filters based on the category
   if (filters.category === 'rent' && filters.dates && filters.dates.length > 0) {
-    const startDate = new Date(filters.dates[0]).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    params.FilterExpression += " and #contractStartingDate >= :startDate";
-    params.ExpressionAttributeNames["#contractStartingDate"] = "contractStartingDate";
+    const startDateObj = new Date(filters.dates[0]);
+    startDateObj.setDate(startDateObj.getDate() + 1); // Add one day to the start date
+    const startDate = startDateObj.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    params.FilterExpression += " and #contractStartDate >= :startDate";
+    params.ExpressionAttributeNames["#contractStartDate"] = "contractStartDate";
     params.ExpressionAttributeValues[":startDate"] = startDate;
   }
 
   if (filters.category === 'sublet' && filters.dates && filters.dates.length === 2) {
-    const startDate = new Date(filters.dates[0]).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    const endDate = new Date(filters.dates[1]).toISOString().split('T')[0];   // Format date as YYYY-MM-DD
-    params.ExpressionAttributeNames["#contractStartingDate"] = "contractStartingDate";
+    const startDateObj = new Date(filters.dates[0]);
+    const endDateObj = new Date(filters.dates[1]);
+    startDateObj.setDate(startDateObj.getDate() + 1); // Add one day to the start date
+    endDateObj.setDate(endDateObj.getDate() + 1); // Add one day to the end date
+    const startDate = startDateObj.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    const endDate = endDateObj.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
+    params.ExpressionAttributeNames["#contractStartDate"] = "contractStartDate";
     params.ExpressionAttributeNames["#contractEndDate"] = "contractEndDate";
 
     if (filters.isWholeDateRangeOnly) {
-      params.FilterExpression += " and #contractStartingDate <= :startDate and #contractEndDate >= :endDate";
+      params.FilterExpression += " and #contractStartDate <= :startDate and #contractEndDate >= :endDate";
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     } else {
-      params.FilterExpression += " and #contractEndDate > :startDate and #contractStartingDate < :endDate";
+      params.FilterExpression += " and #contractEndDate > :startDate and #contractStartDate < :endDate";
       params.ExpressionAttributeValues[":startDate"] = startDate;
       params.ExpressionAttributeValues[":endDate"] = endDate;
     }
   }
 
   // Handle price filtering
-  // i think PricePerWholeTime attribute doesnt exist in the database
   if (filters.maxPrice) {
     if (filters.isPricePerWholeTime && filters.category === 'sublet') {
-      params.FilterExpression += " and #pricePerWholeTime <= :maxPrice";
-      params.ExpressionAttributeNames["#pricePerWholeTime"] = "pricePerWholeTime";
-      params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
+      // This condition is kept to allow further processing after fetching listings
     } else {
-      params.FilterExpression += " and #price <= :maxPrice";
-      params.ExpressionAttributeNames["#price"] = "price";
+      params.FilterExpression += " and #pricePerMonth <= :maxPrice";
+      params.ExpressionAttributeNames["#pricePerMonth"] = "pricePerMonth";
       params.ExpressionAttributeValues[":maxPrice"] = filters.maxPrice;
     }
   }
 
   if (filters.minNumberOfParkings !== undefined) {
-    params.FilterExpression += " and #parking >= :minNumberOfParkings";
-    params.ExpressionAttributeNames["#parking"] = "parking";
+    params.FilterExpression += " and #parkingSpaces >= :minNumberOfParkings";
+    params.ExpressionAttributeNames["#parkingSpaces"] = "parkingSpaces";
     params.ExpressionAttributeValues[":minNumberOfParkings"] = filters.minNumberOfParkings;
   }
   if (filters.minNumberOfRooms !== undefined) {
@@ -74,13 +76,13 @@ async function queryListings(filters, listingIds) {
     params.ExpressionAttributeNames["#numberOfRooms"] = "numberOfRooms";
     params.ExpressionAttributeValues[":minNumberOfRooms"] = filters.minNumberOfRooms;
   }
-  // false or none att all will give back all the listings
+
   if (filters.isAnimalFriendly) {
     params.FilterExpression += " and #isAnimalFriendly = :isAnimalFriendly";
     params.ExpressionAttributeNames["#isAnimalFriendly"] = "isAnimalFriendly";
     params.ExpressionAttributeValues[":isAnimalFriendly"] = filters.isAnimalFriendly;
   }
-  // i think it doesnt exist in the database
+
   if (filters.isWithGardenOrPorch) {
     params.FilterExpression += " and #isWithGardenOrPorch = :isWithGardenOrPorch";
     params.ExpressionAttributeNames["#isWithGardenOrPorch"] = "isWithGardenOrPorch";
@@ -99,11 +101,8 @@ async function queryListings(filters, listingIds) {
     });
   }
 
-  console.log("Final Params:", JSON.stringify(params, null, 2));
-
   try {
     const data = await dynamodb.scan(params).promise();
-    console.log("DynamoDB Scan Data:", data);
     return data.Items;
   } catch (error) {
     console.error("Error querying listings:", error);
@@ -124,7 +123,6 @@ async function getUserHistory(username) {
 
   try {
     const data = await dynamodb.get(params).promise();
-    console.log("User History Data:", data);
     return data.Item.history || {};
   } catch (error) {
     console.error("Error fetching user history:", error);
@@ -142,8 +140,6 @@ function filterListingsByUserHistory(listings, userHistory) {
     },
     []
   );
-
-  console.log("Liked Listings:", likedListings);
 
   return listings.filter(
     (listing) => !likedListings.includes(listing.listingId)
@@ -178,9 +174,6 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
             Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
-  // console.log(`Given lat & lng: ${lat1} ${lng1}`);
-  // console.log(`Listing lat & lng: ${lat2} ${lng2}`);
-  // console.log(`Calculated distance: ${distance} km`);
   return distance;
 }
 
