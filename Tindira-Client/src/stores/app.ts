@@ -72,8 +72,8 @@ export const useAppStore = defineStore('app', {
     },
     async updateFilters(newFilters: SelectedFilters) {
       if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
-        console.log('filters', JSON.stringify(newFilters))
-        this.SelectedFilters = newFilters
+        this.nextListingsArr = [];
+        this.SelectedFilters = newFilters;
         this.isLoading = true
         await this.getNextListingsAndReplace(5);
         this.isLoading = false
