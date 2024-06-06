@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <AptImageCarousel />
+        <AptImageCarousel :images="listing?.images"/>
     </div>
 
     <Divider />

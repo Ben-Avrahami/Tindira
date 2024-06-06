@@ -5,7 +5,7 @@
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
           <div>
-            <AptImageCarousel ref="carouselRef" :key="rerenderer" />
+            <AptImageCarousel ref="carouselRef" :key="rerenderer" :images="userStore?.nextListingsArr[0]?.images"/>
           </div>
         </template>
 
