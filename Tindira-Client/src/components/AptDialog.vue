@@ -24,6 +24,8 @@
         <label v-if="listing.isWithGardenOrPorch" class="font-bold block">Apartment Has a Porch or a Garden </label>
         <label class="font-bold block">contract Starting Date:</label>
         <p>{{ listing?.contractStartDate }} </p>
+        <label class="font-bold block">contract Ending Date:</label>
+        <p>{{ listing?.contractEndDate }} </p>
         <label class="font-bold block">Post Upload Date:</label>
         <p>{{ listing?.postUploadDate }} </p>
 
