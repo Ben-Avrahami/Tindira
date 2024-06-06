@@ -6,7 +6,7 @@
 
     <Divider />
 
-    <GoogleMap :center="listing?.coordinates?.geometry?.location" :name="listing.title"></GoogleMap>
+    <GoogleMap :center="listing?.coordinates?.geometry?.location" :name="listing?.title"></GoogleMap>
 
     <Divider />
     <div class="text-center dark:text-white">
