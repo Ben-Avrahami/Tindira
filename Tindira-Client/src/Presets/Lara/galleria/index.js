@@ -238,7 +238,7 @@ export default {
             'inline-flex justify-center items-center overflow-hidden',
 
             // Appearance
-            'bg-transparent text-white w-16 h-16 transition duration-200 ease-in-out rounded-md',
+            'bg-transparent text-primary-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
             {
                 'opacity-0 group-hover:opacity-100': parent.props.showItemNavigatorsOnHover
             },
@@ -257,7 +257,10 @@ export default {
             'hover:bg-surface-0/10 hover:text-white',
 
             // Focus Effects
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
+            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
+
+            // Z-Index
+            'z-10'
         ]
     }),
     nextitembutton: ({ parent }) => ({
@@ -266,7 +269,7 @@ export default {
             'inline-flex justify-center items-center overflow-hidden',
 
             // Appearance
-            'bg-transparent text-white w-16 h-16 transition duration-200 ease-in-out rounded-md',
+            'bg-transparent text-primary-500 w-16 h-16 transition duration-200 ease-in-out rounded-md',
             {
                 'opacity-0 group-hover:opacity-100': parent.props.showItemNavigatorsOnHover
             },
@@ -285,7 +288,10 @@ export default {
             'hover:bg-surface-0/10 hover:text-white',
 
             // Focus Effects
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
+            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
+
+            // Z-Index
+            'z-10'
         ]
     }),
     caption: {

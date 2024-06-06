@@ -20,7 +20,7 @@ def upload_listings_to_dynamodb(file_path, table_name, region_name='us-east-2'):
 
 if __name__ == "__main__":
     # File path and table name
-    file_path = "C:\\temp\\CloudNetWorkshopUni\\Tindira-Server\\datebase\\users.json"  # Update the file path
+    file_path = "C:\\Users\\galbenar\\OneDrive - Intel Corporation\\Desktop\\Work\\clones\\CloudNetWorkshopUni\\Tindira-Server\\datebase\\users.json"
     table_name = "TindiraUsers"
 
     # Upload listings to DynamoDB table

@@ -1,31 +1,32 @@
 <template>
-  <VueDraggable ref="el" v-model="links" @end="onEnd" @start="onStart" handle=".drag-area">
+  <VueDraggable ref="el" v-model="dummyArrForSwiping" :disabled="disableDrag" @end="onEnd" @start="onStart"
+    handle=".drag-area">
     <transition name="swipe">
       <Card class="w-4/5 mx-auto swipe-card" ref="card">
         <template #header>
-          <Carousel :value="links" :numVisible="1" :numScroll="1" circular>
-            <template #item="slotProps">
-              <div class="border-1 surface-border border-round m-2 p-3">
-                <div class="relative mx-auto">
-                  <Image
-                    alt="Apartment images"
-                    class="w-full border-round"
-                    :src="slotProps.data.src"
-                    preview
-                  />
-                </div>
-              </div>
-            </template>
-          </Carousel>
+          <div>
+            <AptImageCarousel ref="carouselRef" :key="rerenderer" />
+          </div>
         </template>
 
         <template #title>
-          <div class="drag-area">Lior's Home</div>
+          <div class="drag-area">
+            {{
+              userStore.nextListingsArr[0]?.title ??
+              'You swiped all the apartments! Time to take a break'
+            }}
+          </div>
         </template>
         <template #subtitle>
-          <div class="drag-area flex justify-between items-center">
-            Sublet- Tel Aviv
-            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl">
+          <div class="flex items-center">
+            <icon icon="mdi:address-marker-outline"></icon>
+            <p class="drag-area m-0 text-slate-400">{{ userStore.nextListingsArr[0]?.coordinates?.formatted_address }}</p>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="drag-area title flex-grow">
+              Full information
+            </div>
+            <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl" @click="showFullAptData">
               <template #icon>
                 <Icon icon="ooui:info-filled"></Icon>
               </template>
@@ -33,17 +34,17 @@
           </div>
         </template>
         <template #content>
-          <p class="drag-area m-0">A nice cosy home, in the most vibrant place in tel aviv</p>
+          <p class="drag-area m-0">{{ userStore.nextListingsArr[0]?.description }}</p>
         </template>
         <template #footer>
-          <div class="drag-area mx-auto space-x-24 flex justify-center drag-area">
+          <div class="mx-auto space-x-24 flex justify-center">
             <Button severity="secondary" rounded aria-label="Like" @click="swipe(false)">
               <template #icon>
                 <Icon icon="mdi:times"></Icon>
               </template>
             </Button>
 
-            <Button class="text-rose-700 drag-area" rounded aria-label="Like" @click="swipe(true)">
+            <Button class="text-rose-700" rounded aria-label="Like" @click="swipe(true)">
               <template #icon>
                 <Icon icon="ph:heart"></Icon>
               </template>
@@ -56,56 +57,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import Card from 'primevue/card'
-import Carousel from 'primevue/carousel'
-import Button from 'primevue/Button'
-import Image from 'primevue/image'
 import { VueDraggable } from 'vue-draggable-plus'
+import AptImageCarousel from './AptImageCarousel.vue';
+import { useDialog } from 'primevue/usedialog'
 
-const links = ref([
-  {
-    src: 'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
-    alt: 'Apartment Image 1'
-  },
-  {
-    src: 'https://chesmar.com/wp-content/uploads/2019/05/how-many-bedrooms-should-my-new-home-have.jpg',
-    alt: 'Apartment Image 2'
-  },
-  {
-    src: 'https://foyr.com/learn/wp-content/uploads/2022/05/guest-room-in-a-house-1024x752.jpg',
-    alt: 'Apartment Image 3'
-  },
-  {
-    src: 'https://www.thespruce.com/thmb/2_Q52GK3rayV1wnqm6vyBvgI3Ew=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/put-together-a-perfect-guest-room-1976987-hero-223e3e8f697e4b13b62ad4fe898d492d.jpg',
-    alt: 'Apartment Image 4'
-  }
-])
+import { useAppStore } from '../stores/app'
+import API from '@/api';
+
+const userStore = useAppStore()
+
+const dummyArrForSwiping = ref([])
+let disableDrag = ref(false)
+let rerenderer = ref(0)
 
 let startingX = 0
-let sensitivity = 50
+let sensitivity = 80
+
 
 function onEnd(event: any) {
-  console.log(event)
-  if (event.originalEvent instanceof TouchEvent) {
-    if (event.originalEvent.changedTouches[0].clientX > startingX + sensitivity) {
-      console.log('right')
-      swipe(true)
-    }
-    if (event.originalEvent.changedTouches[0].clientX < startingX - sensitivity) {
-      console.log('left')
-      swipe(false)
-    }
-  } else if (event.originalEvent instanceof MouseEvent) {
-    if (event.originalEvent.clientX > startingX + sensitivity) {
-      console.log('right')
-      swipe(true)
-    }
-    if (event.originalEvent.clientX < startingX - sensitivity) {
-      console.log('left')
-      swipe(false)
-    }
+  console.log(event);
+
+  const originalEvent = event.originalEvent;
+  const isTouchEvent = originalEvent instanceof TouchEvent;
+
+  const clientX = isTouchEvent ? originalEvent.changedTouches[0].clientX : originalEvent.clientX;
+  const clientY = isTouchEvent ? originalEvent.changedTouches[0].clientY : originalEvent.clientY;
+  if (clientX > startingX + sensitivity) {
+    console.log('right');
+    swipe(true);
+  } else if (clientX < startingX - sensitivity) {
+    console.log('left');
+    swipe(false);
   }
 }
 
@@ -118,44 +102,89 @@ function onStart(event: any) {
   console.log('starting x is ', startingX)
 }
 
-function swipe(isLike: boolean) {
+onMounted(() => {
   const el = document.querySelector('.swipe-card')
-  el!.addEventListener('animationend', () => {
+  el!.addEventListener('animationend', async () => {
+    rerenderer.value++;
+    userStore.nextListingsArr.shift()
+    await userStore.getAndPushNextListing(1)
     el!.classList.remove('animate-right')
     el!.classList.remove('animate-left')
+    disableDrag.value = false;
   })
+})
+
+async function swipe(isLike: boolean) {
+  const el = document.querySelector('.swipe-card')
   if (el) {
+    disableDrag.value = true;
     isLike ? el.classList.add('animate-right') : el.classList.add('animate-left')
   }
+  API.tagListing(userStore.nextListingsArr[0]?.listingId, userStore.connectedUser!, isLike);
 }
+
+const dialog = useDialog()
+const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+
+const showFullAptData = () => {
+  dialog.open(ApartmentDialog, {
+    data: {
+      listing: userStore.nextListingsArr[0]
+    },
+    props: {
+      header: userStore.nextListingsArr[0]?.title,
+      style: {
+        width: '100vw'
+      },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      modal: true,
+      closable: true,
+    },
+    onClose: (isLike) => {
+      if (isLike?.data !== undefined) {
+        setTimeout(() => {
+          swipe(isLike.data);
+        }, 500);
+      }
+    }
+  })
+}
+
 </script>
 
 <style scoped>
 .animate-right {
-  animation: swipeRight 1s;
+  animation: swipeRight 0.8s ease-out;
 }
 
 @keyframes swipeRight {
   0% {
     transform: translateX(0);
+    opacity: 1;
   }
 
   100% {
     transform: translateX(100%) translateY(-20%) rotate(20deg);
+    opacity: 0;
   }
 }
 
 .animate-left {
-  animation: swipeLeft 1s ease-out;
+  animation: swipeLeft 0.8s ease-out;
 }
 
 @keyframes swipeLeft {
   0% {
     transform: translateX(0);
+    opacity: 1;
   }
 
   100% {
     transform: translateX(-100%) translateY(-20%) rotate(-20deg);
+    opacity: 0;
   }
 }
 </style>
