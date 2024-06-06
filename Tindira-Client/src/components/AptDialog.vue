@@ -11,20 +11,21 @@
     <Divider />
     <div class="text-center dark:text-white">
         <label class="font-bold block">Adress:</label>
-        <p>{{ listing.coordinates.formatted_address}}</p>
+        <p>{{ listing?.coordinates?.formatted_address }}</p>
         <label class="font-bold block">Description:</label>
-        <p>{{ listing.description }}</p>
+        <p>{{ listing?.description }}</p>
         <label class="font-bold block">Price:</label>
-        <p>{{ listing.price }}₪ </p>
+        <p>{{ listing?.isPricePerWholeTime ? listing?.pricePerWholeTime : listing?.pricePerMonth }} ₪/{{listing?.isPricePerWholeTime ? "Whole Time" : "Month"  }} </p>
         <label class="font-bold block">Number Of Rooms:</label>
-        <p>{{ listing.numberOfRooms }} </p>
+        <p>{{ listing?.numberOfRooms }} </p>
         <label class="font-bold block">Amount Of Parkings:</label>
-        <p>{{ listing.parking }} </p>
-        <label v-if="listing.isAnimalFriendly" class="font-bold block">Apartment Is Animel Friendly!</label>
+        <p>{{ listing?.parkingSpaces }} </p>
+        <label v-if="listing.isAnimalFriendly" class="font-bold block">Apartment is Animal Friendly!</label>
+        <label v-if="listing.isWithGardenOrPorch" class="font-bold block">Apartment Has a Porch or a Garden </label>
         <label class="font-bold block">contract Starting Date:</label>
-        <p>{{ listing.contractStartingDate }} </p>
+        <p>{{ listing?.contractStartDate }} </p>
         <label class="font-bold block">Post Upload Date:</label>
-        <p>{{ listing.postUploadDate }} </p>
+        <p>{{ listing?.postUploadDate }} </p>
 
         <Divider />
 
@@ -57,12 +58,6 @@ import type { Listing } from '../interfaces/listing.interface';
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 const listing = dialogRef?.value.data.listing as Listing;
-
-const center = { lat: 40.689247, lng: -74.044502 }
-const markerOptions = { position: center, label: 'L', title: 'LADY LIBERTY' }
-
-const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
 
 function closeDialog(isLike: boolean) {
     dialogRef?.value.close(isLike)
