@@ -34,9 +34,7 @@ onMounted(async () => {
   await router.isReady();
 });
 
-const StoreInitializer = defineAsyncComponent(
-  () => import('./components/global/StoreInitializer.vue')
-)
+const StoreInitializer = defineAsyncComponent(() => import('./components/global/StoreInitializer.vue'))
 </script>
 
 <style scoped></style>
