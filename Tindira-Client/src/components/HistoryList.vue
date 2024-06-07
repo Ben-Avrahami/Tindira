@@ -2,7 +2,7 @@
     <DataView :value="history" dataKey="listingId">
         <template #list="slotProps">
             <div class="grid grid-nogutter">
-                <div v-for="(item, index) in slotProps.items" :key="index" class="col-12 bg-red-300 mb-5">
+                <div v-for="(item, index) in slotProps.items" :key="index" :class="{'bg-green-200': props.isLike, 'bg-red-300': !props.isLike}" class="col-12 mb-5">
                     <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3"
                         :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
                         <div class="md:w-[10rem] relative">
