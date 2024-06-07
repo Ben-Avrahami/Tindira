@@ -46,8 +46,7 @@
 <script setup lang="ts">
 
 import type { Listing } from '@/interfaces/listing.interface';
-import { useDialog } from 'primevue/usedialog';
-import { computed, defineAsyncComponent, onMounted, ref, type PropType, type Ref } from 'vue';
+import {  onMounted, ref, type Ref } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
 import API from '@/api';
@@ -64,11 +63,10 @@ let usersList = ref();
 let usersListObject = ref();
 
 const listing = dialogRef?.value.data.listing as Listing;
-console.log("this is listing in usersList", listing)
 
 onMounted(async () => {
     usersListObject.value = await API.getListingLikedBy(listing.listingId, 1, itemsPerPage.value);
-    usersList = usersListObject.value.users.filter((item: any) => typeof item === 'object');
+    usersList.value = usersListObject.value.users.filter((item: any) => typeof item === 'object');
     totalItems.value = usersListObject.value.totalItems;
 })
 
@@ -76,25 +74,23 @@ async function changePage(event: PageState) {
     await loadUsers(event.page + 1)
 }
 
-function openWhatsAppChat(user:SavedUser) {
-    const whatsAppCompatiblePhoneNumber= convertPhoneNumber(user.phoneNumber);
+function openWhatsAppChat(user: SavedUser) {
+    const whatsAppCompatiblePhoneNumber = convertPhoneNumber(user.phoneNumber);
     const url = `https://wa.me/${whatsAppCompatiblePhoneNumber}?text=Hey, im ${userStore.connectedUserObject?.fullName} and i saw you liked my listing on Tindira. i would like to know more about it.`;
     window.open(url, '_blank');
 }
 
-function convertPhoneNumber(phoneNumber:string) {
+function convertPhoneNumber(phoneNumber: string) {
     let numberWithoutDash = phoneNumber.replace(/-/g, '');
     let convertedNumber = '972' + numberWithoutDash.substring(1);
-    console.log("convereted number", convertedNumber)
     return convertedNumber;
 }
 async function loadUsers(page: number = 1) {
     if (typeof page !== 'number') {
         page = 1;
     }
-    console.log("this is listing in usersList", listing)
-    usersListObject.value = await API.getListingLikedBy(listing.listingId, 1, itemsPerPage.value);
-    usersList = usersListObject.value.users.filter((item: any) => typeof item === 'object');
+    usersListObject.value = await API.getListingLikedBy(listing.listingId, page, itemsPerPage.value);
+    usersList.value = usersListObject.value.users.filter((item: any) => typeof item === 'object');
     totalItems.value = usersListObject.value.totalItems;
 }
 
