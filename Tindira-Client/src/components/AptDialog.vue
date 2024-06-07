@@ -40,7 +40,7 @@
 
         <Divider />
 
-        <div class="mx-auto space-x-24 flex justify-center mt-1" v-if="isConnected">
+        <div class="mx-auto space-x-24 flex justify-center mt-1" v-if="showLikeAndDislikeButton">
             <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
@@ -59,25 +59,20 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, type Ref } from 'vue'
+import { inject, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { useAppStore } from '../stores/app'
 import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 import type { Listing } from '../interfaces/listing.interface';
-import { useClipboard } from '@vueuse/core'
-import { useRoute, useRouter } from 'vue-router';
 import { injectToast } from '@/functions/inject';
 
-const router = useRouter();
-const route = useRoute();
 const toast = injectToast()
 
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 const listing = dialogRef?.value.data.listing as Listing;
-const isConnected = (dialogRef?.value?.data?.isConnected as Boolean) || true;
+const showLikeAndDislikeButton = (dialogRef?.value?.data?.showLikeAndDislikeButton as Boolean) ?? true;
 
 function closeDialog(isLike: boolean) {
     dialogRef?.value.close(isLike)
