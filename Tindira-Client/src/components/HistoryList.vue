@@ -25,7 +25,8 @@
                             </div>
                             <div class="flex flex-col md:items-end gap-5">
                                 <span class="text-xl font-semibold text-surface-700 dark:text-surface-0/80">{{
-                                    item.price }}₪</span>
+                                    item?.isPricePerWholeTime ? item?.pricePerWholeTime : item?.pricePerMonth }}
+                                    ₪/{{ item?.isPricePerWholeTime ? "Whole Time" : "Month" }} </span>
                                 <div class="flex flex-row-reverse md:flex-row gap-2">
                                     <Button severity="secondary" text rounded aria-label="Info" class="mr-2 text-3xl"
                                         @click="showFullAptData(item)">
