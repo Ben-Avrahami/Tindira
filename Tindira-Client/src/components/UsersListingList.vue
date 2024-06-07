@@ -25,9 +25,17 @@
                                 </div>
                                 <div class="flex flex-col md:items-end gap-5">
                                     <span class="text-xl font-semibold text-surface-700 dark:text-surface-0/80">
-                                        {{ item?.isPricePerWholeTime ? item?.pricePerWholeTime : item?.pricePerMonth }} ₪/{{item?.isPricePerWholeTime ? "Whole Time" : "Month"  }} 
+                                        {{ item?.isPricePerWholeTime ? item?.pricePerWholeTime : item?.pricePerMonth }}
+                                        ₪/{{ item?.isPricePerWholeTime ? "Whole Time" : "Month" }}
                                     </span>
                                     <div class="flex flex-row-reverse md:flex-row gap-2">
+                                        <Button severity="secondary" text rounded aria-label="Info"
+                                            class="mr-2 text-3xl" @click="showFullAptData(item)">
+                                            <template #icon>
+                                                <Icon icon="ooui:info-filled"></Icon>
+                                            </template>
+                                        </Button>
+
                                         <Button severity="secondary" text rounded aria-label="Info"
                                             class="mr-2 text-3xl" @click="showAptLikes(item)">
                                             <template #icon>
@@ -79,6 +87,29 @@ const showAptLikes = async (item: any) => {
     await dialog.open(UsersList, {
         data: {
             listing: item
+        },
+        props: {
+            header: item.title,
+            style: {
+                width: '100vw',
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true,
+            closable: true,
+        },
+    })
+}
+
+const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+
+const showFullAptData = (item: any) => {
+    dialog.open(ApartmentDialog, {
+        data: {
+            listing: item,
+            showLikeAndDislikeButton:false
         },
         props: {
             header: item.title,
