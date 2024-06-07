@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <DataView :value="listings" dataKey="listingId">
             <template #list="slotProps">
                 <div class="grid grid-nogutter">
@@ -56,7 +55,6 @@
                 </div>
             </template>
         </DataView>
-
     </div>
 </template>
 
@@ -64,10 +62,9 @@
 
 import type { Listing } from '@/interfaces/listing.interface';
 import { useDialog } from 'primevue/usedialog';
-import { computed, defineAsyncComponent, ref, type PropType } from 'vue';
+import { defineAsyncComponent, type PropType } from 'vue';
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '../stores/app'
-import API from '@/api';
 
 const userStore = useAppStore()
 
