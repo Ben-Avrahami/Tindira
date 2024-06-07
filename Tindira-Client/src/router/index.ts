@@ -38,11 +38,16 @@ const router = createRouter({
       path: '/manage',
       name: 'manage',
       component: () => import('@/views/ManageListings.vue')
-    }
+    },
+    {
+      path: '/listing',
+      name: 'listing',
+      component: () => import('@/views/ListingFromIDView.vue')
+    },
   ]
 })
 
-const routesAllowedWithoutLogin = ['/login', '/signup']
+const routesAllowedWithoutLogin = ['/login', '/signup','/listing']
 
 router.beforeResolve((to, _, next) => {
   const store = useAppStore()

@@ -31,7 +31,7 @@
 
         <Divider />
 
-        <div class=" mx-auto space-x-24 flex justify-center mt-1">
+        <div class=" mx-auto space-x-24 flex justify-center mt-1" v-if="isConnected">
             <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
@@ -60,6 +60,7 @@ import type { Listing } from '../interfaces/listing.interface';
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 const listing = dialogRef?.value.data.listing as Listing;
+const isConnected = dialogRef?.value?.data?.isConnected as Boolean;
 
 function closeDialog(isLike: boolean) {
     dialogRef?.value.close(isLike)
