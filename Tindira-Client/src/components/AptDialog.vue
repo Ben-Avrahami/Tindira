@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <AptImageCarousel :images="listing?.images"/>
+        <AptImageCarousel :images="listing?.images" />
     </div>
 
     <Divider />
@@ -15,7 +15,8 @@
         <label class="font-bold block">Description:</label>
         <p>{{ listing?.description }}</p>
         <label class="font-bold block">Price:</label>
-        <p>{{ listing?.isPricePerWholeTime ? listing?.pricePerWholeTime : listing?.pricePerMonth }} ₪/{{listing?.isPricePerWholeTime ? "Whole Time" : "Month"  }} </p>
+        <p>{{ listing?.isPricePerWholeTime ? listing?.pricePerWholeTime : listing?.pricePerMonth }}
+            ₪/{{ listing?.isPricePerWholeTime ? "Whole Time" : "Month" }} </p>
         <label class="font-bold block">Number Of Rooms:</label>
         <p>{{ listing?.numberOfRooms }} </p>
         <label class="font-bold block">Amount Of Parkings:</label>
@@ -29,9 +30,17 @@
         <label class="font-bold block">Post Upload Date:</label>
         <p>{{ listing?.postUploadDate }} </p>
 
+        <div class="flex justify-center mt-1">
+            <Button rounded text aria-label="Like" @click="copyToClipboard(listing)">
+                <template #icon>
+                    <Icon icon="iconamoon:link" style="font-size: 40px;"></Icon>
+                </template>
+            </Button>
+        </div>
+
         <Divider />
 
-        <div class=" mx-auto space-x-24 flex justify-center mt-1" v-if="isConnected">
+        <div class="mx-auto space-x-24 flex justify-center mt-1" v-if="isConnected">
             <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
@@ -46,6 +55,7 @@
         </div>
     </div>
 
+
 </template>
 
 <script setup lang="ts">
@@ -56,13 +66,31 @@ import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 import type { Listing } from '../interfaces/listing.interface';
+import { useClipboard } from '@vueuse/core'
+import { useRoute, useRouter } from 'vue-router';
+import { injectToast } from '@/functions/inject';
+
+const router = useRouter();
+const route = useRoute();
+const toast = injectToast()
 
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 const listing = dialogRef?.value.data.listing as Listing;
-const isConnected = dialogRef?.value?.data?.isConnected as Boolean;
+const isConnected = (dialogRef?.value?.data?.isConnected as Boolean) || true;
 
 function closeDialog(isLike: boolean) {
     dialogRef?.value.close(isLike)
+}
+
+function copyToClipboard(listing: Listing) {
+    const url = `${window.location.origin}/listing?id=${listing.listingId}`;
+    navigator.clipboard.writeText(url);
+    toast.add({
+        severity: 'success',
+        summary: 'Copied!',
+        detail: 'Link to listing was successfully copied to clipboard',
+        life: 3000
+      })
 }
 </script>
