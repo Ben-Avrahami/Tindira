@@ -28,7 +28,7 @@ const dialog = useDialog()
 dialog.open(ApartmentDialog, {
     data: {
         listing: listing.value,
-        isConnected: userStore.isUserConnected
+        showLikeAndDislikeButton: userStore.isUserConnected
     },
     props: {
         header: listing.value.title,
