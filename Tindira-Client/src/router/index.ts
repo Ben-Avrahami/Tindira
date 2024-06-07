@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/history',
       name: 'history',
       component: () => import('@/views/SwipingHistoryView.vue')
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: () => import('@/views/ManageListings.vue')
     }
   ]
 })
