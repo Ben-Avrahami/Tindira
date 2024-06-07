@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col text-center">
     <Avatar
-      image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp"
+      :image="appStore.connectedUserObject?.profilePicture"
       size="xlarge"
       shape="circle"
       class="mx-auto mt-10 mb-10"
     />
-    <Textarea autoResize rows="15" cols="30" placeholder="this is the user's description" />
+    <Textarea autoResize rows="15" cols="30" :placeholder="appStore.connectedUserObject?.profileDescription" />
 
     <div class="flex justify-center items-center space-x-4 my-4">
       <RouterLink class="w-1/2 px-2" to="/history">
