@@ -4,6 +4,7 @@ import type { Listing } from '@/interfaces/listing.interface'
 export interface State {
   isLoading: boolean
   connectedUser: string | null
+  connectedUserObject: SavedUser | null
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
   categoryOptions: SelectedFilters['category'][]
@@ -14,7 +15,7 @@ export interface SelectedFilters {
   dates: Date | null
   isWholeDateRangeOnly: boolean
   maxPrice: number | null
-  isPricePerWholeTime:boolean
+  isPricePerWholeTime: boolean
   minNumberOfParkings: number
   minNumberOfRooms: number
   isAnimalFriendly: boolean
@@ -23,3 +24,12 @@ export interface SelectedFilters {
   isWithPorchOrGarden: boolean
 }
 
+export interface SavedUser {
+  username: string;
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  profileDescription: string;
+  profilePicture: string;
+  roles: string[];
+}

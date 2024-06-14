@@ -1,12 +1,12 @@
 <template>
 
     <div>
-        <AptImageCarousel />
+        <AptImageCarousel :images="listing?.images" />
     </div>
 
     <Divider />
 
-    <GoogleMap :center="listing?.coordinates?.geometry?.location" :name="listing.title"></GoogleMap>
+    <GoogleMap :center="listing?.coordinates?.geometry?.location" :name="listing?.title"></GoogleMap>
 
     <Divider />
     <div class="text-center dark:text-white">
@@ -15,7 +15,8 @@
         <label class="font-bold block">Description:</label>
         <p>{{ listing?.description }}</p>
         <label class="font-bold block">Price:</label>
-        <p>{{ listing?.isPricePerWholeTime ? listing?.pricePerWholeTime : listing?.pricePerMonth }} ₪/{{listing?.isPricePerWholeTime ? "Whole Time" : "Month"  }} </p>
+        <p>{{ listing?.isPricePerWholeTime ? listing?.pricePerWholeTime : listing?.pricePerMonth }}
+            ₪/{{ listing?.isPricePerWholeTime ? "Whole Time" : "Month" }} </p>
         <label class="font-bold block">Number Of Rooms:</label>
         <p>{{ listing?.numberOfRooms }} </p>
         <label class="font-bold block">Amount Of Parkings:</label>
@@ -24,12 +25,22 @@
         <label v-if="listing.isWithGardenOrPorch" class="font-bold block">Apartment Has a Porch or a Garden </label>
         <label class="font-bold block">contract Starting Date:</label>
         <p>{{ listing?.contractStartDate }} </p>
+        <label class="font-bold block">contract Ending Date:</label>
+        <p>{{ listing?.contractEndDate }} </p>
         <label class="font-bold block">Post Upload Date:</label>
         <p>{{ listing?.postUploadDate }} </p>
 
+        <div class="flex justify-center mt-1">
+            <Button rounded text aria-label="Like" @click="copyToClipboard(listing)">
+                <template #icon>
+                    <Icon icon="iconamoon:link" style="font-size: 40px;"></Icon>
+                </template>
+            </Button>
+        </div>
+
         <Divider />
 
-        <div class=" mx-auto space-x-24 flex justify-center mt-1">
+        <div class="mx-auto space-x-24 flex justify-center mt-1" v-if="showLikeAndDislikeButton">
             <Button severity="secondary" rounded aria-label="Like" @click="closeDialog(false)">
                 <template #icon>
                     <Icon icon="mdi:times"></Icon>
@@ -44,22 +55,37 @@
         </div>
     </div>
 
+
 </template>
 
 <script setup lang="ts">
-import { inject, ref, type Ref } from 'vue'
+import { inject, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { useAppStore } from '../stores/app'
 import AptImageCarousel from './AptImageCarousel.vue';
 import GoogleMap from './GoogleMap.vue';
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 import type { Listing } from '../interfaces/listing.interface';
+import { injectToast } from '@/functions/inject';
+
+const toast = injectToast()
 
 const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 const listing = dialogRef?.value.data.listing as Listing;
+const showLikeAndDislikeButton = (dialogRef?.value?.data?.showLikeAndDislikeButton as Boolean) ?? true;
 
 function closeDialog(isLike: boolean) {
     dialogRef?.value.close(isLike)
+}
+
+function copyToClipboard(listing: Listing) {
+    const url = `${window.location.origin}/listing?id=${listing.listingId}`;
+    navigator.clipboard.writeText(url);
+    toast.add({
+        severity: 'success',
+        summary: 'Copied!',
+        detail: 'Link to listing was successfully copied to clipboard',
+        life: 3000
+      })
 }
 </script>

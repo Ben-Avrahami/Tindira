@@ -7,7 +7,8 @@ const LOCAL_STORAGE_USER_KEY = 'connectedUser'
 export const useAppStore = defineStore('app', {
   state: (): State => ({
     isLoading: false,
-    connectedUser: null,
+    connectedUserObject: null,
+    connectedUser:null,
     nextListingsArr: [],
     SelectedFilters: {
       category: 'rent',
@@ -39,17 +40,22 @@ export const useAppStore = defineStore('app', {
       const userId = localStorage.getItem(LOCAL_STORAGE_USER_KEY)
       if (userId) {
         this.connectedUser = userId
+        let users = await API.getUsersByUserName([userId], ['fullName', 'profilePicture', 'roles', 'profilePicture', 'profileDescription']);
+        this.connectedUserObject = users[0];
         await this.getNextListingsAndReplace(5)
       }
       this.isLoading = false
     },
     async connectUser(userId: string) {
       this.connectedUser = userId
+      let users = await API.getUsersByUserName([userId], ['fullName', 'profilePicture', 'roles', 'profilePicture', 'profileDescription']);
+      this.connectedUserObject = users[0];
       localStorage.setItem(LOCAL_STORAGE_USER_KEY, userId)
       await this.getNextListingsAndReplace(5);
     },
     disconnectUser() {
       this.connectedUser = null
+      this.connectedUserObject = null
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
     },
     async getNextListing(amount: number) {

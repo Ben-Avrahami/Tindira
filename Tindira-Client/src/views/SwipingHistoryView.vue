@@ -10,7 +10,7 @@
                 <Chip>showLikes/Dislikes:</Chip>
                 <Button class="text-2xl" text aria-label="Add" @click="showLikes = !showLikes, loadHistory()">
                     <template #icon>
-                        <Icon v-if="showLikes" icon="mdi:like"></Icon>
+                        <Icon v-if="showLikes" icon="mdi:like" color="green"></Icon>
                         <Icon v-if="!showLikes" icon="mdi:dislike"></Icon>
                     </template>
                 </Button>

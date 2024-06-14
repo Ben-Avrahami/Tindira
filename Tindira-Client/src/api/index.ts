@@ -2,9 +2,8 @@ import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 
 type OptionalField =
-  | 'firstName'
   | 'history'
-  | 'lastName'
+  | 'fullName'
   | 'listings'
   | 'phoneNumber'
   | 'profileDescription'
@@ -70,6 +69,15 @@ class _API {
     console.log(response)
     return response.data
   }
+
+
+  async getListingLikedBy(listingId: string, page: number = 1, items: number = 10) {
+    const response = await this.service.get(
+      `/user/getListingLikedBy?listingId=${listingId}&page=${page.toString()}&items=${items.toString()}`
+    )
+    console.log(response)
+    return response.data
+  }
   async getCategoryHistory(
     category: string,
     username: string,
@@ -87,7 +95,7 @@ class _API {
   async getUsersByUserName(usernames: string[], optionalFields: OptionalField[] = []) {
     let usernamesString = usernames.join(',')
     let optionalFieldsString = optionalFields.join(',')
-    const response = await this.service.get(`/user?username=${usernamesString}`)
+    const response = await this.service.get(`/user?username=${usernamesString}&fields=${optionalFieldsString}`)
     console.log(response)
     return response.data
   }
