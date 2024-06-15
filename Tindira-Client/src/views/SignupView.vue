@@ -102,7 +102,11 @@
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="Upload your profile picture" optional />
           <div class="flex justify-center">
-            <ProfilePicture :profilePicture :setProfilePicture />
+            <ProfilePicture
+              :profilePicture="profilePicture?.content ?? null"
+              :setProfilePicture
+              :clearProfilePicture
+            />
           </div>
         </div>
         <div class="flex pt-4 justify-between">
@@ -209,6 +213,7 @@ import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import API from '@/api'
+import { uploadImagesToS3, type Image } from '@/functions/aws'
 
 const router = useRouter()
 
@@ -306,10 +311,17 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<string>('a')
+const profilePicture = ref<Image | null>(null)
 
-const setProfilePicture = (image: string) => {
-  profilePicture.value = image
+const setProfilePicture = (fileName: string, content: string) => {
+  profilePicture.value = {
+    fileName: fileName,
+    content: content
+  }
+}
+
+const clearProfilePicture = () => {
+  profilePicture.value = null
 }
 
 // ==== Profile Description Panel ==== //
@@ -337,6 +349,25 @@ const validateRoles = (): boolean => {
 
 // ==== Send sign-up request to backend ==== //
 
+const uploadProfilePicture = async (): Promise<string | null> => {
+  if (!profilePicture.value) {
+    return ''
+  }
+
+  const bucketUrl = `users/${username.value}`
+  const { urls, errors } = await uploadImagesToS3([profilePicture.value], bucketUrl)
+  if (errors.length > 0) {
+    toast.add({
+      severity: 'error',
+      summary: 'Profile Picture Upload Failed',
+      detail: errors[0],
+      life: 3000
+    })
+    return null
+  }
+  return urls[0]
+}
+
 const sendSignUpRequest = async () => {
   if (
     !phone.value ||
@@ -355,15 +386,20 @@ const sendSignUpRequest = async () => {
     return
   }
 
+  const profilePictureUrl = await uploadProfilePicture()
+  if (!profilePictureUrl) {
+    return
+  }
+
   const data = {
     email: email.value,
     fullName: name.value,
     username: username.value,
     password: password.value,
-    phone: phone.value, // remove the dashes?
+    phone: phone.value,
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: profilePicture.value || 'a',
-    description: description.value || 'a'
+    profilePicture: profilePictureUrl,
+    description: description.value
   }
 
   try {
