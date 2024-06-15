@@ -56,8 +56,12 @@ export const uploadImagesToS3 = async (
 
   const results = await Promise.all(uploadPromises)
 
-  const urls = results.filter((result) => result.url !== null).map((result) => result.url)
-  const errors = results.filter((result) => result.error !== null).map((result) => result.error)
+  const urls = results
+    .filter((result): result is { url: string; error: null } => result.url !== null)
+    .map((result) => result.url)
+  const errors = results
+    .filter((result): result is { url: null; error: string } => result.error !== null)
+    .map((result) => result.error)
 
   return { urls, errors }
 }
