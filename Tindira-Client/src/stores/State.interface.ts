@@ -1,8 +1,12 @@
-import type { GeoCodeGoogleLocation, SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
+import type {
+  GeoCodeGoogleLocation,
+  SavedGeoCodeGoogleLocation
+} from '@/interfaces/geolocation.interface'
 import type { Listing } from '@/interfaces/listing.interface'
 
 export interface State {
   isLoading: boolean
+  isInitialized: boolean
   connectedUser: string | null
   connectedUserObject: SavedUser | null
   nextListingsArr: Listing[]
@@ -25,11 +29,11 @@ export interface SelectedFilters {
 }
 
 export interface SavedUser {
-  username: string;
-  email: string;
-  fullName: string;
-  phoneNumber: string;
-  profileDescription: string;
-  profilePicture: string;
-  roles: string[];
+  username: string
+  email: string
+  fullName: string
+  phoneNumber: string
+  profileDescription: string
+  profilePicture: string
+  roles: string[]
 }

@@ -44,13 +44,21 @@ const router = createRouter({
       name: 'listing',
       component: () => import('@/views/ListingFromIDView.vue')
     },
+    {
+      path: '/add',
+      name: 'add',
+      component: () => import('@/views/AddListingView.vue')
+    }
   ]
 })
 
-const routesAllowedWithoutLogin = ['/login', '/signup','/listing']
+const routesAllowedWithoutLogin = ['/login', '/signup', '/listing']
 
-router.beforeResolve((to, _, next) => {
+router.beforeResolve(async (to, _, next) => {
   const store = useAppStore()
+  if (store.isInitialized === false) {
+    await store.initializeState()
+  }
   const isLoggedIn = store.isUserConnected
 
   if (!routesAllowedWithoutLogin.includes(to.path) && !isLoggedIn) {
@@ -59,7 +67,7 @@ router.beforeResolve((to, _, next) => {
     return
   }
 
-  if (routesAllowedWithoutLogin.includes(to.path) && isLoggedIn) {
+  if (['/login', '/signup'].includes(to.path) && isLoggedIn) {
     // Redirect to home page if user is logged in
     next('/')
     return
