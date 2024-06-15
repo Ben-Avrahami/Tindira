@@ -1,5 +1,6 @@
 import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
+import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 
 type OptionalField =
   | 'history'
@@ -10,6 +11,25 @@ type OptionalField =
   | 'profilePicture'
   | 'reviews'
   | 'roles'
+
+export type ListingPayload = {
+  category: string
+  contractStartingDate: string
+  contractEndDate: string
+  postExpireDate: string
+  postUploadDate: string
+  description: string
+  isAnimalFriendly: boolean
+  ownerId: string
+  price: number
+  title: string
+  isWithGardenOrPorch: boolean
+  parkingSpaces: number
+  numberOfRooms: number
+  isPricePerWholeTime: boolean
+  images?: string[]
+  coordinates: SavedGeoCodeGoogleLocation
+}
 
 ////////////////////////////////////////////////
 //                API SECTION
@@ -51,11 +71,11 @@ class _API {
     username: string,
     ignoreIds: string[]
   ) {
-    const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : '';
+    const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : ''
     const response = await this.service.post(
       `/listings/getNext?username=${username}&amount=${amount.toString()}&ignoreListings=${ignoreListings}`,
       {
-        "filters": filters
+        filters: filters
       }
     )
     console.log(response)
@@ -69,7 +89,6 @@ class _API {
     console.log(response)
     return response.data
   }
-
 
   async getListingLikedBy(listingId: string, page: number = 1, items: number = 10) {
     const response = await this.service.get(
@@ -93,14 +112,16 @@ class _API {
   }
 
   async getUsersByUserName(usernames: string[], optionalFields: OptionalField[] = []) {
-    let usernamesString = usernames.join(',')
-    let optionalFieldsString = optionalFields.join(',')
-    const response = await this.service.get(`/user?username=${usernamesString}&fields=${optionalFieldsString}`)
+    const usernamesString = usernames.join(',')
+    const optionalFieldsString = optionalFields.join(',')
+    const response = await this.service.get(
+      `/user?username=${usernamesString}&fields=${optionalFieldsString}`
+    )
     console.log(response)
     return response.data
   }
   async getListingsById(ids: string[]) {
-    let idsString = ids.join(',')
+    const idsString = ids.join(',')
     const response = await this.service.get(`listings?id=${idsString}`)
     console.log(response)
     return response.data
@@ -133,6 +154,19 @@ class _API {
     const response = await this.service.post('/login', {
       username: username,
       password: password
+    })
+    return response
+  }
+
+  async postListing(payload: ListingPayload) {
+    const response = await this.service.post('/listing', payload)
+    return response
+  }
+
+  async updateListing(listingId: string, payload: Partial<ListingPayload>) {
+    const response = await this.service.put('/listing/', {
+      listingId: listingId,
+      ...payload
     })
     return response
   }
