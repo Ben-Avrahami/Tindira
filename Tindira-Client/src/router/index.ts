@@ -37,7 +37,7 @@ const router = createRouter({
     {
       path: '/manage',
       name: 'manage',
-      component: () => import('@/views/ManageListings.vue')
+      component: () => import('@/views/ManageListingsView.vue')
     },
     {
       path: '/listing',

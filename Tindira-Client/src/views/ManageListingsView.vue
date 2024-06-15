@@ -4,7 +4,7 @@
       Manage Listings
     </h1>
     <div>
-      <UsersListingList :listings="userListings" />
+      <UsersListings :listings="userListings" />
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@
 import { useAppStore } from '@/stores/app'
 import { onBeforeMount, ref } from 'vue'
 import API from '@/api'
-import UsersListingList from '@/components/UsersListingList.vue'
+import UsersListings from '@/components/manage_listings/UsersListings.vue'
 
 const userStore = useAppStore()
 const userListingsIds = ref()
