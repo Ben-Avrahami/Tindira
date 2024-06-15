@@ -6,7 +6,8 @@
     @start="onStart"
     handle=".drag-area"
   >
-    <div v-if="userStore.nextListingsArr.length > 0" ref="swipeCard">
+    <div v-if="userStore.isLoading" />
+    <div v-else-if="userStore.nextListingsArr.length > 0" ref="swipeCard">
       <DraggableAptCard :listing="userStore.nextListingsArr[0]" :swipe />
     </div>
     <div v-else>
