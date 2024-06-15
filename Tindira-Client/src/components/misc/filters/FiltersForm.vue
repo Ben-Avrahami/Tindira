@@ -44,9 +44,9 @@
   <FiltersFormElement>
     <label class="font-bold block mb-2"> Preferred Location </label>
     <GoogleMapsAutoComplete
-      @locationChosen="(location) => (selectedFilters.location = location)"
-      @locationCleared="() => (selectedFilters.location = null)"
       :locationString="selectedFilters.location?.formatted_address"
+      :locationChosen="(location) => (selectedFilters.location = location)"
+      :locationCleared="() => (selectedFilters.location = null)"
     >
     </GoogleMapsAutoComplete>
   </FiltersFormElement>
@@ -128,7 +128,7 @@
 import { reactive, ref, inject, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '@/stores/app'
-import GoogleMapsAutoComplete from '@/components/GoogleMapsAutoComplete.vue'
+import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 import * as ListingConstants from '@/interfaces/listing.interface'
 import FiltersFormElement from './FiltersFormElement.vue'

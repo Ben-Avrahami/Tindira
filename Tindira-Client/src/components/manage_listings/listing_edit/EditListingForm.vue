@@ -123,8 +123,8 @@
       <GoogleMapsAutoComplete
         class="mt-1 mb-2 w-full"
         :locationString="location?.formatted_address"
-        @locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
-        @locationCleared="() => (location = null)"
+        :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
+        :locationCleared="() => (location = null)"
       />
       <GoogleMap :center="location?.geometry.location" />
     </InputGroup>
@@ -171,8 +171,8 @@ import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interf
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { injectToast } from '@/functions/inject'
 
-import GoogleMap from '@/components/GoogleMap.vue'
-import GoogleMapsAutoComplete from '@/components/GoogleMapsAutoComplete.vue'
+import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
+import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import ApartmentPicture from '@/components/ApartmentPicture.vue'
 
 import API, { type ListingPayload } from '@/api'

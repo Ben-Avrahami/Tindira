@@ -132,8 +132,8 @@
             Start typing an address to get suggestions
           </label>
           <GoogleMapsAutoComplete
-            @locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
-            @locationCleared="() => (location = null)"
+            :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
+            :locationCleared="() => (location = null)"
           />
           <GoogleMap :center="location?.geometry.location" />
         </div>
@@ -294,12 +294,12 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ApartmentPicture from '@/components/ApartmentPicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
-import GoogleMap from '@/components/GoogleMap.vue'
+import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 
 import API from '@/api'
 import type { ListingPayload } from '@/api'
 import * as ListingInterface from '@/interfaces/listing.interface'
-import GoogleMapsAutoComplete from '@/components/GoogleMapsAutoComplete.vue'
+import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { uploadImagesToS3, type Image } from '@/functions/aws'
 

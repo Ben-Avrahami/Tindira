@@ -62,7 +62,7 @@
 import { inject, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AptImageCarousel from './AptImageCarousel.vue';
-import GoogleMap from './GoogleMap.vue';
+import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue';
 import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 import type { Listing } from '../interfaces/listing.interface';
 import { injectToast } from '@/functions/inject';
