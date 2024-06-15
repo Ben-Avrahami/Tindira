@@ -2,8 +2,12 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Category </label>
-      <Dropdown v-model="selectedFilters.category" @change='changeCategory' :options="userStore.categoryOptions"
-        placeholder="Choose a Category" />
+      <Dropdown
+        v-model="selectedFilters.category"
+        @change="changeCategory"
+        :options="userStore.categoryOptions"
+        placeholder="Choose a Category"
+      />
     </div>
   </div>
   <Divider />
@@ -11,27 +15,42 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <div v-if="selectedFilters.category == 'sublet'">
-        <label class="font-bold block mb-2">
-          is Price Per Month or Whole Time?
-        </label>
-        <SelectButton v-model="priceTime" :options="priceTimeOptions" @change="priceTimeChanged"
-          aria-labelledby="price time selector" />
+        <label class="font-bold block mb-2"> is Price Per Month or Whole Time? </label>
+        <SelectButton
+          v-model="priceTime"
+          :options="priceTimeOptions"
+          @change="priceTimeChanged"
+          aria-labelledby="price time selector"
+        />
       </div>
       <label class="font-bold block mb-2">
-        {{ selectedFilters.category === 'rent' ? 'Price/Month' : (selectedFilters.isPricePerWholeTime ? 'Price/Whole Time' : 'Price/Month') }}
+        {{
+          selectedFilters.category === 'rent'
+            ? 'Price/Month'
+            : selectedFilters.isPricePerWholeTime
+            ? 'Price/Whole Time'
+            : 'Price/Month'
+        }}
       </label>
-      <InputNumber v-model="selectedFilters.maxPrice" inputId="currency-il" mode="currency" currency="ILS"
-        locale="en-US" />
+      <InputNumber
+        v-model="selectedFilters.maxPrice"
+        inputId="currency-il"
+        mode="currency"
+        currency="ILS"
+        locale="en-US"
+      />
     </div>
-
   </div>
 
   <Divider />
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2"> Preferred Location </label>
-      <GoogleMapsAutoComplete @locationChosen="updateLocation" @location-cleared="locationCleared"
-        :locationString="selectedFilters.location?.formatted_address">
+      <GoogleMapsAutoComplete
+        @locationChosen="updateLocation"
+        @location-cleared="locationCleared"
+        :locationString="selectedFilters.location?.formatted_address"
+      >
       </GoogleMapsAutoComplete>
     </div>
   </div>
@@ -82,16 +101,22 @@
   <div class="flex flex-wrap gap-3 p-fluid">
     <div class="flex-auto">
       <label class="font-bold block mb-2">
-        {{ selectedFilters.category === 'rent' ? 'Starting Date' : "Date Range" }}
+        {{ selectedFilters.category === 'rent' ? 'Starting Date' : 'Date Range' }}
       </label>
-      <Calendar v-model="selectedFilters.dates"
-        :selectionMode="selectedFilters.category === 'rent' ? 'single' : 'range'" showButtonBar :manualInput="false"
-        dateFormat="dd/mm/yy" />
+      <Calendar
+        v-model="selectedFilters.dates"
+        :selectionMode="selectedFilters.category === 'rent' ? 'single' : 'range'"
+        showButtonBar
+        :manualInput="false"
+        dateFormat="dd/mm/yy"
+      />
     </div>
   </div>
   <div class="flex flex-wrap gap-3 p-fluid" v-if="selectedFilters.dates">
     <div class="flex-auto" v-if="selectedFilters.category === 'sublet'">
-      <label class="font-bold block mb-2"> Only display apartments that are available for the whole time? </label>
+      <label class="font-bold block mb-2">
+        Only display apartments that are available for the whole time?
+      </label>
       <Checkbox v-model="selectedFilters.isWholeDateRangeOnly" :binary="true" />
     </div>
   </div>
@@ -107,39 +132,39 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, inject, onMounted } from 'vue'
+import { reactive, ref, inject, type Ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { useAppStore } from '../stores/app'
-import GoogleMapsAutoComplete from './GoogleMapsAutoComplete.vue';
-
+import { useAppStore } from '@/stores/app'
+import GoogleMapsAutoComplete from '@/components/GoogleMapsAutoComplete.vue'
+import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
 
 const userStore = useAppStore()
 const selectedFilters = reactive({ ...userStore.SelectedFilters })
-let priceTime = ref(selectedFilters.isPricePerWholeTime ? "Whole Time" : "Month");
-let priceTimeOptions = ref(['Month', 'Whole Time']);
+let priceTime = ref(selectedFilters.isPricePerWholeTime ? 'Whole Time' : 'Month')
+let priceTimeOptions = ref(['Month', 'Whole Time'])
 
 function priceTimeChanged(event: any) {
-  selectedFilters.isPricePerWholeTime = event.value === 'Whole Time';
+  selectedFilters.isPricePerWholeTime = event.value === 'Whole Time'
 }
 
 function updateLocation(location: any) {
-  selectedFilters.location = location;
+  selectedFilters.location = location
 }
 
 function changeCategory() {
-  selectedFilters.isPricePerWholeTime = false;
-  priceTime.value = 'Month';
-  selectedFilters.dates = null;
-  selectedFilters.isWholeDateRangeOnly = false;
+  selectedFilters.isPricePerWholeTime = false
+  priceTime.value = 'Month'
+  selectedFilters.dates = null
+  selectedFilters.isWholeDateRangeOnly = false
 }
 
 function locationCleared() {
-  selectedFilters.location = null;
+  selectedFilters.location = null
 }
 
-const dialogRef = inject('dialogRef')
+const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef')
 
 function closeDialog() {
-  (dialogRef as any).value.close()
+  dialogRef?.value.close()
 }
 </script>
