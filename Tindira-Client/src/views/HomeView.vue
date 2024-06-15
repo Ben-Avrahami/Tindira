@@ -5,16 +5,16 @@
         <Icon icon="tabler:adjustments-alt"></Icon>
       </template>
     </Button>
-    <AptCard />
+    <DraggableApt />
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 
-import AptCard from '@/components/AptCard.vue'
 import { Icon } from '@iconify/vue'
 import { useDialog } from 'primevue/usedialog'
+import DraggableApt from '@/components/home/DraggableApt.vue'
 
 const dialog = useDialog()
 const FiltersDialog = defineAsyncComponent(() => import('@/components/FiltersDialog.vue'))
