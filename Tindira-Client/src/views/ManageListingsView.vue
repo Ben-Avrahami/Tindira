@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold text-center text-surface-300 pt-8 select-none mb-10">
-      Manage Listings
-    </h1>
+    <ViewTitle>Manage Listings</ViewTitle>
     <div>
       <UsersListings :listings="userListings" />
     </div>
@@ -15,6 +13,7 @@ import { onBeforeMount, ref } from 'vue'
 import API from '@/api'
 import UsersListings from '@/components/manage_listings/UsersListings.vue'
 import type { Listing } from '@/interfaces/listing.interface'
+import ViewTitle from '@/components/misc/ViewTitle.vue'
 
 const userStore = useAppStore()
 const userListings = ref<Listing[]>()

@@ -1,15 +1,16 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full">
-    <h1 class="text-3xl font-bold text-center text-surface-300 pt-8 select-none">
-      Welcome to Tindira
-    </h1>
+    <ViewTitle>Welcome to Tindira</ViewTitle>
     <img src="@/assets/logo.png" alt="Image" width="100" class="mt-10" />
     <div class="flex flex-col items-center justify-center h-full">
       <Transition name="fade" mode="out-in">
         <KeepAlive>
-          <LoginButtons v-if="method === LoginMethod.UNDEFINED" :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
+          <LoginButtons
+            v-if="method === LoginMethod.UNDEFINED"
+            :loginWithGoogle="() => (method = LoginMethod.GOOGLE)"
             :loginWithPhoneNumber="() => (method = LoginMethod.PHONE_NUMBER)"
-            :loginWithUsername="() => (method = LoginMethod.USERNAME)" />
+            :loginWithUsername="() => (method = LoginMethod.USERNAME)"
+          />
           <component v-else :is="methods[method]" :attemptLogin :back />
         </KeepAlive>
       </Transition>
@@ -23,6 +24,7 @@ import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
 import { useAppStore } from '@/stores/app'
 
+import ViewTitle from '@/components/misc/ViewTitle.vue'
 import LoginButtons from '@/components/login/LoginButtons.vue'
 import WithGoogle from '@/components/login/WithGoogle.vue'
 import WithPhone from '@/components/login/WithPhone.vue'
