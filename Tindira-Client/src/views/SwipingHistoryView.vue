@@ -6,21 +6,16 @@
         <Dropdown
           @change="loadHistory()"
           v-model="selectedCategory"
-          :options="userStore.categoryOptions"
+          :options="ListingInterface.CATEGORIES"
           placeholder="Choose a Category"
         />
       </div>
       <div class="flex items-center justify-center mb-4">
         <Chip>showLikes/Dislikes:</Chip>
-        <Button
-          class="text-2xl"
-          text
-          aria-label="Add"
-          @click=";(showLikes = !showLikes), loadHistory()"
-        >
+        <Button class="text-2xl" text aria-label="Add" @click="alternateLikesDislikes">
           <template #icon>
-            <Icon v-if="showLikes" icon="mdi:like" color="green"></Icon>
-            <Icon v-if="!showLikes" icon="mdi:dislike"></Icon>
+            <Icon v-if="showLikes" icon="mdi:like" color="green" />
+            <Icon v-else icon="mdi:dislike" />
           </template>
         </Button>
       </div>
@@ -29,11 +24,12 @@
       v-if="!userStore.isLoading"
       :history="history"
       :isLike="showLikes"
-      @refresh-history="loadHistory"
+      :refreshHistory="loadHistory"
     />
     <Paginator
+      v-if="history.length"
       template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-      :rows="itemsPerPage"
+      :rows="ITEMS_PER_PAGE"
       :totalRecords="totalItems"
       currentPageReportTemplate="{first} to {last} of {totalRecords}"
       @page="changePage"
@@ -42,22 +38,30 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '../stores/app'
+import * as ListingInterface from '@/interfaces/listing.interface'
+import { useAppStore } from '@/stores/app'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
 import API from '@/api'
-import HistoryList from '@/components/HistoryList.vue'
+import HistoryList from '@/components/history/HistoryList.vue'
 import type { PageState } from 'primevue/paginator'
 
 const userStore = useAppStore()
 
-let selectedCategory = ref('')
-let showLikes = ref(true)
-let history = ref()
-let itemsPerPage = ref(5)
-let totalItems = ref(0)
+const selectedCategory = ref<string>(ListingInterface.CATEGORIES[0])
+const showLikes = ref<boolean>(true)
+const history = ref<ListingInterface.Listing[]>([])
+const totalItems = ref<number>(0)
 
-async function loadHistory(page: number = 1) {
+const ITEMS_PER_PAGE = 5
+
+const alternateLikesDislikes = () => {
+  showLikes.value = !showLikes.value
+  history.value = []
+  loadHistory()
+}
+
+const loadHistory = async (page: number = 1) => {
   userStore.performAsyncAction(async () => {
     if (typeof page !== 'number') {
       page = 1
@@ -67,15 +71,18 @@ async function loadHistory(page: number = 1) {
       userStore.connectedUser!,
       showLikes.value,
       page,
-      itemsPerPage.value
+      ITEMS_PER_PAGE
     )
     history.value = response.history.filter((item: any) => typeof item === 'object')
     totalItems.value = response.total
   })
 }
-async function changePage(event: PageState) {
+
+const changePage = async (event: PageState) => {
   await loadHistory(event.page + 1)
 }
+
+loadHistory()
 </script>
 
 <style scoped></style>
