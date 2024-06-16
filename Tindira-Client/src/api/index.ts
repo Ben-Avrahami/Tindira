@@ -159,12 +159,12 @@ class _API {
   }
 
   async postListing(payload: ListingPayload) {
-    const response = await this.service.post('/listing', payload)
+    const response = await this.service.post('/listings', payload)
     return response
   }
 
   async updateListing(listingId: string, payload: Partial<ListingPayload>) {
-    const response = await this.service.put('/listing', {
+    const response = await this.service.put('/listings', {
       listingId: listingId,
       ...payload
     })
@@ -172,7 +172,7 @@ class _API {
   }
 
   async deleteListing(listingId: string) {
-    const response = await this.service.delete(`/listing/${listingId}`)
+    const response = await this.service.delete(`/listings?listingId=${listingId}`)
     return response
   }
 }
