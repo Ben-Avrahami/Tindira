@@ -239,13 +239,55 @@ const isNameValid = (): boolean => {
   return !!name.value && name.value.trim().split(/\s+/).length === 2
 }
 
-const isUsernameValid = (): boolean => {
+const validateUsername = (): boolean => {
   // TODO: Implement username validation through API
-  return (
-    !!username.value &&
-    !username.value.includes(' ') &&
-    username.value.length >= USERNAME_MIN_LENGTH
-  )
+  const SUMMARY = 'Invalid Username'
+  if (!username.value) {
+    toast.add({
+      severity: 'error',
+      summary: SUMMARY,
+      detail: 'Please enter a username',
+      life: 3000
+    })
+    return false
+  }
+  if (username.value.includes(' ')) {
+    toast.add({
+      severity: 'error',
+      summary: SUMMARY,
+      detail: 'Username must not include spaces',
+      life: 3000
+    })
+    return false
+  }
+  if (username.value.length < USERNAME_MIN_LENGTH) {
+    toast.add({
+      severity: 'error',
+      summary: SUMMARY,
+      detail: `Username must be at least ${USERNAME_MIN_LENGTH} characters`,
+      life: 3000
+    })
+    return false
+  }
+  if (username.value.length > 20) {
+    toast.add({
+      severity: 'error',
+      summary: SUMMARY,
+      detail: 'Username must be at most 20 characters',
+      life: 3000
+    })
+    return false
+  }
+  if (!/^[a-z0-9_]*$/.test(username.value)) {
+    toast.add({
+      severity: 'error',
+      summary: SUMMARY,
+      detail: 'Username must only include small letters, numbers, and underscores',
+      life: 3000
+    })
+    return false
+  }
+  return true
 }
 
 const isEmailValid = (): boolean => {
@@ -279,13 +321,7 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
-  if (!isUsernameValid()) {
-    toast.add({
-      severity: 'error',
-      summary: 'Invalid Username',
-      detail: `Username must include no spaces and at least ${USERNAME_MIN_LENGTH} characters`,
-      life: 3000
-    })
+  if (!validateUsername()) {
     return false
   }
   if (!isEmailValid()) {
