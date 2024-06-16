@@ -1,6 +1,7 @@
 import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
+import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
 
 type OptionalField =
   | 'history'
@@ -117,14 +118,14 @@ class _API {
     const response = await this.service.get(
       `/user?username=${usernamesString}&fields=${optionalFieldsString}`
     )
-    console.log(response)
+    console.log('getUsersByUserName:', response)
     return response.data
   }
-  async getListingsById(ids: string[]) {
+  async getListingsById(ids: string[]): Promise<Listing[]> {
     const idsString = ids.join(',')
     const response = await this.service.get(`listings?id=${idsString}`)
-    console.log('getListingsById:', response)
-    return response.data
+    const listings = response.data.filter(isListingInterface)
+    return listings
   }
 
   async registerUser(

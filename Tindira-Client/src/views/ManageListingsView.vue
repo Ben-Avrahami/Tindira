@@ -14,20 +14,17 @@ import { useAppStore } from '@/stores/app'
 import { onBeforeMount, ref } from 'vue'
 import API from '@/api'
 import UsersListings from '@/components/manage_listings/UsersListings.vue'
+import type { Listing } from '@/interfaces/listing.interface'
 
 const userStore = useAppStore()
-const userListingsIds = ref()
-const userListings = ref()
-
-const fetchListings = async () => {
-  userListingsIds.value = (
-    await API.getUsersByUserName([userStore.connectedUser!], ['listings'])
-  )[0].listings
-  userListings.value = await API.getListingsById(userListingsIds.value)
-}
+const userListings = ref<Listing[]>()
 
 onBeforeMount(async () => {
-  await userStore.performAsyncAction(fetchListings)
+  await userStore.performAsyncAction(async () => {
+    const listings = (await API.getUsersByUserName([userStore.connectedUser!], ['listings']))[0]
+      .listings
+    userListings.value = await API.getListingsById(listings)
+  })
 })
 </script>
 
