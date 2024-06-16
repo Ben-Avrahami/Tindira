@@ -192,7 +192,11 @@
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
-          <Button label="Sign Up!" @click="sendSignUpRequest" />
+          <Button
+            :label="submitting ? 'Wait...' : 'Sign Up!'"
+            @click="disableSignUpButtonAndSubmit"
+            :disabled="submitting"
+          />
         </div>
       </template>
     </StepperPanel>
@@ -389,6 +393,8 @@ const validateRoles = (): boolean => {
 
 // ==== Send sign-up request to backend ==== //
 
+const submitting = ref<boolean>(false)
+
 const uploadProfilePicture = async (): Promise<string | null> => {
   if (!photos.value.length) {
     return 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
@@ -407,6 +413,12 @@ const uploadProfilePicture = async (): Promise<string | null> => {
     return null
   }
   return urls[0]
+}
+
+const disableSignUpButtonAndSubmit = async () => {
+  submitting.value = true
+  await sendSignUpRequest()
+  submitting.value = false
 }
 
 const sendSignUpRequest = async () => {
