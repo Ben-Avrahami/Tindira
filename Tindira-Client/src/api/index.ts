@@ -123,7 +123,7 @@ class _API {
   async getListingsById(ids: string[]) {
     const idsString = ids.join(',')
     const response = await this.service.get(`listings?id=${idsString}`)
-    console.log(response)
+    console.log('getListingsById:', response)
     return response.data
   }
 
@@ -164,7 +164,7 @@ class _API {
   }
 
   async updateListing(listingId: string, payload: Partial<ListingPayload>) {
-    const response = await this.service.put('/listing/', {
+    const response = await this.service.put('/listing', {
       listingId: listingId,
       ...payload
     })

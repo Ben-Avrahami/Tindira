@@ -79,7 +79,7 @@ defineProps<{
 }>()
 
 const copyToClipboard = (listing: Listing) => {
-  const url = `${window.location.origin}/listingid=${listing.listingId}`
+  const url = `${window.location.origin}/listing?id=${listing.listingId}`
   navigator.clipboard.writeText(url)
   toast.add({
     severity: 'info',
