@@ -159,26 +159,10 @@
       <template #content="{ prevCallback, nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="How does the apartment look like?" />
-          <div class="grid grid-cols-2 gap-4">
-            <ApartmentPicture
-              v-for="(picture, index) in pictures"
-              :key="index"
-              :picture="picture.content"
-              :removePicture="() => removePicture(index)"
-            />
-          </div>
-          <Button
-            :label="'Add Pictures (' + pictures.length + '/' + ListingInterface.MAX_PICTURES + ')'"
-            @click="fileInput?.click()"
-            :disabled="pictures.length >= ListingInterface.MAX_PICTURES"
-          />
-          <input
-            ref="fileInput"
-            type="file"
-            accept="image/*"
-            @change="uploadPictures"
-            multiple
-            hidden
+          <ListingImages
+            :images="pictures"
+            :removeImage="(index) => pictures.splice(index, 1)"
+            :addImage="(image: Image) => pictures.push(image)"
           />
         </div>
         <div class="flex pt-4 justify-between">
@@ -292,7 +276,7 @@ import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
 import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
-import ApartmentPicture from '@/components/ApartmentPicture.vue'
+import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 
@@ -434,52 +418,6 @@ const validateLocation = (): boolean => {
 // ==== Pictures Panel ==== //
 
 const pictures = ref<Image[]>([])
-
-const fileInput = ref<HTMLInputElement | null>(null)
-
-const uploadPictures = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const files = target.files
-
-  if (!files) return
-
-  const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-  const MAX_FILE_SIZE_MB = MAX_FILE_SIZE / 1024 / 1024
-
-  if (files.length + pictures.value.length > ListingInterface.MAX_PICTURES) {
-    toast.add({
-      severity: 'error',
-      summary: 'Too Many Pictures',
-      detail: `Please upload a maximum of ${ListingInterface.MAX_PICTURES} pictures`,
-      life: 3000
-    })
-    return
-  }
-
-  Array.from(files).forEach((file) => {
-    if (file.size > MAX_FILE_SIZE) {
-      toast.add({
-        severity: 'error',
-        summary: 'File size is too large',
-        detail: `Please upload a file smaller than ${MAX_FILE_SIZE_MB}MB.`,
-        life: 3000
-      })
-    }
-
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      pictures.value.push({
-        fileName: file.name,
-        content: e.target?.result as string
-      })
-    }
-    reader.readAsDataURL(file)
-  })
-}
-
-const removePicture = (index: number) => {
-  pictures.value.splice(index, 1)
-}
 
 const validatePictures = (): boolean => {
   if (!pictures.value.length) {

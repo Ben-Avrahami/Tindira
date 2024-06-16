@@ -130,26 +130,15 @@
     </InputGroup>
     <InputGroup class="flex flex-col">
       <label class="flex">Images</label>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <ApartmentPicture
-          v-for="(image, index) in images"
-          :key="index"
-          :picture="image"
-          :removePicture="() => images.splice(index, 1)"
-        />
-      </div>
-      <Button
-        :label="'Add Pictures (' + images.length + '/' + ListingInterface.MAX_PICTURES + ')'"
-        @click="fileInput?.click()"
-        :disabled="images.length >= ListingInterface.MAX_PICTURES"
-      />
-      <input
-        ref="fileInput"
-        type="file"
-        accept="image/*"
-        @change="uploadPictures"
-        multiple
-        hidden
+      <ListingImages
+        :images="
+          images.map((image, index) => ({
+            fileName: `image-${index}`,
+            content: image
+          }))
+        "
+        :removeImage="(index) => images.splice(index, 1)"
+        :addImage="(image: Image) => images.push(image.content)"
       />
     </InputGroup>
     <Divider class="w-full" />
@@ -173,13 +162,12 @@ import { injectToast } from '@/functions/inject'
 
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
-import ApartmentPicture from '@/components/ApartmentPicture.vue'
+import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
 
 import API, { type ListingPayload } from '@/api'
+import type { Image } from '@/functions/aws'
 
 const toast = injectToast()
-
-const fileInput = ref<HTMLInputElement | null>(null)
 
 const props = defineProps<{
   listing: ListingInterface.Listing
@@ -365,6 +353,7 @@ const saveForm = async () => {
       detail: 'The listing has been updated successfully',
       life: 3000
     })
+    // TODO: upload photos to S3
     props.exit()
   } catch (error: any) {
     toast.add({
@@ -374,17 +363,5 @@ const saveForm = async () => {
       life: 3000
     })
   }
-}
-
-const uploadPictures = () => {
-  // if (fileInput.value?.files) {
-  //   for (const file of fileInput.value.files) {
-  //     const reader = new FileReader()
-  //     reader.onload = (e) => {
-  //       images.value.push(e.target?.result as string)
-  //     }
-  //     reader.readAsDataURL(file)
-  //   }
-  // }
 }
 </script>
