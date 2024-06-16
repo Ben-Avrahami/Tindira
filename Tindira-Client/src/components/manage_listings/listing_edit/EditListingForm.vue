@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 dark:text-white">
     <InputGroup class="flex flex-col">
       <SelectButton
         v-model="category"
@@ -152,7 +152,7 @@
         hidden
       />
     </InputGroup>
-    <Divider align="center" class="w-full"> Finished Editing? </Divider>
+    <Divider class="w-full" />
     <div class="flex flex-col">
       <label class="flex"></label>
       <div class="flex justify-end gap-4">

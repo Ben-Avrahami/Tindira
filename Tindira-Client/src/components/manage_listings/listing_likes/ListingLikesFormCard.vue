@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="flex flex-col sm:flex-row sm:items-center p-4 gap-3"
-    :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
-  >
+  <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-red-300 dark:bg-red-900">
     <div class="md:w-[10rem] relative">
-      <img class="block xl:block mx-auto rounded-md w-full" :src="user.profilePicture" />
+      <Image class="block xl:block mx-auto rounded-md w-full" :src="user.profilePicture" />
     </div>
     <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
       <div class="flex flex-row md:flex-col justify-between items-start gap-2">
@@ -41,7 +38,6 @@ import type { SavedUser } from '@/stores/State.interface'
 const userStore = useAppStore()
 
 defineProps<{
-  index: number
   user: SavedUser
 }>()
 

@@ -1,9 +1,9 @@
 <template>
   <DataView v-if="finishedLoading" :value="usersList" dataKey="username">
     <template #list="slotProps">
-      <div class="grid grid-nogutter">
-        <div v-for="(item, index) in slotProps.items" :key="index" class="col-12 bg-red-300 mb-5">
-          <ListingLikesFormCard :index="index" :user="item" />
+      <div class="grid grid-nogutter gap-5">
+        <div v-for="(item, index) in slotProps.items" :key="index">
+          <ListingLikesFormCard :user="item" />
         </div>
       </div>
     </template>
@@ -33,7 +33,7 @@ import API from '@/api'
 
 import ListingLikesFormCard from './ListingLikesFormCard.vue'
 
-const ITEMS_PER_PAGE = 2
+const ITEMS_PER_PAGE = 5
 
 const totalItems = ref<number>(0)
 const usersList = ref<SavedUser[]>()

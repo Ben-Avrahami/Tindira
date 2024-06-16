@@ -2,10 +2,9 @@
   <div>
     <DataView v-if="listings !== undefined" :value="listings" dataKey="listingId">
       <template #list="slotProps">
-        <div class="grid grid-nogutter">
-          <div v-for="(item, index) in slotProps.items" :key="index" class="col-12 bg-red-300 mb-5">
+        <div class="grid grid-nogutter gap-5">
+          <div v-for="(item, index) in slotProps.items" :key="index">
             <UsersListing
-              :index="index"
               :listing="item"
               :showFullAptData="showFullAptData"
               :showAptLikes="showAptLikes"
