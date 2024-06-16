@@ -10,7 +10,12 @@
     />
     <div class="flex justify-between w-full">
       <Button type="button" label="Cancel" severity="secondary" @click="back" />
-      <Button type="button" label="Login" @click="loginWithUsername" :disabled="isAttempting">
+      <Button
+        type="button"
+        label="Login"
+        @click="loginWithUsername"
+        :disabled="isAttempting || !username || !password"
+      >
         <span v-if="isAttempting">One moment...</span>
       </Button>
     </div>
