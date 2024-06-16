@@ -524,7 +524,7 @@ const sendUploadRequest = async () => {
     }
   }
   try {
-    const response = await API.postListing(payload)
+    const response = await API.postListing(payload, store.connectedUser)
     toast.add({
       severity: 'success',
       summary: 'Listing Uploaded',

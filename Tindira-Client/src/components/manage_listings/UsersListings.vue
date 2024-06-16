@@ -32,10 +32,14 @@ import { defineAsyncComponent } from 'vue'
 import UsersListing from './UsersListing.vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
+import { useAppStore } from '@/stores/app'
 
 import API from '@/api'
 
+const store = useAppStore()
+
 const confirm = useConfirm()
+
 const toast = useToast()
 
 defineProps<{
@@ -127,13 +131,15 @@ const confirmDelete = async (item: Listing) => {
     rejectLabel: 'Cancel',
     accept: async () => {
       try {
-        await API.deleteListing(item.listingId)
+        if (!store.connectedUser) throw new Error('User not connected')
+        await API.deleteListing(item.listingId, store.connectedUser)
         toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Listing deleted', life: 3000 })
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error?.response?.data?.message || error?.message || 'Unknown error'
         toast.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Could not delete listing',
+          detail: `Could not delete listing: ${errorMessage}`,
           life: 3000
         })
       }

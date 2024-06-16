@@ -158,8 +158,8 @@ class _API {
     return response
   }
 
-  async postListing(payload: ListingPayload) {
-    const response = await this.service.post('/listings', payload)
+  async postListing(payload: ListingPayload, username: string) {
+    const response = await this.service.post(`/listings?username=${username}`, payload)
     return response
   }
 
@@ -171,8 +171,10 @@ class _API {
     return response
   }
 
-  async deleteListing(listingId: string) {
-    const response = await this.service.delete(`/listings?listingId=${listingId}`)
+  async deleteListing(listingId: string, username: string) {
+    const response = await this.service.delete(
+      `/listings?listingId=${listingId}&username=${username}`
+    )
     return response
   }
 }
