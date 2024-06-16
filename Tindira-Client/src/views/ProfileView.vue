@@ -1,15 +1,20 @@
 <template>
   <div class="flex flex-col text-center">
     <Avatar
-      :image="appStore.connectedUserObject?.profilePicture"
+      :image="store.connectedUserObject?.profilePicture"
       size="xlarge"
       shape="circle"
       class="mx-auto mt-10 mb-10"
     />
-    <Textarea autoResize rows="15" cols="30" :placeholder="appStore.connectedUserObject?.profileDescription" />
+    <Textarea
+      autoResize
+      rows="15"
+      cols="30"
+      :value="store.connectedUserObject?.profileDescription"
+    />
 
-    <div class="flex justify-center items-center space-x-4 my-4">
-      <RouterLink class="w-1/2 px-2" to="/history">
+    <div class="flex justify-between items-center gap-x-4 my-4">
+      <RouterLink class="w-1/2" to="/history">
         <Button class="w-full" rounded label="Swiping History">
           <template #icon>
             <Icon icon="material-symbols:history" />
@@ -17,7 +22,7 @@
         </Button>
       </RouterLink>
 
-      <RouterLink class="w-1/2 px-2" to="/manage">
+      <RouterLink class="w-1/2" to="/manage">
         <Button class="w-full" rounded label="Manage Posts">
           <template #icon>
             <Icon icon="mdi:post-it-note-edit-outline" />
@@ -26,8 +31,30 @@
       </RouterLink>
     </div>
 
-    <div class="flex justify-end items-center space-x-4">
-      <div class="w-1/3 px-2">
+    <div class="flex justify-center items-center gap-x-4">
+      <div class="w-1/3">
+        <Button
+          severity="secondary"
+          class="w-full"
+          rounded
+          label="Delete User"
+          @click="confirmDelete"
+        >
+          <template #icon>
+            <Icon icon="mdi:trash-can" />
+          </template>
+        </Button>
+      </div>
+
+      <RouterLink class="w-1/3" to="/about">
+        <Button class="w-full" rounded label="About Us">
+          <template #icon>
+            <Icon icon="mdi:information" />
+          </template>
+        </Button>
+      </RouterLink>
+
+      <div class="w-1/3">
         <Button class="w-full" rounded label="Log Out" @click="logout">
           <template #icon>
             <Icon icon="mdi:logout" />
@@ -35,6 +62,7 @@
         </Button>
       </div>
     </div>
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -42,12 +70,50 @@
 import { Icon } from '@iconify/vue'
 import { useAppStore } from '@/stores/app'
 import router from '@/router'
+import { useConfirm } from 'primevue/useconfirm'
+import { injectToast } from '@/functions/inject'
 
-const appStore = useAppStore()
+const store = useAppStore()
+
+const toast = injectToast()
+
+const confirm = useConfirm()
 
 const logout = () => {
-  appStore.disconnectUser()
+  store.disconnectUser()
   router.push('/')
+}
+
+const confirmDelete = async () => {
+  confirm.require({
+    message: 'Are you sure you want to delete your user?',
+    header: 'Warning',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    accept: async () => {
+      try {
+        if (!store.connectedUser) throw new Error('User not connected')
+        // await API.deleteUser(store.connectedUser) // TODO: Implement deleteUser in API
+        // store.disconnectUser()
+        // toast.add({ severity: 'info', summary: 'Confirmed', detail: 'User deleted', life: 3000 })
+        // router.push('/')
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Deleting user is not implemented yet',
+          life: 3000
+        })
+      } catch (error: any) {
+        const errorMessage = error?.response?.data?.message || error?.message || 'Unknown error'
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Could not delete user: ${errorMessage}`,
+          life: 3000
+        })
+      }
+    }
+  })
 }
 </script>
 
