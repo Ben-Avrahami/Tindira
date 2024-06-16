@@ -6,7 +6,7 @@
         <Dropdown
           @change="loadHistory()"
           v-model="selectedCategory"
-          :options="ListingInterface.CATEGORIES"
+          :options="ListingInterface.categories"
           placeholder="Choose a Category"
         />
       </div>

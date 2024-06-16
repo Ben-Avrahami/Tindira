@@ -52,4 +52,7 @@ export const MAX_ROOMS = 10
 export const MAX_PICTURES = 10
 export const MAX_PARKING_SPOTS = 10
 export const MAX_DESCRIPTION_LENGTH = 500
-export const CATEGORIES = ['rent', 'sublet']
+export const CATEGORIES = ['rent', 'sublet'] as const
+export const categories = [...CATEGORIES]
+
+export type CategoryType = (typeof CATEGORIES)[number]

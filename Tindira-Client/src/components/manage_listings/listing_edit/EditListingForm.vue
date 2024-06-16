@@ -3,7 +3,7 @@
     <InputGroup class="flex flex-col">
       <SelectButton
         v-model="category"
-        :options="ListingInterface.CATEGORIES"
+        :options="ListingInterface.categories"
         aria-labelledby="basic"
       />
     </InputGroup>

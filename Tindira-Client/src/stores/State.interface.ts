@@ -1,5 +1,5 @@
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
-import type { Listing } from '@/interfaces/listing.interface'
+import type { Listing, CategoryType } from '@/interfaces/listing.interface'
 
 export interface State {
   isLoading: boolean
@@ -8,11 +8,10 @@ export interface State {
   connectedUserObject: SavedUser | null
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
-  categoryOptions: SelectedFilters['category'][]
 }
 
 export interface SelectedFilters {
-  category: 'sublet' | 'rent'
+  category: CategoryType
   dates: Date | null
   isWholeDateRangeOnly: boolean
   maxPrice: number | null

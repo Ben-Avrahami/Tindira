@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { SelectedFilters, State } from './State.interface.js'
+import type { SelectedFilters, State } from './State.interface'
 import API from '@/api/index.js'
 
 const LOCAL_STORAGE_USER_KEY = 'connectedUser'
@@ -23,8 +23,7 @@ export const useAppStore = defineStore('app', {
       radiusInKm: undefined,
       location: null,
       isWithPorchOrGarden: false
-    },
-    categoryOptions: ['sublet', 'rent']
+    }
   }),
   getters: {
     isUserConnected: (state) => state.connectedUser !== null,

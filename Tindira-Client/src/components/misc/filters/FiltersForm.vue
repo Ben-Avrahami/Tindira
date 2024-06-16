@@ -4,7 +4,7 @@
     <Dropdown
       v-model="selectedFilters.category"
       @change="changeCategory"
-      :options="ListingConstants.CATEGORIES"
+      :options="ListingConstants.categories"
       placeholder="Choose a Category"
     />
   </FiltersFormElement>
