@@ -326,7 +326,7 @@ const clearProfilePicture = () => {
 
 // ==== Profile Description Panel ==== //
 
-const description = ref<string>('a')
+const description = ref<string>('')
 const MAX_DESCRIPTION_LENGTH = 500
 
 // ==== Interests Panel ==== //
@@ -387,7 +387,7 @@ const sendSignUpRequest = async () => {
   }
 
   const profilePictureUrl = await uploadProfilePicture()
-  if (!profilePictureUrl) {
+  if (profilePictureUrl === null) {
     return
   }
 
