@@ -108,7 +108,6 @@ class _API {
     const response = await this.service.get(
       `/user/getHistory?username=${username}&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`
     )
-    console.log('history:', response)
     return response.data
   }
 
@@ -118,10 +117,10 @@ class _API {
     const response = await this.service.get(
       `/user?username=${usernamesString}&fields=${optionalFieldsString}`
     )
-    console.log('getUsersByUserName:', response)
     return response.data
   }
   async getListingsById(ids: string[]): Promise<Listing[]> {
+    if (ids.length === 0) return []
     const idsString = ids.join(',')
     const response = await this.service.get(`listings?id=${idsString}`)
     const listings = response.data.filter(isListingInterface)
