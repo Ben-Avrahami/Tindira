@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: find alternative to min-h-dvh, it's not functioning properly -->
   <div class="dark:bg-gray-600 flex flex-col min-h-dvh h-dvh">
     <ToastService>
       <Suspense>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full overflow-auto">
     <SiteHeader v-if="appStore.isUserConnected" />
 
     <main class="container flex flex-col flex-1 h-full mx-auto">
