@@ -103,7 +103,7 @@
           <StepperTitle title="Upload your profile picture" optional />
           <div class="flex justify-center">
             <ProfilePicture
-              :profilePicture="profilePicture?.content ?? null"
+              :profilePicture="photosManager.getAllPhotosUrls()[0] || null"
               :setProfilePicture
               :clearProfilePicture
             />
@@ -204,6 +204,7 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
+import { useAppStore } from '@/stores/app'
 
 import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
@@ -212,8 +213,12 @@ import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 
+import { uploadImagesToS3 } from '@/functions/aws'
+import { type Photo, PhotosManager } from '@/functions/photosManager'
+
 import API from '@/api'
-import { uploadImagesToS3, type Image } from '@/functions/aws'
+
+const store = useAppStore()
 
 const router = useRouter()
 
@@ -347,17 +352,16 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const profilePicture = ref<Image | null>(null)
-
-const setProfilePicture = (fileName: string, content: string) => {
-  profilePicture.value = {
-    fileName: fileName,
-    content: content
-  }
-}
+const photos = ref<Photo[]>([])
+const photosManager = new PhotosManager(photos)
 
 const clearProfilePicture = () => {
-  profilePicture.value = null
+  photosManager.resetPhotos()
+}
+
+const setProfilePicture = (file: File) => {
+  photosManager.resetPhotos()
+  photosManager.addPhotoFile(file)
 }
 
 // ==== Profile Description Panel ==== //
@@ -386,12 +390,13 @@ const validateRoles = (): boolean => {
 // ==== Send sign-up request to backend ==== //
 
 const uploadProfilePicture = async (): Promise<string | null> => {
-  if (!profilePicture.value) {
-    return ''
+  if (!photos.value.length) {
+    return 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
   }
 
-  const bucketUrl = `users/${username.value}`
-  const { urls, errors } = await uploadImagesToS3([profilePicture.value], bucketUrl)
+  const path = `users/${username.value}`
+  const file = photos.value[0].file!
+  const { urls, errors } = await uploadImagesToS3([file], path)
   if (errors.length > 0) {
     toast.add({
       severity: 'error',
@@ -455,11 +460,35 @@ const sendSignUpRequest = async () => {
       detail: 'You have successfully signed up!',
       life: 3000
     })
-    router.push('/login')
+    await login()
   } catch (error: any) {
     toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
+      detail: error.response.data.message,
+      life: 3000
+    })
+  }
+}
+
+const login = async () => {
+  try {
+    const response = await API.loginUser(username.value, password.value)
+    if (response.status === 200) {
+      await store.connectUser(response.data.user.username)
+      router.push('/')
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Login Error',
+        detail: 'An error occurred while logging in. Please try again later.',
+        life: 3000
+      })
+    }
+  } catch (error: any) {
+    toast.add({
+      severity: 'error',
+      summary: 'Login Error',
       detail: error.response.data.message,
       life: 3000
     })

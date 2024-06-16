@@ -43,7 +43,7 @@ import { injectToast } from '@/functions/inject'
 
 const props = defineProps<{
   profilePicture: string | null
-  setProfilePicture: (fileName: string, content: string) => void
+  setProfilePicture: (file: File) => void
   clearProfilePicture: () => void
 }>()
 
@@ -77,13 +77,7 @@ const handleFileUpload = (event: Event) => {
     return
   }
 
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    // NOTE: I found a bug here!
-    // If an image was removed, it cannot be uploaded again until another image has been uploaded.
-    props.setProfilePicture(file.name, e.target?.result as string)
-  }
-  reader.readAsDataURL(file)
+  props.setProfilePicture(file)
 }
 </script>
 

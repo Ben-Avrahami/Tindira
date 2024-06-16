@@ -130,16 +130,7 @@
     </InputGroup>
     <InputGroup class="flex flex-col">
       <label class="flex">Images</label>
-      <ListingImages
-        :images="
-          images.map((image, index) => ({
-            fileName: `image-${index}`,
-            content: image
-          }))
-        "
-        :removeImage="(index) => images.splice(index, 1)"
-        :addImage="(image: Image) => images.push(image.content)"
-      />
+      <ListingImages :images="photosManager.getAllPhotosUrls()" :removeImage :addImage />
     </InputGroup>
     <Divider class="w-full" />
     <div class="flex flex-col">
@@ -163,9 +154,10 @@ import { injectToast } from '@/functions/inject'
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
+import { uploadImagesToS3 } from '@/functions/aws'
+import { type Photo, PhotosManager } from '@/functions/photosManager'
 
 import API, { type ListingPayload } from '@/api'
-import type { Image } from '@/functions/aws'
 
 const toast = injectToast()
 
@@ -183,12 +175,31 @@ const price = ref<number>(
 )
 const numberOfRooms = ref<number>(props.listing.numberOfRooms)
 const location = ref<SavedGeoCodeGoogleLocation | null>({ ...props.listing.coordinates })
-const images = ref<string[]>([...props.listing.images])
 const title = ref<string>(props.listing.title)
 const description = ref<string>(props.listing.description)
 const isAnimalFriendly = ref<boolean>(props.listing.isAnimalFriendly)
 const isWithGardenOrPorch = ref<boolean>(props.listing.isWithGardenOrPorch)
 const parkingSpaces = ref<number>(props.listing.parkingSpaces)
+
+const photos = ref<Photo[]>([])
+const photosManager = new PhotosManager(photos, [...props.listing.images])
+
+const addImage = (file: File) => {
+  if (photos.value.length >= ListingInterface.MAX_PICTURES) {
+    toast.add({
+      severity: 'error',
+      summary: 'Too Many Photos',
+      detail: `Please upload a maximum of ${ListingInterface.MAX_PICTURES} photos`,
+      life: 3000
+    })
+    return
+  }
+  photosManager.addPhotoFile(file)
+}
+
+const removeImage = (url: string) => {
+  photosManager.removePhoto(url)
+}
 
 watch(contractStartDate, (newValue, oldValue) => {
   if (newValue) {
@@ -218,7 +229,7 @@ const resetFields = () => {
     : props.listing.pricePerMonth
   numberOfRooms.value = props.listing.numberOfRooms
   location.value = { ...props.listing.coordinates }
-  images.value = [...props.listing.images]
+  photosManager.resetPhotos([...props.listing.images])
   title.value = props.listing.title
   description.value = props.listing.description
   isAnimalFriendly.value = props.listing.isAnimalFriendly
@@ -283,7 +294,7 @@ const validateForm = () => {
   if (!location.value) {
     return addErrorToast('Location')
   }
-  if (images.value.length === 0) {
+  if (photos.value.length === 0) {
     return addErrorToast('At least one image is required')
   }
   return true
@@ -294,12 +305,29 @@ const formatDate = (isoDate: Date): string => {
   return isoDate.toISOString().split('T')[0]
 }
 
-const arraysEqual = (a: any[], b: any[]): boolean => {
-  return a.length === b.length && a.every((val, index) => val === b[index])
+function arraysEqual<T>(a: T[], b: T[]): boolean {
+  return a.length === b.length && [...a].sort().every((val, index) => val === [...b].sort()[index])
 }
-
-const constructPayload = (): Partial<ListingPayload> => {
+const constructPayload = async (): Promise<Partial<ListingPayload>> => {
   const payload: Partial<ListingPayload> = {}
+
+  // upload new images to S3
+  const newImages = photosManager.getFiles()
+  let imagesToPayload: string[] = [...photosManager.getOldPhotosUrls()]
+  if (newImages.length > 0) {
+    const path = `listings/${props.listing.listingId}`
+    const { urls, errors } = await uploadImagesToS3(newImages, path)
+    if (errors.length > 0) {
+      toast.add({
+        severity: 'error',
+        summary: `Failed to upload ${errors.length} image(s)`,
+        detail: errors.join(', '),
+        life: 3000
+      })
+      console.error(`Failed to upload ${errors.length} image(s):`, errors)
+    }
+    imagesToPayload = imagesToPayload.concat(urls)
+  }
 
   // take only the fields that have changed
   if (category.value !== props.listing.category) payload.category = category.value
@@ -317,7 +345,7 @@ const constructPayload = (): Partial<ListingPayload> => {
     payload.numberOfRooms = numberOfRooms.value
   if (JSON.stringify(location.value) !== JSON.stringify(props.listing.coordinates))
     payload.coordinates = location.value as SavedGeoCodeGoogleLocation
-  if (!arraysEqual(images.value, props.listing.images)) payload.images = images.value
+  if (!arraysEqual(imagesToPayload, props.listing.images)) payload.images = imagesToPayload
   if (title.value !== props.listing.title) payload.title = title.value
   if (description.value !== props.listing.description) payload.description = description.value
   if (isAnimalFriendly.value !== props.listing.isAnimalFriendly)
@@ -333,7 +361,7 @@ const constructPayload = (): Partial<ListingPayload> => {
 const saveForm = async () => {
   if (!validateForm()) return
 
-  const payload = constructPayload()
+  const payload = await constructPayload()
 
   if (Object.keys(payload).length === 0) {
     toast.add({

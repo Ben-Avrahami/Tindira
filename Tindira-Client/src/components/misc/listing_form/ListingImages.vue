@@ -4,8 +4,8 @@
       <ListingImage
         v-for="(image, index) in images"
         :key="index"
-        :image="image.content"
-        :removeImage="() => removeImage(index)"
+        :image="image"
+        :removeImage="() => removeImage(image)"
       />
     </div>
     <Button
@@ -22,14 +22,13 @@ import { ref } from 'vue'
 import ListingImage from './ListingImage.vue'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import { injectToast } from '@/functions/inject'
-import type { Image } from '@/functions/aws'
 
 const toast = injectToast()
 
 const props = defineProps<{
-  images: Image[]
-  addImage: (image: Image) => void
-  removeImage: (index: number) => void
+  images: string[]
+  addImage: (image: File) => void
+  removeImage: (url: string) => void
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -63,14 +62,7 @@ const handleInput = (event: Event) => {
       })
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      props.addImage({
-        fileName: file.name,
-        content: e.target?.result as string
-      })
-    }
-    reader.readAsDataURL(file)
+    props.addImage(file)
   })
 }
 </script>

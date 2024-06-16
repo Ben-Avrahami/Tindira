@@ -159,19 +159,15 @@
       <template #content="{ prevCallback, nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="How does the apartment look like?" />
-          <ListingImages
-            :images="pictures"
-            :removeImage="(index) => pictures.splice(index, 1)"
-            :addImage="(image: Image) => pictures.push(image)"
-          />
+          <ListingImages :images="photosManager.getAllPhotosUrls()" :removeImage :addImage />
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
           <NextButton
-            :disabled="!pictures.length"
+            :disabled="!photos.length"
             @click="
                 (event: Event) => {
-                  if (validatePictures()) {
+                  if (validatePhotos()) {
                     nextCallback(event)
                   }
                 }
@@ -285,7 +281,8 @@ import type { ListingPayload } from '@/api'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
-import { uploadImagesToS3, type Image } from '@/functions/aws'
+import { uploadImagesToS3 } from '@/functions/aws'
+import { type Photo, PhotosManager } from '@/functions/photosManager'
 
 const router = useRouter()
 
@@ -415,16 +412,25 @@ const validateLocation = (): boolean => {
   return true
 }
 
-// ==== Pictures Panel ==== //
+// ==== Photos Panel ==== //
 
-const pictures = ref<Image[]>([])
+const photos = ref<Photo[]>([])
+const photosManager = new PhotosManager(photos)
 
-const validatePictures = (): boolean => {
-  if (!pictures.value.length) {
+const addImage = (image: File) => {
+  photosManager.addPhotoFile(image)
+}
+
+const removeImage = (url: string) => {
+  photosManager.removePhoto(url)
+}
+
+const validatePhotos = (): boolean => {
+  if (!photos.value.length) {
     toast.add({
       severity: 'error',
-      summary: 'No Pictures',
-      detail: 'Please upload at least one picture',
+      summary: 'No Photos',
+      detail: 'Please upload at least one photo',
       life: 3000
     })
     return false
@@ -540,8 +546,9 @@ const sendUploadRequest = async () => {
 }
 
 const uploadImages = async (listingId: string): Promise<void> => {
-  const bucketUrl = `listings/${listingId}`
-  const { urls, errors } = await uploadImagesToS3(pictures.value, bucketUrl)
+  const path = `listings/${listingId}`
+  const files = photosManager.getFiles()
+  const { urls, errors } = await uploadImagesToS3(files, path)
   errors.forEach((error) => {
     toast.add({
       severity: 'error',
