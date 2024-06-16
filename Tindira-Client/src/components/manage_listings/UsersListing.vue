@@ -60,6 +60,19 @@
               <Icon icon="mdi:pencil"></Icon>
             </template>
           </Button>
+
+          <Button
+            severity="secondary"
+            text
+            rounded
+            aria-label="Info"
+            class="mr-2 text-3xl"
+            @click="showConfirmDeleteDialog(listing)"
+          >
+            <template #icon>
+              <Icon icon="mdi:delete"></Icon>
+            </template>
+          </Button>
         </div>
       </div>
     </div>
@@ -75,5 +88,6 @@ defineProps<{
   showFullAptData: (listing: Listing) => void
   showAptLikes: (listing: Listing) => Promise<void>
   showEditAptDialog: (listing: Listing) => void
+  showConfirmDeleteDialog: (listing: Listing) => void
 }>()
 </script>

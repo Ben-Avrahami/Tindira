@@ -9,6 +9,7 @@
               :showFullAptData="showFullAptData"
               :showAptLikes="showAptLikes"
               :showEditAptDialog="showEditAptDialog"
+              :showConfirmDeleteDialog="confirmDelete"
             />
           </div>
         </div>
@@ -20,6 +21,7 @@
         </div>
       </template>
     </DataView>
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -28,6 +30,13 @@ import type { Listing } from '@/interfaces/listing.interface'
 import { useDialog } from 'primevue/usedialog'
 import { defineAsyncComponent } from 'vue'
 import UsersListing from './UsersListing.vue'
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
+
+import API from '@/api'
+
+const confirm = useConfirm()
+const toast = useToast()
 
 defineProps<{
   listings: Listing[] | undefined
@@ -106,6 +115,28 @@ const showEditAptDialog = (item: Listing) => {
       modal: true,
       closable: true,
       draggable: false
+    }
+  })
+}
+
+const confirmDelete = async (item: Listing) => {
+  confirm.require({
+    message: 'Are you sure you want to delete this listing?',
+    header: 'Warning',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    accept: async () => {
+      try {
+        await API.deleteListing(item.listingId)
+        toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Listing deleted', life: 3000 })
+      } catch (error) {
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Could not delete listing',
+          life: 3000
+        })
+      }
     }
   })
 }

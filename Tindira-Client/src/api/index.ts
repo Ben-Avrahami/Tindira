@@ -170,6 +170,11 @@ class _API {
     })
     return response
   }
+
+  async deleteListing(listingId: string) {
+    const response = await this.service.delete(`/listing/${listingId}`)
+    return response
+  }
 }
 
 const API = new _API()
