@@ -8,6 +8,7 @@ const s3Client = new S3Client({
   }
 })
 const bucketName = 'tindira'
+const imageUrlPrefix = `https://${bucketName}.s3.${import.meta.env.VITE_AWS_REGION}.amazonaws.com`
 
 const getContentType = (fileName: string): string => {
   const extension = fileName.split('.').pop()?.toLowerCase()
@@ -31,32 +32,28 @@ const getContentType = (fileName: string): string => {
   }
 }
 
-export type Image = {
-  fileName: string
-  content: string
-}
-
 export const uploadImagesToS3 = async (
-  images: Image[],
-  bucketUrl: string
+  images: File[],
+  path: string
 ): Promise<{ urls: string[]; errors: string[] }> => {
   const uploadPromises = images.map(async (image) => {
-    const uniqueImageName = `${Date.now()}-${image.fileName}`
+    const imageKey = `${path}/${Date.now()}-${image.name.replace(/\s+/g, '-')}`
     const params = {
       Bucket: bucketName,
-      Key: uniqueImageName,
-      Body: image.content,
-      ContentType: getContentType(image.fileName)
+      Key: imageKey,
+      Body: image,
+      ContentType: getContentType(image.name)
     }
 
     try {
       await s3Client.send(new PutObjectCommand(params))
+      const imageUrl = `${imageUrlPrefix}/${imageKey}`
       return {
-        url: `https://${bucketName}.s3.${s3Client.config.region}.amazonaws.com/${bucketUrl}/${uniqueImageName}`,
+        url: imageUrl,
         error: null
       }
     } catch (error: any) {
-      const err = `Failed to upload ${image.fileName}: ${error}`
+      const err = `Failed to upload ${image.name}: ${error}`
       console.error(err)
       return { url: null, error: err }
     }
