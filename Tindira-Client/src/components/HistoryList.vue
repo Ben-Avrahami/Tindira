@@ -76,7 +76,7 @@ import type { Listing } from '@/interfaces/listing.interface'
 import { useDialog } from 'primevue/usedialog'
 import { computed, defineAsyncComponent, type PropType } from 'vue'
 import { Icon } from '@iconify/vue'
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '@/stores/app'
 import API from '@/api'
 
 const userStore = useAppStore()
@@ -98,7 +98,9 @@ const tagText = computed(() => (props.isLike ? 'Liked' : 'Disliked'))
 const getSeverity = computed(() => (props.isLike ? 'success' : 'danger'))
 
 const dialog = useDialog()
-const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+const ApartmentDialog = defineAsyncComponent(
+  () => import('@/components/misc/listing/ListingDialog.vue')
+)
 
 const showFullAptData = (item: any) => {
   dialog.open(ApartmentDialog, {

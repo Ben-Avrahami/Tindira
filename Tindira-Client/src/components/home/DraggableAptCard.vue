@@ -2,7 +2,7 @@
   <Card class="w-4/5 mx-auto">
     <template #header>
       <div>
-        <AptImageCarousel :key="rerenderer" :images="listing.images" />
+        <ImageCarousel :key="rerenderer" :images="listing.images" />
       </div>
     </template>
 
@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import AptImageCarousel from '@/components/AptImageCarousel.vue'
+import ImageCarousel from '@/components/misc/ImageCarousel.vue'
 import { useDialog } from 'primevue/usedialog'
 
 import type { Listing } from '@/interfaces/listing.interface'
@@ -71,10 +71,12 @@ const props = defineProps<{
 const rerenderer = ref(0)
 
 const dialog = useDialog()
-const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+const ListingDialog = defineAsyncComponent(
+  () => import('@/components/misc/listing/ListingDialog.vue')
+)
 
 const showFullAptData = () => {
-  dialog.open(ApartmentDialog, {
+  dialog.open(ListingDialog, {
     data: {
       listing: props.listing
     },

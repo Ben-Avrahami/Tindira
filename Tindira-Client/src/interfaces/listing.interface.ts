@@ -25,7 +25,7 @@ export type Listing = {
 
 export const isListingInterface = (listing: any): listing is Listing => {
   return (
-    typeof listing.likedBy === 'object' &&
+    // typeof listing.likedBy === 'object' && // history api does not return likedBy
     typeof listing.listingId === 'string' &&
     typeof listing.postExpireDate === 'string' &&
     typeof listing.contractEndDate === 'string' &&

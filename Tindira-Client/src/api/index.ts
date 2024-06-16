@@ -107,7 +107,7 @@ class _API {
     const response = await this.service.get(
       `/user/getHistory?username=${username}&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`
     )
-    console.log(response)
+    console.log('history:', response)
     return response.data
   }
 

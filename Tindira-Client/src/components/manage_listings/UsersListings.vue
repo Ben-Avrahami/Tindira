@@ -60,10 +60,12 @@ const showAptLikes = async (item: Listing) => {
   })
 }
 
-const ApartmentDialog = defineAsyncComponent(() => import('@/components/AptDialog.vue'))
+const ListingDialog = defineAsyncComponent(
+  () => import('@/components/misc/listing/ListingDialog.vue')
+)
 
 const showFullAptData = (item: Listing) => {
-  dialog.open(ApartmentDialog, {
+  dialog.open(ListingDialog, {
     data: {
       listing: item,
       showLikeAndDislikeButton: false
