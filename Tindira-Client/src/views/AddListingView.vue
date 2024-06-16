@@ -533,7 +533,7 @@ const sendUploadRequest = async () => {
     toast.add({
       severity: 'error',
       summary: 'Upload Failed',
-      detail: error?.response?.body ?? "Couldn't upload the listing :(",
+      detail: error?.response?.data ?? "Couldn't upload the listing :(",
       life: 3000
     })
   }

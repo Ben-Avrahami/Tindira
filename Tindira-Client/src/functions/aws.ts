@@ -1,6 +1,12 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
-const s3Client = new S3Client({ region: 'us-east-2' })
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
+  }
+})
 const bucketName = 'tindira'
 
 const getContentType = (fileName: string): string => {
@@ -50,7 +56,9 @@ export const uploadImagesToS3 = async (
         error: null
       }
     } catch (error: any) {
-      return { url: null, error: `Failed to upload ${image.fileName}: ${error.message}` }
+      const err = `Failed to upload ${image.fileName}: ${error}`
+      console.error(err)
+      return { url: null, error: err }
     }
   })
 
