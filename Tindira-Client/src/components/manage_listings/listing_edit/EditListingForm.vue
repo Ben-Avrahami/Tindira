@@ -304,7 +304,7 @@ const constructPayload = (): Partial<ListingPayload> => {
   // take only the fields that have changed
   if (category.value !== props.listing.category) payload.category = category.value
   if (contractStartDate.value.getTime() !== new Date(props.listing.contractStartDate).getTime())
-    payload.contractStartingDate = formatDate(contractStartDate.value)
+    payload.contractStartDate = formatDate(contractStartDate.value)
   if (contractEndDate.value.getTime() !== new Date(props.listing.contractEndDate).getTime())
     payload.contractEndDate = formatDate(contractEndDate.value)
   if (isPricePerWholeTime.value !== props.listing.isPricePerWholeTime)

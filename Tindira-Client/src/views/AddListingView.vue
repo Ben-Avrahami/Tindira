@@ -493,7 +493,7 @@ const sendUploadRequest = async () => {
   console.log('coordinates: ', coordinates)
   const payload: ListingPayload = {
     category: isRent.value ? 'rent' : 'sublet',
-    contractStartingDate: formatDate(startDate.value),
+    contractStartDate: formatDate(startDate.value),
     contractEndDate: formatDate(endDate.value),
     postExpireDate: isRent.value
       ? formatDate(new Date(new Date().setDate(new Date().getDate() + 365)))

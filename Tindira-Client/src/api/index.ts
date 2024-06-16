@@ -14,7 +14,7 @@ type OptionalField =
 
 export type ListingPayload = {
   category: string
-  contractStartingDate: string
+  contractStartDate: string
   contractEndDate: string
   postExpireDate: string
   postUploadDate: string

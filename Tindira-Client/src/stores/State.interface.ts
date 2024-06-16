@@ -1,7 +1,4 @@
-import type {
-  GeoCodeGoogleLocation,
-  SavedGeoCodeGoogleLocation
-} from '@/interfaces/geolocation.interface'
+import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import type { Listing } from '@/interfaces/listing.interface'
 
 export interface State {
