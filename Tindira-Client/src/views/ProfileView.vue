@@ -1,19 +1,10 @@
 <template>
-  <div class="flex flex-col text-center">
-    <Avatar
-      :image="store.connectedUserObject?.profilePicture"
-      size="xlarge"
-      shape="circle"
-      class="mx-auto mt-10 mb-10"
-    />
-    <Textarea
-      autoResize
-      rows="15"
-      cols="30"
-      :value="store.connectedUserObject?.profileDescription"
-    />
+  <div class="flex flex-col text-center gap-2 mx-2 pb-2">
+    <UserForm v-if="store.connectedUserObject" :user="store.connectedUserObject" editable />
 
-    <div class="flex justify-between items-center gap-x-4 my-4 mx-2">
+    <Divider class="w-full" />
+
+    <div class="flex justify-between items-center gap-4">
       <RouterLink class="w-1/2" to="/history">
         <Button class="w-full" rounded label="Swiping History">
           <template #icon>
@@ -31,7 +22,7 @@
       </RouterLink>
     </div>
 
-    <div class="flex justify-center items-center gap-x-4 mx-2">
+    <div class="flex justify-center items-center gap-4">
       <div class="w-1/3">
         <Button severity="secondary" class="w-full" rounded label="Delete" @click="confirmDelete">
           <template #icon>
@@ -66,6 +57,7 @@ import { useAppStore } from '@/stores/app'
 import router from '@/router'
 import { useConfirm } from 'primevue/useconfirm'
 import { injectToast } from '@/functions/inject'
+import UserForm from '@/components/misc/user_form/UserForm.vue'
 
 const store = useAppStore()
 

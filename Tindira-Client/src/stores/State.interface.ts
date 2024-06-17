@@ -37,7 +37,7 @@ export interface SavedUser {
 
 export const savedUserFields: (keyof SavedUser)[] = [
   'username',
-  // 'email',
+  'email',
   'fullName',
   'phoneNumber',
   'profileDescription',

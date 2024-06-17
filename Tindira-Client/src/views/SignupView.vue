@@ -171,6 +171,7 @@
             @click="
                 (event: Event) => {
                   if (validateRoles()) {
+                    prepareSignUpPanel()
                     nextCallback(event)
                   }
                 }
@@ -186,9 +187,7 @@
       <template #content="{ prevCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="You're all set!" />
-          <div class="flex justify-center">
-            <img alt="logo" src="https://primefaces.org/cdn/primevue/images/stepper/content.svg" />
-          </div>
+          <UserForm v-if="userObject" :user="userObject" :editable="false" />
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
@@ -216,6 +215,7 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
+import UserForm from '@/components/misc/user_form/UserForm.vue'
 
 import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
@@ -359,6 +359,7 @@ const validateBasicInfo = (): boolean => {
 
 const photos = ref<Photo[]>([])
 const photosManager = new PhotosManager(photos)
+const DEFAULT_AVATAR = 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
 
 const clearProfilePicture = () => {
   photosManager.resetPhotos()
@@ -367,6 +368,10 @@ const clearProfilePicture = () => {
 const setProfilePicture = (file: File) => {
   photosManager.resetPhotos()
   photosManager.addPhotoFile(file)
+  uploadProfilePicture().then((profilePictureUrl) => {
+    photosManager.resetPhotos()
+    photosManager.addPhotosUrls([profilePictureUrl])
+  })
 }
 
 // ==== Profile Description Panel ==== //
@@ -392,13 +397,27 @@ const validateRoles = (): boolean => {
   return true
 }
 
+const prepareSignUpPanel = () => {
+  userObject.value = {
+    email: email.value,
+    fullName: name.value,
+    username: username.value,
+    phoneNumber: phone.value,
+    roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
+    profilePicture: photos.value.length ? photos.value[0].url : DEFAULT_AVATAR,
+    profileDescription: description.value,
+    listings: []
+  }
+}
+
 // ==== Send sign-up request to backend ==== //
 
+const userObject = ref<SavedUser | null>(null)
 const submitting = ref<boolean>(false)
 
-const uploadProfilePicture = async (): Promise<string | null> => {
+const uploadProfilePicture = async (): Promise<string> => {
   if (!photos.value.length) {
-    return 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
+    return DEFAULT_AVATAR
   }
 
   const path = `users/${username.value}`
@@ -411,7 +430,7 @@ const uploadProfilePicture = async (): Promise<string | null> => {
       detail: errors[0],
       life: 3000
     })
-    return null
+    return DEFAULT_AVATAR
   }
   return urls[0]
 }
@@ -440,32 +459,26 @@ const sendSignUpRequest = async () => {
     return
   }
 
-  const profilePictureUrl = await uploadProfilePicture()
-  if (profilePictureUrl === null) {
+  if (!userObject.value) {
+    toast.add({
+      severity: 'error',
+      summary: 'An Error Occurred',
+      detail: 'Please refresh and try again',
+      life: 3000
+    })
     return
-  }
-
-  const data = {
-    email: email.value,
-    fullName: name.value,
-    username: username.value,
-    password: password.value,
-    phone: phone.value,
-    roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: profilePictureUrl,
-    description: description.value
   }
 
   try {
     await API.registerUser(
-      data.username,
-      data.email,
-      data.fullName,
-      data.password,
-      data.phone,
-      data.roles,
-      data.profilePicture,
-      data.description
+      userObject.value.username,
+      userObject.value.email,
+      userObject.value.fullName,
+      password.value,
+      userObject.value.phoneNumber,
+      userObject.value.roles,
+      userObject.value.profilePicture,
+      userObject.value.profileDescription
     )
     toast.add({
       severity: 'success',
@@ -474,17 +487,7 @@ const sendSignUpRequest = async () => {
       life: 3000
     })
 
-    const userObject: SavedUser = {
-      username: data.username,
-      email: data.email,
-      fullName: data.fullName,
-      phoneNumber: data.phone,
-      roles: data.roles,
-      profilePicture: data.profilePicture,
-      profileDescription: data.description,
-      listings: []
-    }
-    await store.connectUser(data.username, userObject)
+    await store.connectUser(userObject.value.username, userObject.value)
     router.push('/')
   } catch (error: any) {
     toast.add({
