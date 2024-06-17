@@ -8,7 +8,7 @@
           alt="Listing Image Preview"
         />
       </div>
-      <Button aria-label="Remove Image" @click="removeImage">Remove</Button>
+      <Button v-if="editable" aria-label="Remove Image" @click="removeImage">Remove</Button>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@
 defineProps<{
   image: string
   removeImage: () => void
+  editable?: boolean
 }>()
 </script>
 

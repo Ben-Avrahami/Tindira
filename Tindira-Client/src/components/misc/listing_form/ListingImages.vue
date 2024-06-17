@@ -6,14 +6,17 @@
         :key="index"
         :image="image"
         :removeImage="() => removeImage(image)"
+        :editable="editable"
       />
     </div>
-    <Button
-      :label="'Add Photos (' + images.length + '/' + ListingInterface.MAX_PICTURES + ')'"
-      @click="fileInput?.click()"
-      :disabled="images.length >= ListingInterface.MAX_PICTURES"
-    />
-    <input ref="fileInput" type="file" accept="image/*" @change="handleInput" multiple hidden />
+    <div v-if="editable" class="flex flex-col">
+      <Button
+        :label="'Add Photos (' + images.length + '/' + ListingInterface.MAX_PICTURES + ')'"
+        @click="fileInput?.click()"
+        :disabled="images.length >= ListingInterface.MAX_PICTURES"
+      />
+      <input ref="fileInput" type="file" accept="image/*" @change="handleInput" multiple hidden />
+    </div>
   </div>
 </template>
 
@@ -29,6 +32,7 @@ const props = defineProps<{
   images: string[]
   addImage: (image: File) => void
   removeImage: (url: string) => void
+  editable: boolean
 }>()
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -60,9 +64,9 @@ const handleInput = (event: Event) => {
         detail: `Please upload a file smaller than ${MAX_FILE_SIZE_MB}MB.`,
         life: 3000
       })
+    } else {
+      props.addImage(file)
     }
-
-    props.addImage(file)
   })
 }
 </script>

@@ -1,16 +1,23 @@
 <template>
   <div class="flex flex-col gap-4 dark:text-white">
     <InputGroup class="flex flex-col">
-      <SelectButton
-        v-model="category"
-        :options="ListingInterface.categories"
-        aria-labelledby="basic"
-      />
+      <div class="flex">
+        <Button
+          v-for="(option, index) in ListingInterface.categories"
+          class="w-full"
+          :key="index"
+          :severity="category === option ? 'success' : 'secondary'"
+          @click="category = option"
+          :disabled="disabled"
+        >
+          {{ option }}
+        </Button>
+      </div>
     </InputGroup>
     <InputGroup class="flex flex-col">
       <label class="flex" for="title">Title</label>
       <div class="flex">
-        <InputText id="title" v-model="title" type="text" placeholder="Title" />
+        <InputText id="title" v-model="title" type="text" placeholder="Title" :disabled />
         <InputGroupAddon>
           <Icon icon="mdi:house" />
         </InputGroupAddon>
@@ -26,6 +33,7 @@
         autoResize
         :maxlength="ListingInterface.MAX_DESCRIPTION_LENGTH"
         placeholder="Description"
+        :disabled
       />
       <div class="absolute bottom-0 right-0 mb-1.5 mr-3 text-sm text-gray-500">
         {{ description.length }}/{{ ListingInterface.MAX_DESCRIPTION_LENGTH }}
@@ -39,6 +47,7 @@
         v-model="contractStartDate"
         showIcon
         showButtonBar
+        :disabled
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -49,6 +58,7 @@
         v-model="contractEndDate"
         showIcon
         showButtonBar
+        :disabled
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -62,6 +72,7 @@
         :min="1"
         :max="ListingInterface.MAX_ROOMS"
         :suffix="numberOfRooms === null ? '' : numberOfRooms > 1 ? ' rooms' : ' room'"
+        :disabled
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -75,27 +86,33 @@
         :min="0"
         :max="ListingInterface.MAX_PARKING_SPOTS"
         :suffix="parkingSpaces === 1 ? ' parking spot' : ' parking spots'"
+        :disabled
       />
     </InputGroup>
     <InputGroup>
-      <Checkbox inputId="animalFriendly" v-model="isAnimalFriendly" binary />
+      <Checkbox inputId="animalFriendly" v-model="isAnimalFriendly" binary :disabled />
       <label for="animalFriendly" class="ml-2 text-gray-500">
         The apartment is animal friendly 🐈
       </label>
     </InputGroup>
     <InputGroup>
-      <Checkbox inputId="gardenOrPorch" v-model="isWithGardenOrPorch" binary />
+      <Checkbox inputId="gardenOrPorch" v-model="isWithGardenOrPorch" binary :disabled />
       <label for="gardenOrPorch" class="ml-2 text-gray-500">
         The apartment has a garden or porch 🌳
       </label>
     </InputGroup>
     <InputGroup v-if="category === 'sublet'" class="flex flex-col">
       <div class="mb-2 flex items-center">
-        <RadioButton inputId="price" v-model="isPricePerWholeTime" :value="false" />
+        <RadioButton inputId="price" v-model="isPricePerWholeTime" :value="false" :disabled />
         <label for="price" class="ml-2">Price is per month</label>
       </div>
       <div class="flex items-center">
-        <RadioButton inputId="pricePerPeriod" v-model="isPricePerWholeTime" :value="true" />
+        <RadioButton
+          inputId="pricePerPeriod"
+          v-model="isPricePerWholeTime"
+          :value="true"
+          :disabled
+        />
         <label for="pricePerPeriod" class="ml-2">Price is per whole period</label>
       </div>
     </InputGroup>
@@ -112,6 +129,7 @@
           currency="ILS"
           locale="he-IL"
           currencyDisplay="symbol"
+          :disabled
         />
         <InputGroupAddon>
           <Icon icon="mdi:cash-multiple" />
@@ -125,20 +143,28 @@
         :locationString="location?.formatted_address"
         :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
         :locationCleared="() => (location = null)"
+        :disabled
       />
       <GoogleMap :center="location?.geometry.location" />
     </InputGroup>
     <InputGroup class="flex flex-col">
       <label class="flex">Images</label>
-      <ListingImages :images="photosManager.getAllPhotosUrls()" :removeImage :addImage />
+      <ListingImages
+        :images="photosManager.getAllPhotosUrls()"
+        :removeImage
+        :addImage
+        :editable="!disabled"
+      />
     </InputGroup>
-    <Divider class="w-full" />
-    <div class="flex flex-col">
-      <label class="flex"></label>
-      <div class="flex justify-end gap-4">
-        <Button severity="secondary" label="Cancel" class="w-1/3" @click="cancelForm" />
-        <Button severity="secondary" label="Reset" class="w-1/3" @click="resetForm" />
-        <Button label="Save" class="w-1/3" @click="saveForm" />
+    <div v-if="!disabled">
+      <Divider class="w-full" />
+      <div class="flex flex-col">
+        <label class="flex"></label>
+        <div class="flex justify-end gap-4">
+          <Button severity="secondary" label="Cancel" class="w-1/3" @click="cancelForm" />
+          <Button severity="secondary" label="Reset" class="w-1/3" @click="resetForm" />
+          <Button label="Save" class="w-1/3" @click="saveForm" />
+        </div>
       </div>
     </div>
   </div>
@@ -163,6 +189,7 @@ const toast = injectToast()
 
 const props = defineProps<{
   listing: ListingInterface.Listing
+  disabled?: boolean
   exit: () => void
 }>()
 
@@ -329,12 +356,15 @@ const constructPayload = async (): Promise<Partial<ListingPayload>> => {
     imagesToPayload = imagesToPayload.concat(urls)
   }
 
+  const formattedStartDate = formatDate(contractStartDate.value)
+  const formattedEndDate = formatDate(contractEndDate.value)
+
   // take only the fields that have changed
   if (category.value !== props.listing.category) payload.category = category.value
   if (contractStartDate.value.getTime() !== new Date(props.listing.contractStartDate).getTime())
-    payload.contractStartDate = formatDate(contractStartDate.value)
+    payload.contractStartDate = formattedStartDate
   if (contractEndDate.value.getTime() !== new Date(props.listing.contractEndDate).getTime())
-    payload.contractEndDate = formatDate(contractEndDate.value)
+    payload.contractEndDate = formattedEndDate
   if (isPricePerWholeTime.value !== props.listing.isPricePerWholeTime)
     payload.isPricePerWholeTime = isPricePerWholeTime.value
   const priceValue = isPricePerWholeTime.value
@@ -354,6 +384,19 @@ const constructPayload = async (): Promise<Partial<ListingPayload>> => {
     payload.isWithGardenOrPorch = isWithGardenOrPorch.value
   if (parkingSpaces.value !== props.listing.parkingSpaces)
     payload.parkingSpaces = parkingSpaces.value
+
+  // if any of those changed, send them all to recalculate the price in the backend
+  if (
+    payload.price ||
+    payload.isPricePerWholeTime !== undefined ||
+    payload.contractStartDate ||
+    payload.contractEndDate
+  ) {
+    payload.isPricePerWholeTime = isPricePerWholeTime.value
+    payload.price = price.value
+    payload.contractStartDate = formattedStartDate
+    payload.contractEndDate = formattedEndDate
+  }
 
   return payload
 }

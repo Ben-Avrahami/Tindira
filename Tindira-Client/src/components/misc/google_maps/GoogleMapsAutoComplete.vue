@@ -7,6 +7,7 @@
     @itemSelect="updateLocation"
     @clear="locationCleared"
     inputId="selected-address"
+    :disabled
   />
 </template>
 
@@ -19,6 +20,7 @@ const props = defineProps<{
   locationString?: string
   locationChosen: (location: SavedGeoCodeGoogleLocation) => void
   locationCleared: () => void
+  disabled?: boolean
 }>()
 
 const location = ref<any>(props.locationString || '')

@@ -3,8 +3,8 @@ import type { SavedGeoCodeGoogleLocation } from './geolocation.interface'
 export type Listing = {
   likedBy: string[]
   listingId: string
-  postExpireDate: Date
-  contractEndDate: Date
+  postExpireDate: string
+  contractEndDate: string
   numberOfRooms: number
   coordinates: SavedGeoCodeGoogleLocation
   parkingSpaces: number
