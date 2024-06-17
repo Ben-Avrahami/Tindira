@@ -50,6 +50,11 @@ const router = createRouter({
       component: () => import('@/views/AddListingView.vue')
     },
     {
+      path: '/error',
+      name: 'error',
+      component: () => import('@/views/ErrorView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/PageNotFoundView.vue')
@@ -58,11 +63,28 @@ const router = createRouter({
 })
 
 const routesAllowedWithoutLogin = ['/login', '/signup', '/listing']
+let globalErrorOccurred = false
 
 router.beforeResolve(async (to, _, next) => {
+  if (globalErrorOccurred) {
+    if (to.path !== '/error') {
+      next('/error')
+    } else {
+      next()
+    }
+    return
+  }
+
   const store = useAppStore()
-  if (store.isInitialized === false) {
-    await store.initializeState()
+  if (!store.isInitialized) {
+    try {
+      await store.initializeState()
+    } catch (error) {
+      console.error(error)
+      globalErrorOccurred = true
+      next('/error')
+      return
+    }
   }
   const isLoggedIn = store.isUserConnected
 
@@ -72,7 +94,7 @@ router.beforeResolve(async (to, _, next) => {
     return
   }
 
-  if (['/login', '/signup'].includes(to.path) && isLoggedIn) {
+  if (['/login', '/signup', '/error'].includes(to.path) && isLoggedIn) {
     // Redirect to home page if user is logged in
     next('/')
     return

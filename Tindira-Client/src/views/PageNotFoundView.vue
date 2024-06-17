@@ -6,21 +6,9 @@
       <p class="mt-4 text-gray-600">
         The page you are looking for does not exist or has been moved.
       </p>
-      <div>
-        <Button label="Go Back Home" @click="goBackHome" class="mt-6" />
-      </div>
+      <RouterLink to="/">
+        <Button label="Go Back Home" class="mt-6" />
+      </RouterLink>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const goBackHome = () => {
-  router.push('/')
-}
-</script>
-
-<style scoped></style>
