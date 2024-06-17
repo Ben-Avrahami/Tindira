@@ -176,14 +176,15 @@ import { ref, watch } from 'vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { injectToast } from '@/functions/inject'
+import { uploadImagesToS3 } from '@/functions/aws'
+import { type Photo, PhotosManager } from '@/functions/photosManager'
+import { calculatePrices, formatDate } from '@/functions/listing'
 
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
-import { uploadImagesToS3 } from '@/functions/aws'
-import { type Photo, PhotosManager } from '@/functions/photosManager'
 
-import API, { type ListingPayload } from '@/api'
+import API from '@/api'
 
 const toast = injectToast()
 
@@ -327,16 +328,12 @@ const validateForm = () => {
   return true
 }
 
-const formatDate = (isoDate: Date): string => {
-  // TODO: put somewhere else
-  return isoDate.toISOString().split('T')[0]
-}
-
 function arraysEqual<T>(a: T[], b: T[]): boolean {
   return a.length === b.length && [...a].sort().every((val, index) => val === [...b].sort()[index])
 }
-const constructPayload = async (): Promise<Partial<ListingPayload>> => {
-  const payload: Partial<ListingPayload> = {}
+
+const constructPayload = async (): Promise<Partial<ListingInterface.Listing>> => {
+  const payload: Partial<ListingInterface.Listing> = {}
 
   // upload new images to S3
   const newImages = photosManager.getFiles()
@@ -359,6 +356,13 @@ const constructPayload = async (): Promise<Partial<ListingPayload>> => {
   const formattedStartDate = formatDate(contractStartDate.value)
   const formattedEndDate = formatDate(contractEndDate.value)
 
+  const [pricePerMonth, pricePerWholeTime] = calculatePrices(
+    price.value,
+    formattedStartDate,
+    formattedEndDate,
+    isPricePerWholeTime.value
+  )
+
   // take only the fields that have changed
   if (category.value !== props.listing.category) payload.category = category.value
   if (contractStartDate.value.getTime() !== new Date(props.listing.contractStartDate).getTime())
@@ -370,7 +374,10 @@ const constructPayload = async (): Promise<Partial<ListingPayload>> => {
   const priceValue = isPricePerWholeTime.value
     ? props.listing.pricePerWholeTime
     : props.listing.pricePerMonth
-  if (price.value !== priceValue) payload.price = price.value
+  if (price.value !== priceValue) {
+    payload.pricePerMonth = pricePerMonth
+    payload.pricePerWholeTime = pricePerWholeTime
+  }
   if (numberOfRooms.value !== props.listing.numberOfRooms)
     payload.numberOfRooms = numberOfRooms.value
   if (JSON.stringify(location.value) !== JSON.stringify(props.listing.coordinates))
@@ -384,19 +391,6 @@ const constructPayload = async (): Promise<Partial<ListingPayload>> => {
     payload.isWithGardenOrPorch = isWithGardenOrPorch.value
   if (parkingSpaces.value !== props.listing.parkingSpaces)
     payload.parkingSpaces = parkingSpaces.value
-
-  // if any of those changed, send them all to recalculate the price in the backend
-  if (
-    payload.price ||
-    payload.isPricePerWholeTime !== undefined ||
-    payload.contractStartDate ||
-    payload.contractEndDate
-  ) {
-    payload.isPricePerWholeTime = isPricePerWholeTime.value
-    payload.price = price.value
-    payload.contractStartDate = formattedStartDate
-    payload.contractEndDate = formattedEndDate
-  }
 
   return payload
 }

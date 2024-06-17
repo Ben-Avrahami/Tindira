@@ -159,7 +159,12 @@
       <template #content="{ prevCallback, nextCallback }">
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="How does the apartment look like?" />
-          <ListingImages :images="photosManager.getAllPhotosUrls()" :removeImage :addImage />
+          <ListingImages
+            :images="photosManager.getAllPhotosUrls()"
+            :removeImage
+            :addImage
+            editable
+          />
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
@@ -233,6 +238,7 @@
             @click="
                 (event: Event) => {
                   if (validateAdditionalInfo()) {
+                    prepareAddListingRequest()
                     nextCallback(event)
                   }
                 }
@@ -249,7 +255,7 @@
         <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
           <StepperTitle title="The listing is ready to upload!" />
           <div class="flex justify-center">
-            <img alt="logo" src="https://primefaces.org/cdn/primevue/images/stepper/content.svg" />
+            <EditListingForm v-if="listing" :listing :exit="() => {}" disabled />
           </div>
         </div>
         <div class="flex pt-4 justify-between">
@@ -277,12 +283,13 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 
 import API from '@/api'
-import type { ListingPayload } from '@/api'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
+import EditListingForm from '@/components/manage_listings/listing_edit/EditListingForm.vue'
+import { calculatePrices, formatDate } from '@/functions/listing'
 
 const router = useRouter()
 
@@ -478,37 +485,43 @@ const validateAdditionalInfo = (): boolean => {
   return true
 }
 
-// ==== Send sign-up request to backend ==== //
-
-const formatDate = (isoDate: Date): string => {
-  return isoDate.toISOString().split('T')[0]
-}
-
-const sendUploadRequest = async () => {
+const prepareAddListingRequest = () => {
   if (
     !startDate.value ||
     !endDate.value ||
-    !price.value ||
     !rooms.value ||
+    !price.value ||
     !coordinates ||
-    !store.connectedUser
+    !store.connectedUser ||
+    isRent.value === null
   ) {
     // This should never happen because the NextButton is disabled, but just in case
     return
   }
-  console.log('coordinates: ', coordinates)
-  const payload: ListingPayload = {
+
+  const contractStartDate = formatDate(startDate.value)
+  const contractEndDate = formatDate(endDate.value)
+  const postUploadDate = formatDate(new Date())
+  const postExpireDate = isRent.value
+    ? formatDate(new Date(new Date().setDate(new Date().getDate() + 365)))
+    : formatDate(endDate.value)
+
+  const [pricePerMonth, pricePerWholeTime] = calculatePrices(
+    price.value,
+    contractStartDate,
+    contractEndDate,
+    isRent.value
+  )
+
+  listing.value = {
     category: isRent.value ? 'rent' : 'sublet',
-    contractStartDate: formatDate(startDate.value),
-    contractEndDate: formatDate(endDate.value),
-    postExpireDate: isRent.value
-      ? formatDate(new Date(new Date().setDate(new Date().getDate() + 365)))
-      : formatDate(endDate.value),
-    postUploadDate: formatDate(new Date()),
+    contractStartDate: contractStartDate,
+    contractEndDate: contractEndDate,
+    postExpireDate: postExpireDate,
+    postUploadDate: postUploadDate,
     description: description.value,
     isAnimalFriendly: isAnimalFriendly.value,
     ownerId: store.connectedUser,
-    price: price.value,
     title: title.value,
     isWithGardenOrPorch: isWithGardenOrPorch.value,
     parkingSpaces: parkingSpots.value,
@@ -521,10 +534,28 @@ const sendUploadRequest = async () => {
         viewport: coordinates.geometry.viewport
       },
       place_id: coordinates.place_id
-    }
+    },
+    isActive: true,
+    images: photosManager.getAllPhotosUrls(),
+    pricePerWholeTime: pricePerWholeTime,
+    pricePerMonth: pricePerMonth,
+    // a little hack below
+    listingId: '0',
+    likedBy: []
+  }
+}
+
+// ==== Send add-listing request to backend ==== //
+
+const listing = ref<ListingInterface.Listing | null>(null)
+
+const sendUploadRequest = async () => {
+  if (!store.connectedUser || !listing.value) {
+    // This should never happen because the NextButton is disabled, but just in case
+    return
   }
   try {
-    const response = await API.postListing(payload, store.connectedUser)
+    const response = await API.postListing(listing.value, store.connectedUser)
     toast.add({
       severity: 'success',
       summary: 'Listing Uploaded',

@@ -1,28 +1,8 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
-import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
 import { type SavedUser, type SelectedFilters, savedUserFields } from '@/stores/State.interface'
 
 type OptionalField = keyof SavedUser | 'history' | 'listings' | 'reviews'
-
-export type ListingPayload = {
-  category: string
-  contractStartDate: string
-  contractEndDate: string
-  postExpireDate: string
-  postUploadDate: string
-  description: string
-  isAnimalFriendly: boolean
-  ownerId: string
-  price: number
-  title: string
-  isWithGardenOrPorch: boolean
-  parkingSpaces: number
-  numberOfRooms: number
-  isPricePerWholeTime: boolean
-  images?: string[]
-  coordinates: SavedGeoCodeGoogleLocation
-}
 
 ////////////////////////////////////////////////
 //                API SECTION
@@ -125,6 +105,11 @@ class _API {
     return listings
   }
 
+  async isUsernameAvailable(username: string) {
+    const response = await this.service.get(`/user/check?username=${username}`)
+    return response.data === 'true'
+  }
+
   async registerUser(
     username: string,
     email: string,
@@ -156,16 +141,13 @@ class _API {
     return response
   }
 
-  async postListing(payload: ListingPayload, username: string) {
+  async postListing(payload: Listing, username: string) {
     const response = await this.service.post(`/listings?username=${username}`, payload)
     return response
   }
 
-  async updateListing(listingId: string, payload: Partial<ListingPayload>) {
-    const response = await this.service.put('/listings', {
-      listingId: listingId,
-      ...payload
-    })
+  async updateListing(listingId: string, payload: Partial<Listing>) {
+    const response = await this.service.put(`/listings?listingId=${listingId}`, payload)
     return response
   }
 
