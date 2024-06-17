@@ -248,6 +248,16 @@ watch(category, (newCategory) => {
   }
 })
 
+watch(
+  () => props.listing,
+  () => {
+    resetFields()
+  },
+  {
+    deep: true
+  }
+)
+
 const resetFields = () => {
   category.value = props.listing.category
   contractStartDate.value = new Date(props.listing.contractStartDate)
