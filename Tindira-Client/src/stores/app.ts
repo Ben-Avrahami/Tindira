@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { type SelectedFilters, type State } from './State.interface'
+import { type SavedUser, type SelectedFilters, type State } from './State.interface'
 import API from '@/api/index.js'
 
 const LOCAL_STORAGE_USER_KEY = 'connectedUser'
@@ -44,10 +44,14 @@ export const useAppStore = defineStore('app', {
       this.isLoading = false
       this.isInitialized = true
     },
-    async connectUser(userId: string) {
-      const users = await API.getUser(userId)
+    async connectUser(userId: string, userObject: SavedUser | null = null) {
+      if (userObject) {
+        this.connectedUserObject = userObject
+      } else {
+        const user = await API.getUser(userId)
+        this.connectedUserObject = user
+      }
       this.connectedUser = userId
-      this.connectedUserObject = users[0]
       localStorage.setItem(LOCAL_STORAGE_USER_KEY, userId)
       await this.getNextListingsAndReplace(5)
     },

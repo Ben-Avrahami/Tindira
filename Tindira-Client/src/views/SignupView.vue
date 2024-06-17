@@ -219,6 +219,7 @@ import ToggleRole from '@/components/signup/ToggleRole.vue'
 
 import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
+import type { SavedUser } from '@/stores/State.interface'
 
 import API from '@/api'
 
@@ -472,35 +473,23 @@ const sendSignUpRequest = async () => {
       detail: 'You have successfully signed up!',
       life: 3000
     })
-    await login()
+
+    const userObject: SavedUser = {
+      username: data.username,
+      email: data.email,
+      fullName: data.fullName,
+      phoneNumber: data.phone,
+      roles: data.roles,
+      profilePicture: data.profilePicture,
+      profileDescription: data.description,
+      listings: []
+    }
+    await store.connectUser(data.username, userObject)
+    router.push('/')
   } catch (error: any) {
     toast.add({
       severity: 'error',
       summary: 'Sign Up Failed',
-      detail: error.response.data.message,
-      life: 3000
-    })
-  }
-}
-
-const login = async () => {
-  try {
-    const response = await API.loginUser(username.value, password.value)
-    if (response.status === 200) {
-      await store.connectUser(response.data.user.username)
-      router.push('/')
-    } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Login Error',
-        detail: 'An error occurred while logging in. Please try again later.',
-        life: 3000
-      })
-    }
-  } catch (error: any) {
-    toast.add({
-      severity: 'error',
-      summary: 'Login Error',
       detail: error.response.data.message,
       life: 3000
     })
