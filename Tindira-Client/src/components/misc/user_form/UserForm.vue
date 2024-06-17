@@ -1,14 +1,16 @@
 <template>
   <div class="flex flex-col text-center justify-center gap-5">
-    <Avatar :image="profilePicture" size="xlarge" shape="circle" class="mx-auto mt-10 mb-10" />
-    <InputGroup>
-      <InputText id="username" v-model="username" placeholder="Username" disabled />
-      <InputGroupAddon>
-        <label for="username">
-          <Icon icon="mdi:account" />
-        </label>
-      </InputGroupAddon>
-    </InputGroup>
+    <div class="flex flex-col">
+      <Avatar :image="profilePicture" size="xlarge" shape="circle" class="mx-auto my-6" />
+      <InputGroup>
+        <InputText id="username" v-model="username" placeholder="Username" disabled />
+        <InputGroupAddon>
+          <label for="username">
+            <Icon icon="mdi:account" />
+          </label>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
     <InputGroup>
       <InputText id="email" v-model="email" placeholder="Email" :disabled="!editing" />
       <InputGroupAddon>
@@ -107,6 +109,7 @@ const saveForm = () => {
     detail: 'Save not implemented yet',
     life: 3000
   })
+  resetFields()
   editing.value = false
 }
 </script>
