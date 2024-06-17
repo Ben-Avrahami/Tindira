@@ -20,9 +20,7 @@ const userListings = ref<Listing[]>()
 
 onBeforeMount(async () => {
   await userStore.performAsyncAction(async () => {
-    const listings = (await API.getUsersByUserName([userStore.connectedUser!], ['listings']))[0]
-      .listings
-    userListings.value = await API.getListingsById(listings)
+    userListings.value = await API.getListingsById(userStore.connectedUserObject!.listings)
   })
 })
 </script>

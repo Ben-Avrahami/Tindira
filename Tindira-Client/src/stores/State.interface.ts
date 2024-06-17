@@ -32,4 +32,16 @@ export interface SavedUser {
   profileDescription: string
   profilePicture: string
   roles: string[]
+  listings: string[]
 }
+
+export const savedUserFields: (keyof SavedUser)[] = [
+  'username',
+  // 'email',
+  'fullName',
+  'phoneNumber',
+  'profileDescription',
+  'profilePicture',
+  'roles',
+  'listings'
+]

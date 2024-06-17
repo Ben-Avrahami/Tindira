@@ -1,17 +1,9 @@
-import type { SelectedFilters } from '@/stores/State.interface'
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
+import { type SavedUser, type SelectedFilters, savedUserFields } from '@/stores/State.interface'
 
-type OptionalField =
-  | 'history'
-  | 'fullName'
-  | 'listings'
-  | 'phoneNumber'
-  | 'profileDescription'
-  | 'profilePicture'
-  | 'reviews'
-  | 'roles'
+type OptionalField = keyof SavedUser | 'history' | 'listings' | 'reviews'
 
 export type ListingPayload = {
   category: string
@@ -119,6 +111,12 @@ class _API {
     )
     return response.data
   }
+
+  async getUser(username: string) {
+    const users = await this.getUsersByUserName([username], savedUserFields)
+    return users[0]
+  }
+
   async getListingsById(ids: string[]): Promise<Listing[]> {
     if (ids.length === 0) return []
     const idsString = ids.join(',')
