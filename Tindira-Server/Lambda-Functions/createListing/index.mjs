@@ -221,7 +221,7 @@ function validateBodyHeadersQueryString(body, username) { // Use Joi to create a
 /*************************************************************************************************************************************************************************************/
 
 
-async function createListing(body, ID, pricePerMonth, pricePerWholeTime) {
+async function createListing(body, ID) {
 
   let bodyUpdated = body; // Add the ID property, and also isActive and likedBy properties to the listing object
   bodyUpdated['listingId'] = ID;
