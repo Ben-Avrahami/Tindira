@@ -43,7 +43,7 @@ export const handler = async (event) => {
   const listingId = uuidv4(); // Create a unique ID for the new listing
 
   try {
-    const listing = await createListing(value, listingId); // Upload the listing
+    const listing = await createListing(body, listingId); // Upload the listing
     await addListingToUser(username, listingId); // Add the listing to the user's array
     return { // Listing created successfully
       statusCode: 200,
