@@ -201,7 +201,7 @@ function validateBodyHeadersQueryString(body) { // Use Joi to create a schema fo
 /*************************************************************************************************************************************************************************************/
 
 
-async function updateListing(body, listingId, pricePerMonth, pricePerWholeTime) {
+async function updateListing(body, listingId) {
 
   let bodyUpdated = body; // Add the ID property, and also isActive and likedBy properties to the listing object
 
