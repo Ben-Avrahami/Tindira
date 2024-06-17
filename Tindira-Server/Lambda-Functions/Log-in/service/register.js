@@ -27,7 +27,7 @@ async function register(userInfo) {
     !password ||
     !phoneNumber ||
     !roles ||
-    !profilePicture ||
+    !profilePicture
   ) {
     return util.buildResponse(401, {
       message: "All fields are required",
