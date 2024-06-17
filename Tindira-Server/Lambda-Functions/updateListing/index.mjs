@@ -153,7 +153,7 @@ function validateBodyHeadersQueryString(body) { // Use Joi to create a schema fo
     isActive: Joi.boolean(),
     //price: Joi.number(), Old format
     pricePerWholeTime: Joi.number(),
-    pricePerMonth: Joi.numner(),
+    pricePerMonth: Joi.number(),
     category: Joi.string().valid("rent", "sublet"),
     contractStartDate: Joi.date().format('YYYY-MM-DD'),
     contractEndDate: Joi.date().format('YYYY-MM-DD'),
