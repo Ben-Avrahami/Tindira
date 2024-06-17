@@ -181,7 +181,7 @@ function validateBodyHeadersQueryString(body, username) { // Use Joi to create a
     ownerId: Joi.string().required(),
     //price: Joi.number().required(),
     pricePerWholeTime: Joi.number(),
-    pricePerMonth: Joi.numner(),
+    pricePerMonth: Joi.number(),
     title: Joi.string().required(),
     isWithGardenOrPorch: Joi.boolean().required(),
     parkingSpaces: Joi.number().required(),
