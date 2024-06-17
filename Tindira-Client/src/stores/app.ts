@@ -9,6 +9,7 @@ export const useAppStore = defineStore('app', {
     isLoading: false,
     isInitialized: false,
     connectedUserObject: null,
+    connectedUserListings: [],
     connectedUser: null,
     nextListingsArr: [],
     SelectedFilters: {
@@ -50,6 +51,9 @@ export const useAppStore = defineStore('app', {
       } else {
         const user = await API.getUser(userId)
         this.connectedUserObject = user
+        API.getListingsById(user.listings).then((listings) => {
+          this.connectedUserListings = listings
+        }) // lazy load
       }
       this.connectedUser = userId
       localStorage.setItem(LOCAL_STORAGE_USER_KEY, userId)

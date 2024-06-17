@@ -6,6 +6,7 @@ export interface State {
   isInitialized: boolean
   connectedUser: string | null
   connectedUserObject: SavedUser | null
+  connectedUserListings: Listing[]
   nextListingsArr: Listing[]
   SelectedFilters: SelectedFilters
 }
