@@ -1,9 +1,7 @@
 <template>
   <div>
     <ViewTitle>Manage Listings</ViewTitle>
-    <div>
-      <UsersListings :listings="userStore.connectedUserListings" />
-    </div>
+    <UsersListings :listings="userStore.connectedUserListings" />
   </div>
 </template>
 

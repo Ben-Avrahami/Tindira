@@ -590,19 +590,19 @@ const uploadImages = async (listingId: string): Promise<void> => {
   })
 
   if (urls.length) {
-    try {
-      await API.updateListing(listingId, {
+    store
+      .updateConnectedUserListing(listingId, {
         images: urls
       })
-    } catch (error: any) {
-      console.log(error)
-      toast.add({
-        severity: 'error',
-        summary: 'Listing Image Upload Failed',
-        detail: error?.response?.body ?? "Couldn't upload the listing's images :(",
-        life: 3000
+      .catch((error) => {
+        toast.add({
+          severity: 'error',
+          summary: 'Listing Image Upload Failed',
+          detail: error?.response?.body ?? "Couldn't upload the listing's images :(",
+          life: 3000
+        })
+        console.error(error)
       })
-    }
   }
 }
 </script>

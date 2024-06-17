@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { type SavedUser, type SelectedFilters, type State } from './State.interface'
 import API from '@/api/index.js'
+import type { Listing } from '@/interfaces/listing.interface'
 
 const LOCAL_STORAGE_USER_KEY = 'connectedUser'
 
@@ -81,6 +82,26 @@ export const useAppStore = defineStore('app', {
     async getAndPushNextListing(amount: number) {
       const newListing = await this.getNextListing(amount)
       this.nextListingsArr.push(...newListing)
+    },
+    async updateConnectedUserListing(listingId: string, partialListing: Partial<Listing>) {
+      const index = this.connectedUserListings.findIndex(
+        (listing) => listing.listingId === listingId
+      )
+
+      if (index === -1) {
+        throw new Error(`Listing ${listingId} not found`)
+      }
+
+      const oldListing = this.connectedUserListings[index]
+      this.connectedUserListings[index] = { ...oldListing, ...partialListing }
+
+      try {
+        return await API.updateListing(listingId, partialListing)
+      } catch (error) {
+        console.error(error)
+        this.connectedUserListings[index] = oldListing // Rollback on error
+        throw error // Re-throw the error to be handled by the caller
+      }
     },
     async updateFilters(newFilters: SelectedFilters) {
       if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {

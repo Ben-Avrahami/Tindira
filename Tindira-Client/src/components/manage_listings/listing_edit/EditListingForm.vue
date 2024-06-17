@@ -179,12 +179,13 @@ import { injectToast } from '@/functions/inject'
 import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
 import { calculatePrices, formatDate } from '@/functions/listing'
+import { useAppStore } from '@/stores/app'
 
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
 
-import API from '@/api'
+const store = useAppStore()
 
 const toast = injectToast()
 
@@ -410,23 +411,17 @@ const saveForm = async () => {
     return
   }
 
-  try {
-    await API.updateListing(props.listing.listingId, payload)
-    toast.add({
-      severity: 'success',
-      summary: 'Listing Updated',
-      detail: 'The listing has been updated successfully',
-      life: 3000
-    })
-    // TODO: upload photos to S3
-    props.exit()
-  } catch (error: any) {
+  store.updateConnectedUserListing(props.listing.listingId, payload).catch((error) => {
     toast.add({
       severity: 'error',
       summary: 'Error',
       detail: error.message,
       life: 3000
     })
-  }
+    resetFields()
+    console.error(error)
+  })
+
+  props.exit()
 }
 </script>
