@@ -260,7 +260,11 @@
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
-          <Button label="Upload" @click="sendUploadRequest" />
+          <Button
+            :label="submitting ? 'wait...' : 'Upload!'"
+            @click="sendUploadRequest"
+            :disabled="submitting"
+          />
         </div>
       </template>
     </StepperPanel>
@@ -496,6 +500,7 @@ const prepareAddListingRequest = () => {
     isRent.value === null
   ) {
     // This should never happen because the NextButton is disabled, but just in case
+    console.warn('Unreachable code detected')
     return
   }
 
@@ -548,6 +553,7 @@ const prepareAddListingRequest = () => {
 // ==== Send add-listing request to backend ==== //
 
 const listing = ref<ListingInterface.Listing | null>(null)
+const submitting = ref<boolean>(false)
 
 const sendUploadRequest = async () => {
   if (!store.connectedUser || !listing.value) {
@@ -555,6 +561,7 @@ const sendUploadRequest = async () => {
     return
   }
   try {
+    submitting.value = true
     const response = await API.postListing(listing.value, store.connectedUser)
     toast.add({
       severity: 'success',
@@ -570,9 +577,11 @@ const sendUploadRequest = async () => {
     toast.add({
       severity: 'error',
       summary: 'Upload Failed',
-      detail: error?.response?.data ?? "Couldn't upload the listing :(",
+      detail: error?.message ?? "Couldn't upload the listing :(",
       life: 3000
     })
+  } finally {
+    submitting.value = false
   }
 }
 
