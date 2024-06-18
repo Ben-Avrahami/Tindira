@@ -83,6 +83,10 @@ class _API {
     return users[0]
   }
 
+  async updateUser(username: string, payload: Partial<SavedUser>) {
+    return await this.service.put(`/user?username=${username}`, payload)
+  }
+
   async getListingsById(ids: string[]): Promise<Listing[]> {
     if (ids.length === 0) return []
     const idsString = ids.join(',')
@@ -92,7 +96,8 @@ class _API {
   }
 
   async isUsernameTaken(username: string) {
-    return await this.service.get(`/user/check?username=${username}`)
+    const response = await this.service.get(`/user/check?username=${username}`)
+    return response.data
   }
 
   async registerUser(

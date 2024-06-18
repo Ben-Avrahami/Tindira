@@ -63,7 +63,24 @@ export const useAppStore = defineStore('app', {
     disconnectUser() {
       this.connectedUser = null
       this.connectedUserObject = null
+      this.connectedUserListings = []
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY)
+    },
+    async updateConnectedUser(partialUser: Partial<SavedUser>) {
+      if (!this.connectedUser || !this.connectedUserObject) {
+        throw new Error('User not connected')
+      }
+
+      const oldUser = this.connectedUserObject
+      this.connectedUserObject = { ...this.connectedUserObject, ...partialUser }
+
+      try {
+        return await API.updateUser(this.connectedUser, partialUser)
+      } catch (error) {
+        console.error(error)
+        this.connectedUserObject = oldUser // Rollback on error
+        throw error // Re-throw the error to be handled by the caller
+      }
     },
     async getNextListing(amount: number) {
       const ignoreIds = this.nextListingsArr.map((listing) => listing.listingId)
@@ -116,13 +133,14 @@ export const useAppStore = defineStore('app', {
         throw new Error(`Listing ${listingId} not found`)
       }
 
-      this.connectedUserListings.splice(index, 1)
+      // Capture the listing before deletion
+      const [deletedListing] = this.connectedUserListings.splice(index, 1)
 
       try {
         return await API.deleteListing(listingId, this.connectedUser)
       } catch (error) {
         console.error(error)
-        this.connectedUserListings.splice(index, 0, this.connectedUserListings[index]) // Rollback on error
+        this.connectedUserListings.splice(index, 0, deletedListing) // Rollback on error
         throw error // Re-throw the error to be handled by the caller
       }
     },

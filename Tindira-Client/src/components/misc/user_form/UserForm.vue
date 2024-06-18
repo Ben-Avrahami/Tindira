@@ -2,44 +2,43 @@
   <div class="flex flex-col text-center justify-center gap-5">
     <div class="flex flex-col">
       <Avatar :image="profilePicture" size="xlarge" shape="circle" class="mx-auto my-6" />
-      <InputGroup>
-        <InputText id="username" v-model="username" placeholder="Username" disabled />
-        <InputGroupAddon>
-          <label for="username">
-            <Icon icon="mdi:account" />
-          </label>
-        </InputGroupAddon>
-      </InputGroup>
+      <IconField>
+        <InputIcon>
+          <Icon icon="mdi:rename" />
+        </InputIcon>
+        <InputText id="username" v-model="username" type="text" placeholder="Username" disabled />
+      </IconField>
     </div>
-    <InputGroup>
-      <InputText id="email" v-model="email" placeholder="Email" :disabled="!editing" />
-      <InputGroupAddon>
-        <label for="email">
-          <Icon icon="mdi:email" />
-        </label>
-      </InputGroupAddon>
-    </InputGroup>
-    <InputGroup>
-      <InputText id="fullName" v-model="fullName" placeholder="Full Name" :disabled="!editing" />
-      <InputGroupAddon>
-        <label for="fullName">
-          <Icon icon="mdi:card-account-details" />
-        </label>
-      </InputGroupAddon>
-    </InputGroup>
-    <InputGroup>
+    <IconField>
+      <InputIcon>
+        <Icon icon="mdi:email" />
+      </InputIcon>
+      <InputText id="email" v-model="email" type="email" placeholder="Email" :disabled="!editing" />
+    </IconField>
+    <IconField>
+      <InputIcon>
+        <Icon icon="mdi:user" />
+      </InputIcon>
       <InputText
-        id="phoneNumber"
-        v-model="phoneNumber"
-        placeholder="Phone Number"
+        id="name"
+        v-model="fullName"
+        type="text"
+        placeholder="Full Name"
         :disabled="!editing"
       />
-      <InputGroupAddon>
-        <label for="phoneNumber">
-          <Icon icon="mdi:phone" />
-        </label>
-      </InputGroupAddon>
-    </InputGroup>
+    </IconField>
+    <IconField>
+      <InputIcon>
+        <Icon icon="mdi:phone" />
+      </InputIcon>
+      <InputMask
+        id="phone"
+        v-model="phoneNumber"
+        mask="059-999-9999"
+        placeholder="05X-XXX-XXXX"
+        :disabled="!editing"
+      />
+    </IconField>
     <Textarea
       rows="10"
       cols="30"
@@ -66,12 +65,16 @@
 import { Icon } from '@iconify/vue'
 import { injectToast } from '@/functions/inject'
 import type { SavedUser } from '@/stores/State.interface'
-import { ref } from 'vue'
+import * as UserFunctions from '@/functions/user'
+import { ref, watch } from 'vue'
+import { useAppStore } from '@/stores/app'
 
 const props = defineProps<{
   user: SavedUser
   editable: boolean
 }>()
+
+const store = useAppStore()
 
 const toast = injectToast()
 
@@ -83,6 +86,16 @@ const email = ref<string>(props.user.email)
 const fullName = ref<string>(props.user.fullName)
 const phoneNumber = ref<string>(props.user.phoneNumber)
 const profileDescription = ref<string>(props.user.profileDescription)
+
+watch(
+  () => props.user,
+  () => {
+    resetFields()
+  },
+  {
+    deep: true
+  }
+)
 
 const resetFields = () => {
   profilePicture.value = props.user.profilePicture
@@ -102,14 +115,76 @@ const resetForm = () => {
   resetFields()
 }
 
+const constructPayload = () => {
+  const payload: Partial<SavedUser> = {}
+
+  // take only the fields that have changed (note: username is not editable)
+  if (profilePicture.value !== props.user.profilePicture)
+    payload.profilePicture = profilePicture.value
+  if (email.value !== props.user.email) payload.email = email.value
+  if (fullName.value !== props.user.fullName) payload.fullName = fullName.value
+  if (phoneNumber.value !== props.user.phoneNumber) payload.phoneNumber = phoneNumber.value
+  if (profileDescription.value !== props.user.profileDescription)
+    payload.profileDescription = profileDescription.value
+
+  return payload
+}
+
+const validateForm = (): boolean => {
+  if (!UserFunctions.isPhoneValid(phoneNumber.value)) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Phone Number',
+      detail: 'Please enter a valid phone number',
+      life: 3000
+    })
+    return false
+  }
+  if (!UserFunctions.isNameValid(fullName.value)) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Name',
+      detail: 'Please enter your full name',
+      life: 3000
+    })
+    return false
+  }
+  if (!UserFunctions.isEmailValid(email.value)) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Email',
+      detail: 'Please enter a valid email address',
+      life: 3000
+    })
+    return false
+  }
+  return true
+}
+
 const saveForm = () => {
-  toast.add({
-    severity: 'info',
-    summary: 'Save',
-    detail: 'Save not implemented yet',
-    life: 3000
+  if (!validateForm()) return
+
+  const payload = constructPayload()
+
+  if (Object.keys(payload).length === 0) {
+    toast.add({
+      severity: 'info',
+      summary: 'No Changes',
+      detail: 'No changes were made to the user profile',
+      life: 3000
+    })
+    return
+  }
+
+  store.updateConnectedUser(payload).catch((error) => {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.message,
+      life: 3000
+    })
+    resetFields()
   })
-  resetFields()
   editing.value = false
 }
 </script>

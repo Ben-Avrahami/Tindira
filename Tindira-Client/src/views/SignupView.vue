@@ -5,91 +5,79 @@
         <StepperIcon :icon="'mdi:user'" :colorize="index <= active" />
       </template>
       <template #content="{ nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+        <div
+          class="flex flex-col justify-center gap-5 mx-auto"
+          style="min-height: 16rem; max-width: 20rem"
+        >
           <StepperTitle title="Let's create your account!" />
-          <div class="mb-4">
-            <IconField>
-              <InputIcon>
-                <Icon icon="mdi:phone" />
-              </InputIcon>
-              <InputMask
-                id="phone"
-                v-model="phone"
-                mask="059-999-9999"
-                placeholder="05X-XXX-XXXX"
+          <IconField>
+            <InputIcon>
+              <Icon icon="mdi:phone" />
+            </InputIcon>
+            <InputMask id="phone" v-model="phone" mask="059-999-9999" placeholder="05X-XXX-XXXX" />
+          </IconField>
+          <IconField>
+            <InputIcon>
+              <Icon icon="mdi:user" />
+            </InputIcon>
+            <InputText id="name" v-model="name" type="text" placeholder="Full Name" />
+          </IconField>
+          <IconField>
+            <InputIcon>
+              <Icon icon="mdi:email" />
+            </InputIcon>
+            <InputText id="email" v-model="email" type="email" placeholder="Email" />
+          </IconField>
+          <IconField>
+            <InputIcon v-if="!username">
+              <Icon icon="mdi:rename" />
+            </InputIcon>
+            <InputIcon v-else-if="fetchingUsernameTaken">
+              <ProgressSpinner
+                style="width: 18px; height: 18px; filter: brightness(0.7) sepia(1)"
+                strokeWidth="8"
               />
-            </IconField>
-          </div>
-          <div class="mb-4">
-            <IconField>
-              <InputIcon>
-                <Icon icon="mdi:user" />
-              </InputIcon>
-              <InputText id="name" v-model="name" type="text" placeholder="Full Name" />
-            </IconField>
-          </div>
-          <div class="mb-4">
-            <IconField>
-              <InputIcon>
-                <Icon icon="mdi:email" />
-              </InputIcon>
-              <InputText id="email" v-model="email" type="email" placeholder="Email" />
-            </IconField>
-          </div>
-          <div class="mb-4">
-            <IconField>
-              <InputIcon v-if="!username">
-                <Icon icon="mdi:rename" />
-              </InputIcon>
-              <InputIcon v-else-if="fetchingUsernameTaken">
-                <ProgressSpinner
-                  style="width: 18px; height: 18px; filter: brightness(0.7) sepia(1)"
-                  strokeWidth="8"
-                />
-              </InputIcon>
-              <InputIcon v-else-if="usernameTaken">
-                <Icon icon="mdi:close" class="text-red-500" />
-              </InputIcon>
-              <InputIcon v-else>
-                <Icon icon="mdi:check" class="text-green-500" />
-              </InputIcon>
-              <InputText id="username" v-model="username" type="text" placeholder="Username" />
-            </IconField>
-          </div>
-          <div class="mb-4">
-            <Password v-model="password" toggleMask placeholder="Password" class="w-full">
-              <template #footer>
-                <Divider />
-                <p class="mt-2 p-0 mb-2">Requirements</p>
-                <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
-                  <li
-                    :class="{
-                      'text-green-500': password && /[a-z]/.test(password)
-                    }"
-                  >
-                    At least one lowercase
-                  </li>
-                  <li
-                    :class="{
-                      'text-green-500': password && /[A-Z]/.test(password)
-                    }"
-                  >
-                    At least one uppercase
-                  </li>
-                  <li :class="{ 'text-green-500': password && /\d/.test(password) }">
-                    At least one digit
-                  </li>
-                  <li
-                    :class="{
-                      'text-green-500': password && password.length >= 8
-                    }"
-                  >
-                    Minimum 8 characters
-                  </li>
-                </ul>
-              </template>
-            </Password>
-          </div>
+            </InputIcon>
+            <InputIcon v-else-if="usernameTaken">
+              <Icon icon="mdi:close" class="text-red-500" />
+            </InputIcon>
+            <InputIcon v-else>
+              <Icon icon="mdi:check" class="text-green-500" />
+            </InputIcon>
+            <InputText id="username" v-model="username" type="text" placeholder="Username" />
+          </IconField>
+          <Password v-model="password" toggleMask placeholder="Password" class="w-full">
+            <template #footer>
+              <Divider />
+              <p class="mt-2 p-0 mb-2">Requirements</p>
+              <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
+                <li
+                  :class="{
+                    'text-green-500': password && /[a-z]/.test(password)
+                  }"
+                >
+                  At least one lowercase
+                </li>
+                <li
+                  :class="{
+                    'text-green-500': password && /[A-Z]/.test(password)
+                  }"
+                >
+                  At least one uppercase
+                </li>
+                <li :class="{ 'text-green-500': password && /\d/.test(password) }">
+                  At least one digit
+                </li>
+                <li
+                  :class="{
+                    'text-green-500': password && password.length >= 8
+                  }"
+                >
+                  Minimum 8 characters
+                </li>
+              </ul>
+            </template>
+          </Password>
         </div>
         <div class="flex pt-4 justify-between">
           <Button label="To Login" severity="secondary" @click="() => router.push('/login')" />
@@ -142,10 +130,10 @@
             rows="10"
             cols="30"
             autoResize
-            :maxlength="MAX_DESCRIPTION_LENGTH"
+            :maxlength="UserFunctions.MAX_DESCRIPTION_LENGTH"
           />
           <div class="absolute bottom-0 right-0 mb-4 mr-4 text-sm text-gray-500">
-            {{ description.length }}/{{ MAX_DESCRIPTION_LENGTH }}
+            {{ description.length }}/{{ UserFunctions.MAX_DESCRIPTION_LENGTH }}
           </div>
         </div>
         <div class="flex pt-4 justify-between">
@@ -229,9 +217,9 @@ import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 import UserBusinessCard from '@/components/misc/user_form/UserBusinessCard.vue'
 
-import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
 import type { SavedUser } from '@/stores/State.interface'
+import * as UserFunctions from '@/functions/user'
 
 import API from '@/api'
 
@@ -251,8 +239,6 @@ const username = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
 
-const USERNAME_MIN_LENGTH = 4
-
 const usernameTaken = ref<boolean>(false)
 const fetchingUsernameTaken = ref<boolean>(false)
 let timeoutId: NodeJS.Timeout | undefined
@@ -266,95 +252,14 @@ watch(username, (newUsername) => {
   timeoutId = setTimeout(async () => {
     if (newUsername) {
       const isUsernameTaken = await API.isUsernameTaken(newUsername)
-      usernameTaken.value = isUsernameTaken || !isUsernameValid(newUsername)
+      usernameTaken.value = isUsernameTaken || !UserFunctions.isUsernameValid(newUsername)
       fetchingUsernameTaken.value = false
     }
   }, IS_USERNAME_AVAILABLE_DELAY)
 })
 
-const isPhoneValid = (): boolean => {
-  return !!phone.value && phone.value.trim().length === 12
-}
-
-const isNameValid = (): boolean => {
-  return !!name.value && name.value.trim().split(/\s+/).length === 2
-}
-
-const isUsernameValid = (username: string): boolean => {
-  return (
-    !!username &&
-    !username.includes(' ') &&
-    !(username.trim().length < USERNAME_MIN_LENGTH) &&
-    !(username.length > 20) &&
-    !!/^[a-z0-9_]*$/.test(username)
-  )
-}
-
-const validateUsername = (): boolean => {
-  // TODO: Implement username validation through API
-  const SUMMARY = 'Invalid Username'
-  if (!username.value) {
-    toast.add({
-      severity: 'error',
-      summary: SUMMARY,
-      detail: 'Please enter a username',
-      life: 3000
-    })
-    return false
-  }
-  if (username.value.includes(' ')) {
-    toast.add({
-      severity: 'error',
-      summary: SUMMARY,
-      detail: 'Username must not include spaces',
-      life: 3000
-    })
-    return false
-  }
-  if (username.value.length < USERNAME_MIN_LENGTH) {
-    toast.add({
-      severity: 'error',
-      summary: SUMMARY,
-      detail: `Username must be at least ${USERNAME_MIN_LENGTH} characters`,
-      life: 3000
-    })
-    return false
-  }
-  if (username.value.length > 20) {
-    toast.add({
-      severity: 'error',
-      summary: SUMMARY,
-      detail: 'Username must be at most 20 characters',
-      life: 3000
-    })
-    return false
-  }
-  if (!/^[a-z0-9_]*$/.test(username.value)) {
-    toast.add({
-      severity: 'error',
-      summary: SUMMARY,
-      detail: 'Username must only include small letters, numbers, and underscores',
-      life: 3000
-    })
-    return false
-  }
-  return true
-}
-
-const isEmailValid = (): boolean => {
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  return regex.test(email.value)
-}
-
-const isPasswordStrong = (): boolean => {
-  // At least one lowercase, one uppercase, one digit, and minimum 8 characters
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&]{8,}$/
-  // Note: The regex above does not exactly match PrimeVue's regex, which can cause buggy behavior
-  return regex.test(password.value)
-}
-
 const validateBasicInfo = (): boolean => {
-  if (!isPhoneValid()) {
+  if (!UserFunctions.isPhoneValid(phone.value)) {
     toast.add({
       severity: 'error',
       summary: 'Invalid Phone Number',
@@ -363,7 +268,7 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
-  if (!isNameValid()) {
+  if (!UserFunctions.isNameValid(name.value)) {
     toast.add({
       severity: 'error',
       summary: 'Invalid Name',
@@ -372,7 +277,14 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
-  if (!validateUsername()) {
+  const errorMessage = UserFunctions.validateUsername(username.value)
+  if (errorMessage) {
+    toast.add({
+      severity: 'error',
+      summary: 'Invalid Username',
+      detail: errorMessage,
+      life: 3000
+    })
     return false
   }
   if (usernameTaken.value) {
@@ -384,7 +296,7 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
-  if (!isEmailValid()) {
+  if (!UserFunctions.isEmailValid(email.value)) {
     toast.add({
       severity: 'error',
       summary: 'Invalid Email',
@@ -393,7 +305,7 @@ const validateBasicInfo = (): boolean => {
     })
     return false
   }
-  if (!isPasswordStrong()) {
+  if (!UserFunctions.isPasswordStrong(password.value)) {
     toast.add({
       severity: 'error',
       summary: 'Weak Password',
@@ -409,7 +321,6 @@ const validateBasicInfo = (): boolean => {
 
 const photos = ref<Photo[]>([])
 const photosManager = new PhotosManager(photos)
-const DEFAULT_AVATAR = 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
 
 const clearProfilePicture = () => {
   photosManager.resetPhotos()
@@ -427,7 +338,6 @@ const setProfilePicture = (file: File) => {
 // ==== Profile Description Panel ==== //
 
 const description = ref<string>('')
-const MAX_DESCRIPTION_LENGTH = 500
 
 // ==== Interests Panel ==== //
 
@@ -454,7 +364,7 @@ const prepareSignUpPanel = () => {
     username: username.value,
     phoneNumber: phone.value,
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: photos.value.length ? photos.value[0].url : DEFAULT_AVATAR,
+    profilePicture: photos.value.length ? photos.value[0].url : UserFunctions.DEFAULT_AVATAR,
     profileDescription: description.value,
     listings: []
   }
@@ -467,22 +377,22 @@ const submitting = ref<boolean>(false)
 
 const uploadProfilePicture = async (): Promise<string> => {
   if (!photos.value.length) {
-    return DEFAULT_AVATAR
+    return UserFunctions.DEFAULT_AVATAR
   }
 
   const path = `users/${username.value}`
   const file = photos.value[0].file!
-  const { urls, errors } = await uploadImagesToS3([file], path)
-  if (errors.length > 0) {
+  const { url, error } = await UserFunctions.uploadProfilePicture(file, path)
+  if (error) {
     toast.add({
       severity: 'error',
       summary: 'Profile Picture Upload Failed',
-      detail: errors[0],
+      detail: error,
       life: 3000
     })
-    return DEFAULT_AVATAR
   }
-  return urls[0]
+
+  return url
 }
 
 const disableSignUpButtonAndSubmit = async () => {
@@ -549,5 +459,3 @@ const sendSignUpRequest = async () => {
   }
 }
 </script>
-
-<style scoped></style>
