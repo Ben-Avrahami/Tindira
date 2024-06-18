@@ -24,7 +24,7 @@ import SwipingHistoryView from './profile/HistoryView.vue'
 const active = ref(0)
 const items = ref([
   { label: 'Profile' },
-  { label: 'My Listings' },
+  { label: 'Listings' },
   { label: 'History' },
   { label: 'About' }
 ])
