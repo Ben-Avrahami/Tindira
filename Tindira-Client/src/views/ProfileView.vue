@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col text-center gap-2 mx-2 pb-2">
-    <UserForm v-if="store.connectedUserObject" :user="store.connectedUserObject" editable />
+    <div v-if="store.connectedUserObject">
+      <UserBusinessCard :user="store.connectedUserObject" @dblclick="() => (editing = !editing)" />
+    </div>
 
     <Divider class="w-full" />
 
@@ -32,7 +34,7 @@
       </div>
 
       <RouterLink class="w-1/3" to="/about">
-        <Button class="w-full" rounded label="About Us">
+        <Button class="w-full" rounded label="About">
           <template #icon>
             <Icon icon="mdi:information" />
           </template>
@@ -57,7 +59,8 @@ import { useAppStore } from '@/stores/app'
 import router from '@/router'
 import { useConfirm } from 'primevue/useconfirm'
 import { injectToast } from '@/functions/inject'
-import UserForm from '@/components/misc/user_form/UserForm.vue'
+import UserBusinessCard from '@/components/misc/user_form/UserBusinessCard.vue'
+import { ref } from 'vue'
 
 const store = useAppStore()
 
@@ -69,6 +72,8 @@ const logout = () => {
   store.disconnectUser()
   router.push('/')
 }
+
+const editing = ref(false)
 
 const confirmDelete = async () => {
   confirm.require({
