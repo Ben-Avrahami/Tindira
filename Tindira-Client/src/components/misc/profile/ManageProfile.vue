@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col justify-center text-center gap-2 pb-2">
-    <UserBusinessCard :user @dblclick="showUserFormDialog" />
+    <!-- <UserBusinessCard :user @dblclick="showUserFormDialog" /> -->
+    <UserFormPreview :user="props.user" @dblclick="showUserFormDialog" />
 
     <div class="grid grid-cols-3 gap-2">
       <Button severity="secondary" rounded label="Delete" @click="confirmDelete">
@@ -31,9 +32,10 @@ import { useConfirm } from 'primevue/useconfirm'
 import { injectToast } from '@/functions/inject'
 import type { SavedUser } from '@/interfaces/user.interface'
 import { useDialog } from 'primevue/usedialog'
+import { defineAsyncComponent } from 'vue'
 
 import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
-import { defineAsyncComponent } from 'vue'
+import UserFormPreview from './UserFormPreview.vue'
 
 const store = useAppStore()
 
