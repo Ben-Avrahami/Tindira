@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { useAppStore } from '../../../stores/app'
-import type { SavedUser } from '@/stores/State.interface'
+import { useAppStore } from '@/stores/app'
+import type { SavedUser } from '@/interfaces/user.interface'
 
 const userStore = useAppStore()
 

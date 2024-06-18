@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
-import { type SavedUser, type SelectedFilters, savedUserFields } from '@/stores/State.interface'
+import type { SelectedFilters } from '@/stores/State.interface'
+import { type SavedUser, savedUserFields } from '@/interfaces/user.interface'
 
 type OptionalField = keyof SavedUser | 'history' | 'listings' | 'reviews'
 
@@ -37,7 +38,6 @@ class _API {
         filters: filters
       }
     )
-    console.log(response)
     return response.data
   }
 
@@ -45,7 +45,6 @@ class _API {
     const response = await this.service.put(
       `/listings/tag?username=${username}&listingId=${listingId}&isLike=${isLike.toString()}`
     )
-    console.log(response)
     return response.data
   }
 
@@ -53,7 +52,6 @@ class _API {
     const response = await this.service.get(
       `/user/getListingLikedBy?listingId=${listingId}&page=${page.toString()}&items=${items.toString()}`
     )
-    console.log(response)
     return response.data
   }
   async getCategoryHistory(

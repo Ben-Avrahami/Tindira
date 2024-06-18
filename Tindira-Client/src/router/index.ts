@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: () => import('@/views/AboutView.vue')
+      component: () => import('@/views/profile/AboutView.vue')
     },
     {
       path: '/login',
@@ -28,16 +28,6 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('@/views/SignupView.vue')
-    },
-    {
-      path: '/history',
-      name: 'history',
-      component: () => import('@/views/SwipingHistoryView.vue')
-    },
-    {
-      path: '/manage',
-      name: 'manage',
-      component: () => import('@/views/ManageListingsView.vue')
     },
     {
       path: '/listing',

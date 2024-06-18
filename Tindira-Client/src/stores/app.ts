@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { type SavedUser, type SelectedFilters, type State } from './State.interface'
+import type { SelectedFilters, State } from './State.interface'
+import type { SavedUser } from '@/interfaces/user.interface'
 import API from '@/api/index.js'
 import type { Listing } from '@/interfaces/listing.interface'
 

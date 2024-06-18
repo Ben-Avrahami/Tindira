@@ -4,15 +4,15 @@
       class="scaler max-w-[400px] mx-auto mt-[-12.5%] mb-[-12.5%] md:mt-[-6.25%] md:mb-[-6.25%] aspect-w-3 aspect-h-2"
     >
       <button class="card block relative z-10 p-3 w-full h-full">
-        <UserForm :user :editable="false" />
+        <UserFormPreview :user :disabled="true" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { SavedUser } from '@/stores/State.interface'
-import UserForm from './UserForm.vue'
+import type { SavedUser } from '@/interfaces/user.interface'
+import UserFormPreview from './UserFormPreview.vue'
 
 defineProps<{
   user: SavedUser

@@ -1,25 +1,42 @@
 <template>
-  <div>
-    <div class="flex flex-col items-center justify-center">
-      <div class="flex items-center justify-center">
-        <Chip>Category:</Chip>
-        <Dropdown
-          @change="loadHistory()"
-          v-model="selectedCategory"
-          :options="ListingInterface.categories"
-          placeholder="Choose a Category"
-        />
-      </div>
-      <div class="flex items-center justify-center mb-4">
-        <Chip>showLikes/Dislikes:</Chip>
-        <Button class="text-2xl" text aria-label="Add" @click="alternateLikesDislikes">
-          <template #icon>
-            <Icon v-if="showLikes" icon="mdi:like" color="green" />
-            <Icon v-else icon="mdi:dislike" />
-          </template>
-        </Button>
-      </div>
-    </div>
+  <div class="flex flex-col gap-4">
+    <ViewTitle>Swiping History</ViewTitle>
+    <Toolbar>
+      <template #start>
+        <div class="flex items-center justify-center w-full h-full text-center">
+          <label class="mr-2">Category:</label>
+          <Button
+            v-for="(option, index) in ListingInterface.categories"
+            :key="index"
+            :severity="selectedCategory === option ? 'success' : 'secondary'"
+            :label="option"
+            @click="() => alternameCategory(option)"
+          />
+        </div>
+      </template>
+
+      <template #center>
+        <IconField iconPosition="left" class="hidden md:block">
+          <InputIcon>
+            <Icon icon="mdi:search" />
+          </InputIcon>
+          <InputText placeholder="Search" disabled />
+        </IconField>
+      </template>
+
+      <template #end>
+        <div class="flex items-center justify-center w-full h-full text-center">
+          <label class="mr-2">Show:</label>
+          <Button severity="secondary" @click="alternateLikesDislikes">
+            <template #icon>
+              <Icon v-if="showLikes" icon="mdi:thumb-up" class="text-green-500" />
+              <Icon v-else icon="mdi:thumb-down" class="text-red-500" />
+            </template>
+          </Button>
+        </div>
+      </template>
+    </Toolbar>
+
     <HistoryList
       v-if="!userStore.isLoading"
       :history="history"
@@ -43,8 +60,10 @@ import { useAppStore } from '@/stores/app'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
 import API from '@/api'
-import HistoryList from '@/components/history/HistoryList.vue'
 import type { PageState } from 'primevue/paginator'
+
+import HistoryList from '@/components/history/HistoryList.vue'
+import ViewTitle from '@/components/misc/ViewTitle.vue'
 
 const userStore = useAppStore()
 
@@ -57,6 +76,12 @@ const ITEMS_PER_PAGE = 5
 
 const alternateLikesDislikes = () => {
   showLikes.value = !showLikes.value
+  history.value = []
+  loadHistory()
+}
+
+const alternameCategory = (category: string) => {
+  selectedCategory.value = category
   history.value = []
   loadHistory()
 }

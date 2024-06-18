@@ -215,10 +215,10 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
-import UserBusinessCard from '@/components/misc/user_form/UserBusinessCard.vue'
+import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
 
 import { type Photo, PhotosManager } from '@/functions/photosManager'
-import type { SavedUser } from '@/stores/State.interface'
+import type { SavedUser } from '@/interfaces/user.interface'
 import * as UserFunctions from '@/functions/user'
 
 import API from '@/api'

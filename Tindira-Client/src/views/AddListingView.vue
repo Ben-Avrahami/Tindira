@@ -340,7 +340,6 @@ watch(startDate, (newValue, oldValue) => {
 })
 
 const isPriceValid = (): boolean => {
-  console.log(startDate.value)
   return price.value !== null && price.value > 0
 }
 
@@ -571,7 +570,7 @@ const sendUploadRequest = async () => {
     uploadImages(newListingId)
     await router.push('/')
   } catch (error: any) {
-    console.log(error)
+    console.error(error)
     toast.add({
       severity: 'error',
       summary: 'Upload Failed',

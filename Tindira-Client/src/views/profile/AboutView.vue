@@ -1,20 +1,11 @@
 <template>
   <article class="flex flex-col items-center justify-center p-8 text-justify gap-5">
+    <ViewTitle>About Us</ViewTitle>
     <section>
-      <h1 class="text-4xl font-bold mb-4 text-center">Why Us?</h1>
       <p class="text-lg leading-relaxed">
         Our application is built with cutting-edge technology to provide the best user experience.
         We focus on performance, design, and usability to ensure that our users have the best
         experience possible.
-      </p>
-    </section>
-    <Divider />
-    <section>
-      <h2 class="text-3xl font-semibold mb-6 text-center">Our Mission</h2>
-      <p class="text-lg leading-relaxed">
-        Our mission is to create innovative solutions that empower our users to achieve their goals.
-        We strive to provide the best user experience by focusing on performance, design, and
-        usability.
       </p>
     </section>
     <section>
@@ -23,6 +14,14 @@
         Our vision is to be the leading provider of cutting-edge technology solutions that enhance
         the lives of our users. We aim to create a positive impact on the world by providing
         innovative solutions that empower our users to achieve their goals.
+      </p>
+    </section>
+    <section>
+      <h2 class="text-3xl font-semibold mb-6 text-center">Why Us?</h2>
+      <p class="text-lg leading-relaxed">
+        Our mission is to create innovative solutions that empower our users to achieve their goals.
+        We strive to provide the best user experience by focusing on performance, design, and
+        usability.
       </p>
     </section>
     <Divider />
@@ -54,6 +53,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ViewTitle from '@/components/misc/ViewTitle.vue'
 
 interface TeamMember {
   name: string

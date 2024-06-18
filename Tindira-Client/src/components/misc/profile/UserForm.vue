@@ -13,7 +13,13 @@
       <InputIcon>
         <Icon icon="mdi:email" />
       </InputIcon>
-      <InputText id="email" v-model="email" type="email" placeholder="Email" :disabled="!editing" />
+      <InputText
+        id="email"
+        v-model="email"
+        type="email"
+        placeholder="Email"
+        :invalid="!isEmailValid"
+      />
     </IconField>
     <IconField>
       <InputIcon>
@@ -24,7 +30,7 @@
         v-model="fullName"
         type="text"
         placeholder="Full Name"
-        :disabled="!editing"
+        :invalid="!isNameValid"
       />
     </IconField>
     <IconField>
@@ -36,27 +42,28 @@
         v-model="phoneNumber"
         mask="059-999-9999"
         placeholder="05X-XXX-XXXX"
-        :disabled="!editing"
+        :invalid="!isPhoneValid"
       />
     </IconField>
-    <Textarea
-      rows="10"
-      cols="30"
-      autoResize
-      v-model="profileDescription"
-      placeholder="Profile Description"
-      :disabled="!editing"
-    />
+    <div class="flex flex-col relative">
+      <Textarea
+        class="w-full"
+        rows="10"
+        cols="30"
+        autoResize
+        v-model="profileDescription"
+        :maxlength="UserFunctions.MAX_DESCRIPTION_LENGTH"
+        placeholder="Profile Description"
+      />
+      <div class="absolute bottom-0 right-0 mb-2 mr-3 text-sm text-gray-500">
+        {{ profileDescription.length }}/{{ UserFunctions.MAX_DESCRIPTION_LENGTH }}
+      </div>
+    </div>
 
-    <div v-if="editable" class="flex flex-col">
-      <div v-if="editing" class="flex justify-end gap-4">
-        <Button severity="secondary" label="Cancel" class="w-1/3" @click="cancelForm" />
-        <Button severity="secondary" label="Reset" class="w-1/3" @click="resetForm" />
-        <Button label="Save" class="w-1/3" @click="saveForm" />
-      </div>
-      <div v-else class="flex flex-col justify-center">
-        <Button severity="secondary" label="Edit Profile" @click="editing = true" />
-      </div>
+    <div class="flex flex-row justify-end gap-4">
+      <Button severity="secondary" label="Cancel" class="w-1/3" @click="cancelForm" />
+      <Button severity="secondary" label="Reset" class="w-1/3" @click="resetForm" />
+      <Button label="Save" class="w-1/3" @click="saveForm" />
     </div>
   </div>
 </template>
@@ -64,21 +71,19 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { injectToast } from '@/functions/inject'
-import type { SavedUser } from '@/stores/State.interface'
+import type { SavedUser } from '@/interfaces/user.interface'
 import * as UserFunctions from '@/functions/user'
-import { ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 
 const props = defineProps<{
   user: SavedUser
-  editable: boolean
+  close: () => void
 }>()
 
 const store = useAppStore()
 
 const toast = injectToast()
-
-const editing = ref<boolean>(false)
 
 const profilePicture = ref<string>(props.user.profilePicture)
 const username = ref<string>(props.user.username)
@@ -87,15 +92,9 @@ const fullName = ref<string>(props.user.fullName)
 const phoneNumber = ref<string>(props.user.phoneNumber)
 const profileDescription = ref<string>(props.user.profileDescription)
 
-watch(
-  () => props.user,
-  () => {
-    resetFields()
-  },
-  {
-    deep: true
-  }
-)
+const isPhoneValid = computed(() => UserFunctions.isPhoneValid(phoneNumber.value))
+const isNameValid = computed(() => UserFunctions.isNameValid(fullName.value))
+const isEmailValid = computed(() => UserFunctions.isEmailValid(email.value))
 
 const resetFields = () => {
   profilePicture.value = props.user.profilePicture
@@ -108,7 +107,7 @@ const resetFields = () => {
 
 const cancelForm = () => {
   resetFields()
-  editing.value = false
+  props.close()
 }
 
 const resetForm = () => {
@@ -185,7 +184,7 @@ const saveForm = () => {
     })
     resetFields()
   })
-  editing.value = false
+  props.close()
 }
 </script>
 

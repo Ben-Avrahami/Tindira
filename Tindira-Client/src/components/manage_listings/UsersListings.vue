@@ -1,26 +1,42 @@
 <template>
   <div>
-    <DataView v-if="listings !== undefined" :value="listings" dataKey="listingId">
-      <template #list="slotProps">
-        <div class="grid grid-nogutter gap-5">
-          <div v-for="(item, index) in slotProps.items" :key="index">
-            <UsersListing
-              :listing="item"
-              :showFullAptData="showFullAptData"
-              :showAptLikes="showAptLikes"
-              :showEditAptDialog="showEditAptDialog"
-              :showConfirmDeleteDialog="confirmDelete"
-            />
+    <div v-if="listings !== undefined">
+      <DataView v-if="listings.length" :value="listings" dataKey="listingId">
+        <template #list="slotProps">
+          <div class="grid grid-nogutter gap-5">
+            <div v-for="(item, index) in slotProps.items" :key="index">
+              <UsersListing
+                :listing="item"
+                :showFullAptData="showFullAptData"
+                :showAptLikes="showAptLikes"
+                :showEditAptDialog="showEditAptDialog"
+                :showConfirmDeleteDialog="confirmDelete"
+              />
+            </div>
           </div>
-        </div>
-      </template>
-      <template #empty>
-        <div class="flex text-center justify-center text-2xl">
-          You havent uploaded any listings yet!<br />
-          What are you waiting for?
-        </div>
-      </template>
-    </DataView>
+        </template>
+      </DataView>
+      <div
+        v-else
+        class="flex flex-col items-center justify-center text-lg text-center text-surface-600 dark:text-surface-900 mx-auto px-4 max-w-xl mt-10"
+      >
+        <h2 class="font-bold mb-4">No Listings Found</h2>
+        <p class="mb-4">
+          Your portfolio appears to be empty. This is a golden opportunity to highlight your
+          offerings to potential clients.
+        </p>
+        <p>
+          Ready to make your mark? Click
+          <RouterLink
+            to="/add"
+            class="text-primary-500 hover:text-primary-600 transition duration-200 ease-in-out"
+          >
+            here
+          </RouterLink>
+          to add your first listing.
+        </p>
+      </div>
+    </div>
     <ConfirmDialog />
   </div>
 </template>
@@ -58,7 +74,8 @@ const showAptLikes = async (item: Listing) => {
     props: {
       header: item.title,
       style: {
-        width: '100vw'
+        width: '100%',
+        maxWidth: '896px' // max-w-4xl
       },
       breakpoints: {
         '960px': '75vw',
@@ -83,7 +100,8 @@ const showFullAptData = (item: Listing) => {
     props: {
       header: item.title,
       style: {
-        width: '100vw'
+        width: '100%',
+        maxWidth: '896px' // max-w-4xl
       },
       breakpoints: {
         '960px': '75vw',
@@ -108,7 +126,8 @@ const showEditAptDialog = (item: Listing) => {
     props: {
       header: item.title,
       style: {
-        width: '95vw'
+        width: '100%',
+        maxWidth: '896px' // max-w-4xl
       },
       breakpoints: {
         '960px': '75vw',

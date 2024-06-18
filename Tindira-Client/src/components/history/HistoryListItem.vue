@@ -76,7 +76,8 @@ const showFullAptData = (item: any) => {
     props: {
       header: item.title,
       style: {
-        width: '100vw'
+        width: '100%',
+        maxWidth: '896px' // max-w-4xl
       },
       breakpoints: {
         '960px': '75vw',

@@ -20,7 +20,8 @@ const showFilters = () => {
     props: {
       header: 'Filters',
       style: {
-        width: '95vw'
+        width: '100%',
+        maxWidth: '896px' // max-w-4xl
       },
       breakpoints: {
         '960px': '75vw',

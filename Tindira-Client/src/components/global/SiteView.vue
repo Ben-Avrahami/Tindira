@@ -2,10 +2,10 @@
   <div class="flex flex-col h-full overflow-auto">
     <SiteHeader v-if="appStore.isUserConnected" />
 
-    <main class="container flex flex-col flex-1 h-full mx-auto">
+    <main class="container flex flex-col flex-1 h-full mx-auto max-w-4xl">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
-          <component :is="Component" />
+          <component :is="Component" :key="$route.path" />
         </Transition>
       </RouterView>
     </main>

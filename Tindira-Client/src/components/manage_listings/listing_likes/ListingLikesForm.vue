@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { watchEffect, ref } from 'vue'
 import type { PageState } from 'primevue/paginator'
-import type { SavedUser } from '@/stores/State.interface'
+import type { SavedUser } from '@/interfaces/user.interface'
 import API from '@/api'
 
 import ListingLikesFormCard from './ListingLikesFormCard.vue'

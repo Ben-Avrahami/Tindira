@@ -1,5 +1,6 @@
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import type { Listing, CategoryType } from '@/interfaces/listing.interface'
+import type { SavedUser } from '@/interfaces/user.interface'
 
 export interface State {
   isLoading: boolean
@@ -24,25 +25,3 @@ export interface SelectedFilters {
   radiusInKm: number | number[] | undefined
   isWithPorchOrGarden: boolean
 }
-
-export interface SavedUser {
-  username: string
-  email: string
-  fullName: string
-  phoneNumber: string
-  profileDescription: string
-  profilePicture: string
-  roles: string[]
-  listings: string[]
-}
-
-export const savedUserFields: (keyof SavedUser)[] = [
-  'username',
-  'email',
-  'fullName',
-  'phoneNumber',
-  'profileDescription',
-  'profilePicture',
-  'roles',
-  'listings'
-]
