@@ -105,9 +105,9 @@ class _API {
     return listings
   }
 
-  async isUsernameAvailable(username: string) {
+  async isUsernameTaken(username: string) {
     const response = await this.service.get(`/user/check?username=${username}`)
-    return response.data === 'true'
+    return response.data === true
   }
 
   async registerUser(

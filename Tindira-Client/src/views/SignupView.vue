@@ -38,8 +38,20 @@
           </div>
           <div class="mb-4">
             <IconField>
-              <InputIcon>
+              <InputIcon v-if="!username">
                 <Icon icon="mdi:rename" />
+              </InputIcon>
+              <InputIcon v-else-if="fetchingUsernameTaken">
+                <ProgressSpinner
+                  style="width: 18px; height: 18px; filter: brightness(0.7) sepia(1)"
+                  strokeWidth="8"
+                />
+              </InputIcon>
+              <InputIcon v-else-if="usernameTaken">
+                <Icon icon="mdi:close" class="text-red-500" />
+              </InputIcon>
+              <InputIcon v-else>
+                <Icon icon="mdi:check" class="text-green-500" />
               </InputIcon>
               <InputText id="username" v-model="username" type="text" placeholder="Username" />
             </IconField>
@@ -185,9 +197,9 @@
         <StepperIcon :icon="'mdi:check'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+        <div class="flex flex-col gap-2 mx-auto">
           <StepperTitle title="You're all set!" />
-          <UserForm v-if="userObject" :user="userObject" :editable="false" />
+          <UserBusinessCard v-if="userObject" :user="userObject" />
         </div>
         <div class="flex pt-4 justify-between">
           <BackButton @click="prevCallback" />
@@ -203,7 +215,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { useRouter } from 'vue-router'
 import { injectToast } from '@/functions/inject'
@@ -215,7 +227,7 @@ import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
 import ProfilePicture from '@/components/signup/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
-import UserForm from '@/components/misc/user_form/UserForm.vue'
+import UserBusinessCard from '@/components/misc/user_form/UserBusinessCard.vue'
 
 import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
@@ -241,12 +253,41 @@ const password = ref<string>('')
 
 const USERNAME_MIN_LENGTH = 4
 
+const usernameTaken = ref<boolean>(false)
+const fetchingUsernameTaken = ref<boolean>(false)
+let timeoutId: NodeJS.Timeout | undefined
+const IS_USERNAME_AVAILABLE_DELAY = 800
+
+watch(username, (newUsername) => {
+  if (timeoutId !== undefined) {
+    clearTimeout(timeoutId)
+  }
+  fetchingUsernameTaken.value = true
+  timeoutId = setTimeout(async () => {
+    if (newUsername) {
+      const isUsernameTaken = await API.isUsernameTaken(newUsername)
+      usernameTaken.value = isUsernameTaken || !isUsernameValid(newUsername)
+      fetchingUsernameTaken.value = false
+    }
+  }, IS_USERNAME_AVAILABLE_DELAY)
+})
+
 const isPhoneValid = (): boolean => {
   return !!phone.value && phone.value.trim().length === 12
 }
 
 const isNameValid = (): boolean => {
   return !!name.value && name.value.trim().split(/\s+/).length === 2
+}
+
+const isUsernameValid = (username: string): boolean => {
+  return (
+    !!username &&
+    !username.includes(' ') &&
+    !(username.trim().length < USERNAME_MIN_LENGTH) &&
+    !(username.length > 20) &&
+    !!/^[a-z0-9_]*$/.test(username)
+  )
 }
 
 const validateUsername = (): boolean => {
@@ -334,6 +375,15 @@ const validateBasicInfo = (): boolean => {
   if (!validateUsername()) {
     return false
   }
+  if (usernameTaken.value) {
+    toast.add({
+      severity: 'error',
+      summary: 'Username Taken',
+      detail: 'Please choose a different username',
+      life: 3000
+    })
+    return false
+  }
   if (!isEmailValid()) {
     toast.add({
       severity: 'error',
@@ -371,7 +421,7 @@ const setProfilePicture = (file: File) => {
   uploadProfilePicture().then((profilePictureUrl) => {
     photosManager.resetPhotos()
     photosManager.addPhotosUrls([profilePictureUrl])
-  })
+  }) // lazy upload
 }
 
 // ==== Profile Description Panel ==== //
@@ -488,7 +538,7 @@ const sendSignUpRequest = async () => {
     })
 
     await store.connectUser(userObject.value.username, userObject.value)
-    router.push('/')
+    await router.push('/')
   } catch (error: any) {
     toast.add({
       severity: 'error',
