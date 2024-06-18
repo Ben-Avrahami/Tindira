@@ -8,7 +8,7 @@
           :key="index"
           :severity="category === option ? 'success' : 'secondary'"
           @click="category = option"
-          :disabled="disabled"
+          :disabled="disabled || submitting"
         >
           {{ option }}
         </Button>
@@ -17,7 +17,13 @@
     <InputGroup class="flex flex-col">
       <label class="flex" for="title">Title</label>
       <div class="flex">
-        <InputText id="title" v-model="title" type="text" placeholder="Title" :disabled />
+        <InputText
+          id="title"
+          v-model="title"
+          type="text"
+          placeholder="Title"
+          :disabled="disabled || submitting"
+        />
         <InputGroupAddon>
           <Icon icon="mdi:house" />
         </InputGroupAddon>
@@ -33,7 +39,7 @@
         autoResize
         :maxlength="ListingInterface.MAX_DESCRIPTION_LENGTH"
         placeholder="Description"
-        :disabled
+        :disabled="disabled || submitting"
       />
       <div class="absolute bottom-0 right-0 mb-1.5 mr-3 text-sm text-gray-500">
         {{ description.length }}/{{ ListingInterface.MAX_DESCRIPTION_LENGTH }}
@@ -47,7 +53,7 @@
         v-model="contractStartDate"
         showIcon
         showButtonBar
-        :disabled
+        :disabled="disabled || submitting"
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -58,7 +64,7 @@
         v-model="contractEndDate"
         showIcon
         showButtonBar
-        :disabled
+        :disabled="disabled || submitting"
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -72,7 +78,7 @@
         :min="1"
         :max="ListingInterface.MAX_ROOMS"
         :suffix="numberOfRooms === null ? '' : numberOfRooms > 1 ? ' rooms' : ' room'"
-        :disabled
+        :disabled="disabled || submitting"
       />
     </InputGroup>
     <InputGroup class="flex flex-col">
@@ -86,24 +92,39 @@
         :min="0"
         :max="ListingInterface.MAX_PARKING_SPOTS"
         :suffix="parkingSpaces === 1 ? ' parking spot' : ' parking spots'"
-        :disabled
+        :disabled="disabled || submitting"
       />
     </InputGroup>
     <InputGroup>
-      <Checkbox inputId="animalFriendly" v-model="isAnimalFriendly" binary :disabled />
+      <Checkbox
+        inputId="animalFriendly"
+        v-model="isAnimalFriendly"
+        binary
+        :disabled="disabled || submitting"
+      />
       <label for="animalFriendly" class="ml-2 text-gray-500">
         The apartment is animal friendly 🐈
       </label>
     </InputGroup>
     <InputGroup>
-      <Checkbox inputId="gardenOrPorch" v-model="isWithGardenOrPorch" binary :disabled />
+      <Checkbox
+        inputId="gardenOrPorch"
+        v-model="isWithGardenOrPorch"
+        binary
+        :disabled="disabled || submitting"
+      />
       <label for="gardenOrPorch" class="ml-2 text-gray-500">
         The apartment has a garden or porch 🌳
       </label>
     </InputGroup>
     <InputGroup v-if="category === 'sublet'" class="flex flex-col">
       <div class="mb-2 flex items-center">
-        <RadioButton inputId="price" v-model="isPricePerWholeTime" :value="false" :disabled />
+        <RadioButton
+          inputId="price"
+          v-model="isPricePerWholeTime"
+          :value="false"
+          :disabled="disabled || submitting"
+        />
         <label for="price" class="ml-2">Price is per month</label>
       </div>
       <div class="flex items-center">
@@ -111,7 +132,7 @@
           inputId="pricePerPeriod"
           v-model="isPricePerWholeTime"
           :value="true"
-          :disabled
+          :disabled="disabled || submitting"
         />
         <label for="pricePerPeriod" class="ml-2">Price is per whole period</label>
       </div>
@@ -129,7 +150,7 @@
           currency="ILS"
           locale="he-IL"
           currencyDisplay="symbol"
-          :disabled
+          :disabled="disabled || submitting"
         />
         <InputGroupAddon>
           <Icon icon="mdi:cash-multiple" />
@@ -143,7 +164,7 @@
         :locationString="location?.formatted_address"
         :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
         :locationCleared="() => (location = null)"
-        :disabled
+        :disabled="disabled || submitting"
       />
       <GoogleMap :center="location?.geometry.location" />
     </InputGroup>
@@ -153,7 +174,7 @@
         :images="photosManager.getAllPhotosUrls()"
         :removeImage
         :addImage
-        :editable="!disabled"
+        :editable="!(disabled || submitting)"
       />
     </InputGroup>
     <div v-if="!disabled">
@@ -161,9 +182,26 @@
       <div class="flex flex-col">
         <label class="flex"></label>
         <div class="flex justify-end gap-4">
-          <Button severity="secondary" label="Cancel" class="w-1/3" @click="cancelForm" />
-          <Button severity="secondary" label="Reset" class="w-1/3" @click="resetForm" />
-          <Button label="Save" class="w-1/3" @click="saveForm" />
+          <Button
+            severity="secondary"
+            label="Cancel"
+            class="w-1/3"
+            @click="cancelForm"
+            :disabled="submitting"
+          />
+          <Button
+            severity="secondary"
+            label="Reset"
+            class="w-1/3"
+            @click="resetForm"
+            :disabled="submitting"
+          />
+          <Button
+            label="Save"
+            class="w-1/3"
+            @click="disableButtonsAndSubmit"
+            :disabled="submitting"
+          />
         </div>
       </div>
     </div>
@@ -404,6 +442,14 @@ const constructPayload = async (): Promise<Partial<ListingInterface.Listing>> =>
     payload.parkingSpaces = parkingSpaces.value
 
   return payload
+}
+
+const submitting = ref(false)
+
+const disableButtonsAndSubmit = async () => {
+  submitting.value = true
+  await saveForm()
+  submitting.value = false
 }
 
 const saveForm = async () => {
