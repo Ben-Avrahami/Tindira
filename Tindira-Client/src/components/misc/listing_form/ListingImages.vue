@@ -5,15 +5,15 @@
         v-for="(image, index) in images"
         :key="index"
         :image="image"
-        :removeImage="() => removeImage(image)"
+        :removeImage="() => photosManager.remove([image])"
         :editable="editable"
       />
     </div>
     <div v-if="editable" class="flex flex-col">
       <Button
-        :label="'Add Photos (' + images.length + '/' + ListingInterface.MAX_PICTURES + ')'"
-        @click="fileInput?.click()"
-        :disabled="images.length >= ListingInterface.MAX_PICTURES"
+        :label="'Add Photos (' + images.length + '/' + MAX_PHOTOS + ')'"
+        @click="fileInput?.click() ?? (() => console.warn('fileInput is null'))"
+        :disabled="images.length >= MAX_PHOTOS"
       />
       <input ref="fileInput" type="file" accept="image/*" @change="handleInput" multiple hidden />
     </div>
@@ -21,53 +21,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import ListingImage from './ListingImage.vue'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import { injectToast } from '@/functions/inject'
+import type { PhotosManager } from '@/functions/photosManager'
+import { DEFAULT_MAX_FILE_SIZE, handleFilesUpload } from '@/functions/util'
 
 const toast = injectToast()
 
 const props = defineProps<{
-  images: string[]
-  addImage: (image: File) => void
-  removeImage: (url: string) => void
+  photosManager: PhotosManager
+  username: string
   editable: boolean
 }>()
 
+const MAX_PHOTOS = ListingInterface.MAX_PICTURES
+const MAX_PHOTO_SIZE = DEFAULT_MAX_FILE_SIZE
+
+const images = computed(() => props.photosManager.get())
+
 const fileInput = ref<HTMLInputElement | null>(null)
 
-const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const files = target.files
+const handleInput = async (event: Event) => {
+  const error = await handleFilesUpload(event, props.photosManager, MAX_PHOTO_SIZE, MAX_PHOTOS)
 
-  if (!files) return
-
-  const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-  const MAX_FILE_SIZE_MB = MAX_FILE_SIZE / 1024 / 1024
-
-  if (files.length + props.images.length > ListingInterface.MAX_PICTURES) {
+  if (error) {
     toast.add({
       severity: 'error',
-      summary: 'Too Many Photos',
-      detail: `Please upload a maximum of ${ListingInterface.MAX_PICTURES} photos`,
+      summary: 'Files upload error',
+      detail: error,
       life: 3000
     })
-    return
   }
-
-  Array.from(files).forEach((file) => {
-    if (file.size > MAX_FILE_SIZE) {
-      toast.add({
-        severity: 'error',
-        summary: 'File size is too large',
-        detail: `Please upload a file smaller than ${MAX_FILE_SIZE_MB}MB.`,
-        life: 3000
-      })
-    } else {
-      props.addImage(file)
-    }
-  })
 }
 </script>
 

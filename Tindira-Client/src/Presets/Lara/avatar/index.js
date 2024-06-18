@@ -4,7 +4,8 @@ export default {
             // Font
             {
                 'text-xl': props.size == 'large',
-                'text-2xl': props.size == 'xlarge'
+                'text-2xl': props.size == 'xlarge',
+                'text-4xl': props.size == '2xlarge'
             },
 
             // Alignments
@@ -15,7 +16,8 @@ export default {
             {
                 'h-8 w-8': props.size == null || props.size == 'normal',
                 'w-12 h-12': props.size == 'large',
-                'w-16 h-16': props.size == 'xlarge'
+                'w-16 h-16': props.size == 'xlarge',
+                'w-32 h-32': props.size == '2xlarge'
             },
             { '-ml-4': parent.instance.$style?.name == 'avatargroup' },
 

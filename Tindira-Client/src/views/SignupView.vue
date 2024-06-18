@@ -99,19 +99,15 @@
         <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" />
       </template>
       <template #content="{ prevCallback, nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-          <StepperTitle title="Upload your profile picture" optional />
-          <div class="flex justify-center">
-            <ProfilePicture
-              :profilePicture="photosManager.getAllPhotosUrls()[0] || null"
-              :setProfilePicture
-              :clearProfilePicture
-            />
+        <div class="flex flex-col gap-20 mx-auto">
+          <div class="flex flex-col gap-20 mx-auto" style="min-height: 16rem; max-width: 24rem">
+            <StepperTitle title="Upload your profile picture" optional />
+            <ProfilePicture :username :profilePictureManager />
           </div>
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <NextButton @click="nextCallback" />
+          <div class="flex pt-4 justify-between">
+            <BackButton @click="prevCallback" />
+            <NextButton @click="nextCallback" />
+          </div>
         </div>
       </template>
     </StepperPanel>
@@ -213,11 +209,12 @@ import NextButton from '@/components/signup/NextButton.vue'
 import BackButton from '@/components/signup/BackButton.vue'
 import StepperIcon from '@/components/signup/StepperIcon.vue'
 import StepperTitle from '@/components/signup/StepperTitle.vue'
-import ProfilePicture from '@/components/signup/ProfilePicture.vue'
+// import ProfilePicture from '@/components/signup/ProfilePicture.vue'
+import ProfilePicture from '@/components/misc/ProfilePicture.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
 
-import { type Photo, PhotosManager } from '@/functions/photosManager'
+import { type Photo, ProfilePictureManager } from '@/functions/photosManager'
 import type { SavedUser } from '@/interfaces/user.interface'
 import * as UserFunctions from '@/functions/user'
 
@@ -319,21 +316,8 @@ const validateBasicInfo = (): boolean => {
 
 // ==== Profile Picture Panel ==== //
 
-const photos = ref<Photo[]>([])
-const photosManager = new PhotosManager(photos)
-
-const clearProfilePicture = () => {
-  photosManager.resetPhotos()
-}
-
-const setProfilePicture = (file: File) => {
-  photosManager.resetPhotos()
-  photosManager.addPhotoFile(file)
-  uploadProfilePicture().then((profilePictureUrl) => {
-    photosManager.resetPhotos()
-    photosManager.addPhotosUrls([profilePictureUrl])
-  }) // lazy upload
-}
+const profilePicture = ref<Photo>({ url: '' })
+const profilePictureManager = new ProfilePictureManager(profilePicture)
 
 // ==== Profile Description Panel ==== //
 
@@ -364,7 +348,7 @@ const prepareSignUpPanel = () => {
     username: username.value,
     phoneNumber: phone.value,
     roles: [...(rent.value ? ['renter'] : []), ...(lease.value ? ['lessor'] : [])],
-    profilePicture: photos.value.length ? photos.value[0].url : UserFunctions.DEFAULT_AVATAR,
+    profilePicture: profilePicture.value.url,
     profileDescription: description.value,
     listings: []
   }
@@ -374,26 +358,6 @@ const prepareSignUpPanel = () => {
 
 const userObject = ref<SavedUser | null>(null)
 const submitting = ref<boolean>(false)
-
-const uploadProfilePicture = async (): Promise<string> => {
-  if (!photos.value.length) {
-    return UserFunctions.DEFAULT_AVATAR
-  }
-
-  const path = `users/${username.value}`
-  const file = photos.value[0].file!
-  const { url, error } = await UserFunctions.uploadProfilePicture(file, path)
-  if (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Profile Picture Upload Failed',
-      detail: error,
-      life: 3000
-    })
-  }
-
-  return url
-}
 
 const disableSignUpButtonAndSubmit = async () => {
   submitting.value = true

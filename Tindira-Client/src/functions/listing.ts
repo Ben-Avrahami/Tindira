@@ -1,3 +1,7 @@
+import { uploadImagesToS3 } from './aws'
+
+const S3_LISTINGS_PREFIX = 'listings'
+
 const monthDifference = (startDate: string, endDate: string) => {
   const from = new Date(startDate)
   const to = new Date(endDate)
@@ -26,4 +30,9 @@ export const calculatePrices = (
 
 export const formatDate = (isoDate: Date): string => {
   return isoDate.toISOString().split('T')[0]
+}
+
+export const uploadPhotosToS3 = async (files: File[], listingId: string) => {
+  const path = `${S3_LISTINGS_PREFIX}/${listingId}`
+  return await uploadImagesToS3(files, path)
 }

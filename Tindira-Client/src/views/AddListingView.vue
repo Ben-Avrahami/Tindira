@@ -1,32 +1,40 @@
 <template>
-  <Stepper v-model:activeStep="active">
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:star'" :colorize="index <= active" />
-      </template>
-      <template #content="{ nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-          <StepperTitle title="Let's add a new listing!" />
-          <div class="flex flex-row justify-center gap-4">
-            <ToggleRole
-              icon="mdi:home-city"
-              description="Add apartment for rent"
-              :selected="isRent === true"
-              :toggleRole="() => (isRent = true)"
-            />
-            <ToggleRole
-              icon="mdi:home-clock"
-              description="Add apartment for sublet"
-              :selected="isRent === false"
-              :toggleRole="() => (isRent = false)"
-            />
-          </div>
-        </div>
-        <div class="flex pt-4 justify-between">
-          <Button label="Cancel" severity="secondary" @click="() => router.push('/')" />
-          <NextButton
-            :disabled="isRent === null"
-            @click="
+  <div>
+    <div v-if="!store.connectedUser">
+      <div class="flex flex-col gap-4 items-center">
+        <h1 class="text-2xl font-bold">Please log in to add a listing</h1>
+        <Button label="Log In" @click="() => router.push('/login')" />
+      </div>
+    </div>
+    <div v-else>
+      <Stepper v-model:activeStep="active">
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:star'" :colorize="index <= active" />
+          </template>
+          <template #content="{ nextCallback }">
+            <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+              <StepperTitle title="Let's add a new listing!" />
+              <div class="flex flex-row justify-center gap-4">
+                <ToggleRole
+                  icon="mdi:home-city"
+                  description="Add apartment for rent"
+                  :selected="isRent === true"
+                  :toggleRole="() => (isRent = true)"
+                />
+                <ToggleRole
+                  icon="mdi:home-clock"
+                  description="Add apartment for sublet"
+                  :selected="isRent === false"
+                  :toggleRole="() => (isRent = false)"
+                />
+              </div>
+            </div>
+            <div class="flex pt-4 justify-between">
+              <Button label="Cancel" severity="secondary" @click="() => router.push('/')" />
+              <NextButton
+                :disabled="isRent === null"
+                @click="
                 (event: Event) => {
                   if (validateListingType()) {
                     if (isRent === true) {
@@ -36,206 +44,205 @@
                   }
                 }
               "
-          />
-        </div>
-      </template>
-    </StepperPanel>
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:house'" :colorize="index <= active" />
-      </template>
-      <template #content="{ prevCallback, nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-          <StepperTitle :title="`Adding an apartment for ${isRent ? 'rent' : 'sublet'}!`" />
-          <InputGroup class="mb-4">
-            <Calendar
-              class="w-full"
-              v-model="startDate"
-              placeholder="Starting Date"
-              showIcon
-              showButtonBar
-            />
-          </InputGroup>
-          <InputGroup class="mb-4">
-            <Calendar
-              class="w-full"
-              v-model="endDate"
-              placeholder="Ending Date"
-              showIcon
-              showButtonBar
-            />
-          </InputGroup>
-          <InputGroup class="mb-4">
-            <InputNumber
-              inputId="rooms"
-              v-model="rooms"
-              mode="decimal"
-              showButtons
-              :min="1"
-              :max="ListingInterface.MAX_ROOMS"
-              :suffix="rooms === null ? '' : rooms > 1 ? ' rooms' : ' room'"
-              placeholder="Number of rooms"
-            />
-          </InputGroup>
-          <InputGroup v-if="!isRent" class="mb-4 flex flex-col">
-            <div class="mb-2 flex items-center">
-              <RadioButton inputId="price" v-model="isPricePerMonth" :value="true" />
-              <label for="price" class="ml-2">Price is per month</label>
+              />
             </div>
-            <div class="flex items-center">
-              <RadioButton inputId="pricePerPeriod" v-model="isPricePerMonth" :value="false" />
-              <label for="pricePerPeriod" class="ml-2">Price is per whole period</label>
+          </template>
+        </StepperPanel>
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:house'" :colorize="index <= active" />
+          </template>
+          <template #content="{ prevCallback, nextCallback }">
+            <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+              <StepperTitle :title="`Adding an apartment for ${isRent ? 'rent' : 'sublet'}!`" />
+              <InputGroup class="mb-4">
+                <Calendar
+                  class="w-full"
+                  v-model="startDate"
+                  placeholder="Starting Date"
+                  showIcon
+                  showButtonBar
+                />
+              </InputGroup>
+              <InputGroup class="mb-4">
+                <Calendar
+                  class="w-full"
+                  v-model="endDate"
+                  placeholder="Ending Date"
+                  showIcon
+                  showButtonBar
+                />
+              </InputGroup>
+              <InputGroup class="mb-4">
+                <InputNumber
+                  inputId="rooms"
+                  v-model="rooms"
+                  mode="decimal"
+                  showButtons
+                  :min="1"
+                  :max="ListingInterface.MAX_ROOMS"
+                  :suffix="rooms === null ? '' : rooms > 1 ? ' rooms' : ' room'"
+                  placeholder="Number of rooms"
+                />
+              </InputGroup>
+              <InputGroup v-if="!isRent" class="mb-4 flex flex-col">
+                <div class="mb-2 flex items-center">
+                  <RadioButton inputId="price" v-model="isPricePerMonth" :value="true" />
+                  <label for="price" class="ml-2">Price is per month</label>
+                </div>
+                <div class="flex items-center">
+                  <RadioButton inputId="pricePerPeriod" v-model="isPricePerMonth" :value="false" />
+                  <label for="pricePerPeriod" class="ml-2">Price is per whole period</label>
+                </div>
+              </InputGroup>
+              <InputGroup class="mb-4">
+                <InputNumber
+                  class="w-full"
+                  inputId="price"
+                  v-model="price"
+                  mode="currency"
+                  currency="ILS"
+                  locale="he-IL"
+                  currencyDisplay="symbol"
+                  :placeholder="isPricePerMonth ? 'Price per month' : 'Price per whole period'"
+                />
+                <InputGroupAddon>
+                  <Icon icon="mdi:cash-multiple" />
+                </InputGroupAddon>
+              </InputGroup>
             </div>
-          </InputGroup>
-          <InputGroup class="mb-4">
-            <InputNumber
-              class="w-full"
-              inputId="price"
-              v-model="price"
-              mode="currency"
-              currency="ILS"
-              locale="he-IL"
-              currencyDisplay="symbol"
-              :placeholder="isPricePerMonth ? 'Price per month' : 'Price per whole period'"
-            />
-            <InputGroupAddon>
-              <Icon icon="mdi:cash-multiple" />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <NextButton
-            :disabled="!price || !startDate || !endDate || !rooms"
-            @click="
+            <div class="flex pt-4 justify-between">
+              <BackButton @click="prevCallback" />
+              <NextButton
+                :disabled="!price || !startDate || !endDate || !rooms"
+                @click="
                 (event: Event) => {
                   if (validateBasicInfo()) {
                     nextCallback(event)
                   }
                 }
               "
-          />
-        </div>
-      </template>
-    </StepperPanel>
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:map'" :colorize="index <= active" />
-      </template>
-      <template #content="{ prevCallback, nextCallback }">
-        <div
-          class="flex flex-col gap-2 mx-auto relative"
-          style="min-height: 16rem; max-width: 24rem"
-        >
-          <StepperTitle title="Where is the apartment located?" />
-          <label for="selected-address" class="text-sm text-gray-500">
-            Start typing an address to get suggestions
-          </label>
-          <GoogleMapsAutoComplete
-            :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
-            :locationCleared="() => (location = null)"
-          />
-          <GoogleMap :center="location?.geometry.location" />
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <NextButton
-            :disabled="!location"
-            @click="
+              />
+            </div>
+          </template>
+        </StepperPanel>
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:map'" :colorize="index <= active" />
+          </template>
+          <template #content="{ prevCallback, nextCallback }">
+            <div
+              class="flex flex-col gap-2 mx-auto relative"
+              style="min-height: 16rem; max-width: 24rem"
+            >
+              <StepperTitle title="Where is the apartment located?" />
+              <label for="selected-address" class="text-sm text-gray-500">
+                Start typing an address to get suggestions
+              </label>
+              <GoogleMapsAutoComplete
+                :locationChosen="(loc: SavedGeoCodeGoogleLocation) => location = loc"
+                :locationCleared="() => (location = null)"
+              />
+              <GoogleMap :center="location?.geometry.location" />
+            </div>
+            <div class="flex pt-4 justify-between">
+              <BackButton @click="prevCallback" />
+              <NextButton
+                :disabled="!location"
+                @click="
                 (event: Event) => {
                   if (validateLocation()) {
                     nextCallback(event)
                   }
                 }
               "
-          />
-        </div>
-      </template>
-    </StepperPanel>
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" />
-      </template>
-      <template #content="{ prevCallback, nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-          <StepperTitle title="How does the apartment look like?" />
-          <ListingImages
-            :images="photosManager.getAllPhotosUrls()"
-            :removeImage
-            :addImage
-            editable
-          />
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <NextButton
-            :disabled="!photos.length"
-            @click="
+              />
+            </div>
+          </template>
+        </StepperPanel>
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:camera'" :colorize="index <= active" />
+          </template>
+          <template #content="{ prevCallback, nextCallback }">
+            <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+              <StepperTitle title="How does the apartment look like?" />
+              <ListingImages
+                :photosManager="photosManager"
+                :username="store.connectedUser"
+                editable
+              />
+            </div>
+            <div class="flex pt-4 justify-between">
+              <BackButton @click="prevCallback" />
+              <NextButton
+                :disabled="!photos.length"
+                @click="
                 (event: Event) => {
                   if (validatePhotos()) {
                     nextCallback(event)
                   }
                 }
               "
-          />
-        </div>
-      </template>
-    </StepperPanel>
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:pencil'" :colorize="index <= active" />
-      </template>
-      <template #content="{ prevCallback, nextCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-          <StepperTitle title="What else?" />
-          <InputGroup>
-            <InputText inputId="title" v-model="title" type="text" placeholder="Title" />
-            <InputGroupAddon>
-              <Icon icon="mdi:house" />
-            </InputGroupAddon>
-          </InputGroup>
-          <InputGroup class="flex flex-col w-full relative">
-            <Textarea
-              v-model="description"
-              rows="10"
-              cols="30"
-              autoResize
-              :maxlength="ListingInterface.MAX_DESCRIPTION_LENGTH"
-              placeholder="Description"
-            />
-            <div class="absolute bottom-0 right-0 mb-1.5 mr-3 text-sm text-gray-500">
-              {{ description.length }}/{{ ListingInterface.MAX_DESCRIPTION_LENGTH }}
+              />
             </div>
-          </InputGroup>
-          <InputGroup>
-            <InputNumber
-              inputId="parking"
-              v-model="parkingSpots"
-              mode="decimal"
-              showButtons
-              :min="0"
-              :max="ListingInterface.MAX_PARKING_SPOTS"
-              :suffix="parkingSpots === 1 ? ' parking spot' : ' parking spots'"
-            />
-          </InputGroup>
-          <InputGroup>
-            <Checkbox inputId="animalFriendly" v-model="isAnimalFriendly" binary />
-            <label for="animalFriendly" class="ml-2 text-gray-500">
-              The apartment is animal friendly 🐈
-            </label>
-          </InputGroup>
-          <InputGroup>
-            <Checkbox inputId="gardenOrPorch" v-model="isWithGardenOrPorch" binary />
-            <label for="gardenOrPorch" class="ml-2 text-gray-500">
-              The apartment has a garden or porch 🌳
-            </label>
-          </InputGroup>
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <NextButton
-            :disabled="!title || !description"
-            @click="
+          </template>
+        </StepperPanel>
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:pencil'" :colorize="index <= active" />
+          </template>
+          <template #content="{ prevCallback, nextCallback }">
+            <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+              <StepperTitle title="What else?" />
+              <InputGroup>
+                <InputText inputId="title" v-model="title" type="text" placeholder="Title" />
+                <InputGroupAddon>
+                  <Icon icon="mdi:house" />
+                </InputGroupAddon>
+              </InputGroup>
+              <InputGroup class="flex flex-col w-full relative">
+                <Textarea
+                  v-model="description"
+                  rows="10"
+                  cols="30"
+                  autoResize
+                  :maxlength="ListingInterface.MAX_DESCRIPTION_LENGTH"
+                  placeholder="Description"
+                />
+                <div class="absolute bottom-0 right-0 mb-1.5 mr-3 text-sm text-gray-500">
+                  {{ description.length }}/{{ ListingInterface.MAX_DESCRIPTION_LENGTH }}
+                </div>
+              </InputGroup>
+              <InputGroup>
+                <InputNumber
+                  inputId="parking"
+                  v-model="parkingSpots"
+                  mode="decimal"
+                  showButtons
+                  :min="0"
+                  :max="ListingInterface.MAX_PARKING_SPOTS"
+                  :suffix="parkingSpots === 1 ? ' parking spot' : ' parking spots'"
+                />
+              </InputGroup>
+              <InputGroup>
+                <Checkbox inputId="animalFriendly" v-model="isAnimalFriendly" binary />
+                <label for="animalFriendly" class="ml-2 text-gray-500">
+                  The apartment is animal friendly 🐈
+                </label>
+              </InputGroup>
+              <InputGroup>
+                <Checkbox inputId="gardenOrPorch" v-model="isWithGardenOrPorch" binary />
+                <label for="gardenOrPorch" class="ml-2 text-gray-500">
+                  The apartment has a garden or porch 🌳
+                </label>
+              </InputGroup>
+            </div>
+            <div class="flex pt-4 justify-between">
+              <BackButton @click="prevCallback" />
+              <NextButton
+                :disabled="!title || !description"
+                @click="
                 (event: Event) => {
                   if (validateAdditionalInfo()) {
                     prepareAddListingRequest()
@@ -243,32 +250,34 @@
                   }
                 }
               "
-          />
-        </div>
-      </template>
-    </StepperPanel>
-    <StepperPanel>
-      <template #header="{ index }">
-        <StepperIcon :icon="'mdi:check'" :colorize="index <= active" />
-      </template>
-      <template #content="{ prevCallback }">
-        <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-          <StepperTitle title="The listing is ready to upload!" />
-          <div class="flex justify-center">
-            <EditListingForm v-if="listing" :listing :exit="() => {}" disabled />
-          </div>
-        </div>
-        <div class="flex pt-4 justify-between">
-          <BackButton @click="prevCallback" />
-          <Button
-            :label="submitting ? 'wait...' : 'Upload!'"
-            @click="sendUploadRequest"
-            :disabled="submitting"
-          />
-        </div>
-      </template>
-    </StepperPanel>
-  </Stepper>
+              />
+            </div>
+          </template>
+        </StepperPanel>
+        <StepperPanel>
+          <template #header="{ index }">
+            <StepperIcon :icon="'mdi:check'" :colorize="index <= active" />
+          </template>
+          <template #content="{ prevCallback }">
+            <div class="flex flex-col gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+              <StepperTitle title="The listing is ready to upload!" />
+              <div class="flex justify-center">
+                <EditListingForm v-if="listing" :listing :exit="() => {}" disabled />
+              </div>
+            </div>
+            <div class="flex pt-4 justify-between">
+              <BackButton @click="prevCallback" />
+              <Button
+                :label="submitting ? 'wait...' : 'Upload!'"
+                @click="sendUploadRequest"
+                :disabled="submitting"
+              />
+            </div>
+          </template>
+        </StepperPanel>
+      </Stepper>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -289,7 +298,6 @@ import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
-import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
 import EditListingForm from '@/components/manage_listings/listing_edit/EditListingForm.vue'
 import { calculatePrices, formatDate } from '@/functions/listing'
@@ -426,14 +434,6 @@ const validateLocation = (): boolean => {
 const photos = ref<Photo[]>([])
 const photosManager = new PhotosManager(photos)
 
-const addImage = (image: File) => {
-  photosManager.addPhotoFile(image)
-}
-
-const removeImage = (url: string) => {
-  photosManager.removePhoto(url)
-}
-
 const validatePhotos = (): boolean => {
   if (!photos.value.length) {
     toast.add({
@@ -539,7 +539,7 @@ const prepareAddListingRequest = () => {
       place_id: coordinates.place_id
     },
     isActive: true,
-    images: photosManager.getAllPhotosUrls(),
+    images: photosManager.get(),
     pricePerWholeTime: pricePerWholeTime,
     pricePerMonth: pricePerMonth,
     // a little hack below
@@ -561,14 +561,28 @@ const sendUploadRequest = async () => {
   try {
     submitting.value = true
     const newListingId = await store.postListing(listing.value)
+    photosManager.save(newListingId).then(({ urls, errors }) => {
+      // upload images lazily
+      if (errors.length) {
+        console.error(errors)
+        toast.add({
+          severity: 'warn',
+          summary: 'Attention',
+          detail: `${errors.length}/${errors.length + urls.length} image(s) failed to upload`,
+          life: 3000
+        })
+      }
+      if (urls.length) {
+        store.updateConnectedUserListing(newListingId, { images: urls })
+      }
+    })
     toast.add({
       severity: 'success',
       summary: 'Listing Uploaded',
       detail: 'Your listing has been uploaded successfully!',
       life: 3000
     })
-    uploadImages(newListingId)
-    await router.push('/')
+    router.push('/')
   } catch (error: any) {
     console.error(error)
     toast.add({
@@ -579,27 +593,6 @@ const sendUploadRequest = async () => {
     })
   } finally {
     submitting.value = false
-  }
-}
-
-const uploadImages = async (listingId: string): Promise<void> => {
-  const path = `listings/${listingId}`
-  const files = photosManager.getFiles()
-  const { urls, errors } = await uploadImagesToS3(files, path)
-  errors.forEach((error) => {
-    toast.add({
-      severity: 'error',
-      summary: 'Listing Image Upload Failed',
-      detail: error,
-      life: 3000
-    })
-  })
-
-  if (urls.length) {
-    await store.updateConnectedUserListing(listingId, {
-      images: urls
-    })
-    photosManager.removePhotos(urls)
   }
 }
 </script>

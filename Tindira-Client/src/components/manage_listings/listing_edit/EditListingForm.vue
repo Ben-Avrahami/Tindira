@@ -171,9 +171,8 @@
     <InputGroup class="flex flex-col">
       <label class="flex">Images</label>
       <ListingImages
-        :images="photosManager.getAllPhotosUrls()"
-        :removeImage
-        :addImage
+        :username="listing.ownerId"
+        :photosManager
         :editable="!(disabled || submitting)"
       />
     </InputGroup>
@@ -214,10 +213,10 @@ import { ref, watch } from 'vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { injectToast } from '@/functions/inject'
-import { uploadImagesToS3 } from '@/functions/aws'
 import { type Photo, PhotosManager } from '@/functions/photosManager'
 import { calculatePrices, formatDate } from '@/functions/listing'
 import { useAppStore } from '@/stores/app'
+import { arraysEqual } from '@/functions/util'
 
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
@@ -250,23 +249,6 @@ const parkingSpaces = ref<number>(props.listing.parkingSpaces)
 
 const photos = ref<Photo[]>([])
 const photosManager = new PhotosManager(photos, [...props.listing.images])
-
-const addImage = (file: File) => {
-  if (photos.value.length >= ListingInterface.MAX_PICTURES) {
-    toast.add({
-      severity: 'error',
-      summary: 'Too Many Photos',
-      detail: `Please upload a maximum of ${ListingInterface.MAX_PICTURES} photos`,
-      life: 3000
-    })
-    return
-  }
-  photosManager.addPhotoFile(file)
-}
-
-const removeImage = (url: string) => {
-  photosManager.removePhoto(url)
-}
 
 watch(contractStartDate, (newValue, oldValue) => {
   if (newValue) {
@@ -306,7 +288,7 @@ const resetFields = () => {
     : props.listing.pricePerMonth
   numberOfRooms.value = props.listing.numberOfRooms
   location.value = { ...props.listing.coordinates }
-  photosManager.resetPhotos([...props.listing.images])
+  photosManager.reset([...props.listing.images])
   title.value = props.listing.title
   description.value = props.listing.description
   isAnimalFriendly.value = props.listing.isAnimalFriendly
@@ -377,30 +359,8 @@ const validateForm = () => {
   return true
 }
 
-function arraysEqual<T>(a: T[], b: T[]): boolean {
-  return a.length === b.length && [...a].sort().every((val, index) => val === [...b].sort()[index])
-}
-
 const constructPayload = async (): Promise<Partial<ListingInterface.Listing>> => {
   const payload: Partial<ListingInterface.Listing> = {}
-
-  // upload new images to S3
-  const newImages = photosManager.getFiles()
-  let imagesToPayload: string[] = [...photosManager.getOldPhotosUrls()]
-  if (newImages.length > 0) {
-    const path = `listings/${props.listing.listingId}`
-    const { urls, errors } = await uploadImagesToS3(newImages, path)
-    if (errors.length > 0) {
-      toast.add({
-        severity: 'error',
-        summary: `Failed to upload ${errors.length} image(s)`,
-        detail: errors.join(', '),
-        life: 3000
-      })
-      console.error(`Failed to upload ${errors.length} image(s):`, errors)
-    }
-    imagesToPayload = imagesToPayload.concat(urls)
-  }
 
   const formattedStartDate = formatDate(contractStartDate.value)
   const formattedEndDate = formatDate(contractEndDate.value)
@@ -431,7 +391,7 @@ const constructPayload = async (): Promise<Partial<ListingInterface.Listing>> =>
     payload.numberOfRooms = numberOfRooms.value
   if (JSON.stringify(location.value) !== JSON.stringify(props.listing.coordinates))
     payload.coordinates = location.value as SavedGeoCodeGoogleLocation
-  if (!arraysEqual(imagesToPayload, props.listing.images)) payload.images = imagesToPayload
+  if (!arraysEqual(photosManager.get(), props.listing.images)) payload.images = photosManager.get()
   if (title.value !== props.listing.title) payload.title = title.value
   if (description.value !== props.listing.description) payload.description = description.value
   if (isAnimalFriendly.value !== props.listing.isAnimalFriendly)
@@ -477,6 +437,31 @@ const saveForm = async () => {
     resetFields()
     console.error(error)
   })
+
+  photosManager
+    .save(props.listing.listingId)
+    .then(({ urls, errors }) => {
+      if (errors.length) {
+        toast.add({
+          severity: 'error',
+          summary: `Failed to upload ${errors.length} image(s)`,
+          detail: errors.join(', '),
+          life: 3000
+        })
+        console.error(`Failed to upload ${errors.length} image(s):`, errors)
+      }
+      if (urls) {
+        store.updateConnectedUserListing(props.listing.listingId, { images: urls })
+      }
+    })
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.message,
+        life: 3000
+      })
+    })
 
   props.exit()
 }

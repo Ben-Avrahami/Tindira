@@ -34,7 +34,7 @@ import type { SavedUser } from '@/interfaces/user.interface'
 import { useDialog } from 'primevue/usedialog'
 import { defineAsyncComponent } from 'vue'
 
-import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
+// import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
 import UserFormPreview from './UserFormPreview.vue'
 
 const store = useAppStore()

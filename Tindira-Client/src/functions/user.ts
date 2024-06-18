@@ -4,6 +4,8 @@ export const MIN_USERNAME_LENGTH = 4
 export const MAX_DESCRIPTION_LENGTH = 500
 export const DEFAULT_AVATAR = 'https://tindira.s3.us-east-2.amazonaws.com/avatar-placeholder.png'
 
+const S3_USERNAME_PREFIX = 'users'
+
 export const isPhoneValid = (phone: string): boolean => {
   return !!phone && phone.trim().length === 12
 }
@@ -53,11 +55,11 @@ export const isPasswordStrong = (password: string): boolean => {
   return regex.test(password)
 }
 
-export const uploadProfilePicture = async (file: File, username: string) => {
-  const path = `users/${username}`
+export const uploadImageToS3 = async (file: File, username: string) => {
+  const path = `${S3_USERNAME_PREFIX}/${username}`
   const { urls, errors } = await uploadImagesToS3([file], path)
-  if (errors.length > 0) {
-    return { url: DEFAULT_AVATAR, error: errors[0] }
+  if (errors.length) {
+    return { error: errors[0] }
   }
 
   return { url: urls[0] }
