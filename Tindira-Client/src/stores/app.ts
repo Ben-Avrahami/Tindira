@@ -83,6 +83,19 @@ export const useAppStore = defineStore('app', {
         throw error // Re-throw the error to be handled by the caller
       }
     },
+    async deleteConnectedUser() {
+      if (!this.connectedUser) {
+        throw new Error('User not connected')
+      }
+
+      try {
+        await API.deleteUser(this.connectedUser)
+        this.disconnectUser()
+      } catch (error) {
+        console.error(error)
+        throw error // Re-throw the error to be handled by the caller
+      }
+    },
     async getNextListing(amount: number) {
       const ignoreIds = this.nextListingsArr.map((listing) => listing.listingId)
       const newListings = await API.getNextListings(

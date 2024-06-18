@@ -85,6 +85,10 @@ class _API {
     return await this.service.put(`/user?username=${username}`, payload)
   }
 
+  async deleteUser(username: string) {
+    return await this.service.delete(`/user?username=${username}`)
+  }
+
   async getListingsById(ids: string[]): Promise<Listing[]> {
     if (ids.length === 0) return []
     const idsString = ids.join(',')
