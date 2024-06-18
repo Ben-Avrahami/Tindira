@@ -8,7 +8,9 @@
           <Button
             v-for="(option, index) in ListingInterface.categories"
             :key="index"
-            :severity="selectedCategory === option ? 'success' : 'secondary'"
+            :severity="
+              selectedCategory === option ? (showLikes ? 'success' : undefined) : 'secondary'
+            "
             :label="option"
             @click="() => alternameCategory(option)"
           />
@@ -30,7 +32,7 @@
           <Button severity="secondary" @click="alternateLikesDislikes">
             <template #icon>
               <Icon v-if="showLikes" icon="mdi:thumb-up" class="text-green-500" />
-              <Icon v-else icon="mdi:thumb-down" class="text-red-500" />
+              <Icon v-else icon="mdi:thumb-down" class="text-primary-500" />
             </template>
           </Button>
         </div>
