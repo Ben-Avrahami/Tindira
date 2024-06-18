@@ -1,27 +1,25 @@
 <template>
-  <article class="flex flex-col items-center justify-center p-8 text-justify gap-5">
+  <article class="flex flex-col items-center justify-center p-8 gap-5 text-center">
     <ViewTitle>About Us</ViewTitle>
     <section>
       <p class="text-lg leading-relaxed">
-        Our application is built with cutting-edge technology to provide the best user experience.
-        We focus on performance, design, and usability to ensure that our users have the best
-        experience possible.
+        <b> Tindira: Your Next Home, A Swipe Away​</b>
       </p>
     </section>
     <section>
-      <h2 class="text-3xl font-semibold mb-6 text-center">Our Vision</h2>
+      <h2 class="text-3xl font-semibold mb-6">Our Vision</h2>
       <p class="text-lg leading-relaxed">
-        Our vision is to be the leading provider of cutting-edge technology solutions that enhance
-        the lives of our users. We aim to create a positive impact on the world by providing
-        innovative solutions that empower our users to achieve their goals.
+        Tindira is a mobile application that aims to streamline the apartment hunting process by enabling users to swipe left or right on apartment listings,
+        similar to today's popular dating apps. The app fills a gap in the current market by providing
+        a user-friendly interface to filter and browse available apartments based on location, price, size, and other preferences.​
       </p>
     </section>
     <section>
-      <h2 class="text-3xl font-semibold mb-6 text-center">Why Us?</h2>
+      <h2 class="text-3xl font-semibold mb-6">Why Us?</h2>
       <p class="text-lg leading-relaxed">
-        Our mission is to create innovative solutions that empower our users to achieve their goals.
-        We strive to provide the best user experience by focusing on performance, design, and
-        usability.
+        Our mission is to create innovative solutions that empower users to find their dream apartments and help 
+        apartment owners connect with their ideal tenants. We are dedicated to providing the best user experience by
+        focusing on performance, design, and usability.
       </p>
     </section>
     <Divider />
@@ -64,25 +62,37 @@ interface TeamMember {
 
 const team = ref<TeamMember[]>([
   {
-    name: 'Alice Johnson',
-    role: 'CEO & Founder',
+    name: 'Ben Avrahami',
+    role: 'Front End Developer',
     description:
-      'Alice is the visionary behind our company with a passion for technology and innovation.',
-    image: 'https://randomuser.me/api/portraits/women/1.jpg'
+      'Ben is a dedicated developer with a passion for creating beautiful and responsive user interfaces.',
+    image: 'https://tindira.s3.us-east-2.amazonaws.com/users/bens/cropped_image+(4).png'
   },
   {
-    name: 'Bob Smith',
-    role: 'Lead Developer',
-    description: 'Bob is our lead developer with extensive experience in full-stack development.',
-    image: 'https://randomuser.me/api/portraits/men/2.jpg'
+    name: 'Yoni Simian',
+    role: 'Front End Developer',
+    description: 'Yoni is a skilled developer with a keen eye for detail and design.',
+    image: 'https://tindira.s3.us-east-2.amazonaws.com/users/yonisimian/yoni.png'
   },
   {
-    name: 'Catherine Lee',
-    role: 'UI/UX Designer',
+    name: 'Mor Simha​',
+    role: 'Back End Developer',
     description:
-      'Catherine designs intuitive user interfaces that ensure a seamless user experience.',
-    image: 'https://randomuser.me/api/portraits/women/3.jpg'
-  }
+      'Mor is a talented developer with a strong passion for building scalable and efficient applications.',
+    image: 'https://tindira.s3.us-east-2.amazonaws.com/users/morty/morty.png'
+  },
+  {
+    name: 'Gal Ben Artzi',
+    role: 'Back End Developer',
+    description:'Gal is a proficient developer who excels at integrating complex systems and ensuring seamless backend operations.',
+    image: 'https://tindira.s3.us-east-2.amazonaws.com/users/galben/galben.png'
+  },
+  {
+    name: 'Omer Komissrachik',
+    role: 'Back End Developer',
+    description:' Omer is an enthusiastic developer who is dedicated to creating seamless and efficient backend systems.',
+    image: 'https://tindira.s3.us-east-2.amazonaws.com/users/omer/omer.png'
+  },
 ])
 </script>
 
