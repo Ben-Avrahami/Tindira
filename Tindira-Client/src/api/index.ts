@@ -1,4 +1,4 @@
-import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
 import { type SavedUser, type SelectedFilters, savedUserFields } from '@/stores/State.interface'
 
@@ -20,22 +20,8 @@ class _API {
     this.service = service
   }
 
-  handleSuccess(response: AxiosResponse) {
-    return response
-  }
-
-  handleError = (error: AxiosError) => {
-    console.log(error?.response?.status + 'error, the response message: ' + error.response)
-    return Promise.reject(error)
-  }
-
-  redirectTo = (document: { location: any }, path: any) => {
-    document.location = path
-  }
-
   async checkHealth() {
-    const response = await this.service.get('/health')
-    return response
+    return await this.service.get('/health')
   }
 
   async getNextListings(
@@ -106,8 +92,7 @@ class _API {
   }
 
   async isUsernameTaken(username: string) {
-    const response = await this.service.get(`/user/check?username=${username}`)
-    return response.data === true
+    return await this.service.get(`/user/check?username=${username}`)
   }
 
   async registerUser(
@@ -120,7 +105,7 @@ class _API {
     profilePicture: string,
     profileDescription: string
   ) {
-    const response = await this.service.post('/register', {
+    return await this.service.post('/register', {
       username: username,
       email: email,
       fullName: fullName,
@@ -130,32 +115,25 @@ class _API {
       profilePicture: profilePicture,
       profileDescription: profileDescription
     })
-    return response
   }
 
   async loginUser(username: string, password: string) {
-    const response = await this.service.post('/login', {
+    return await this.service.post('/login', {
       username: username,
       password: password
     })
-    return response
   }
 
   async postListing(payload: Listing, username: string) {
-    const response = await this.service.post(`/listings?username=${username}`, payload)
-    return response
+    return await this.service.post(`/listings?username=${username}`, payload)
   }
 
   async updateListing(listingId: string, payload: Partial<Listing>) {
-    const response = await this.service.put(`/listings?listingId=${listingId}`, payload)
-    return response
+    return await this.service.put(`/listings?listingId=${listingId}`, payload)
   }
 
   async deleteListing(listingId: string, username: string) {
-    const response = await this.service.delete(
-      `/listings?listingId=${listingId}&username=${username}`
-    )
-    return response
+    return await this.service.delete(`/listings?listingId=${listingId}&username=${username}`)
   }
 }
 
