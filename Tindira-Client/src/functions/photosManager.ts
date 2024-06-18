@@ -29,13 +29,12 @@ export class PhotosManager {
     return url
   }
 
-  removePhoto(url: string): boolean {
-    const index = this.photosRef.value.findIndex((photo) => photo.url === url)
-    if (index !== -1) {
-      this.photosRef.value.splice(index, 1)
-      return true
-    }
-    return false
+  removePhoto(url: string): void {
+    this.photosRef.value = this.photosRef.value.filter((photo) => photo.url !== url)
+  }
+
+  removePhotos(urls: string[]): void {
+    this.photosRef.value = this.photosRef.value.filter((photo) => !urls.includes(photo.url))
   }
 
   getOldPhotosUrls(): string[] {

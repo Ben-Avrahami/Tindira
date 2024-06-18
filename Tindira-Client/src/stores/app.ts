@@ -103,6 +103,40 @@ export const useAppStore = defineStore('app', {
         throw error // Re-throw the error to be handled by the caller
       }
     },
+    async deleteListing(listingId: string) {
+      if (!this.connectedUser) {
+        throw new Error('User not connected')
+      }
+
+      const index = this.connectedUserListings.findIndex(
+        (listing) => listing.listingId === listingId
+      )
+
+      if (index === -1) {
+        throw new Error(`Listing ${listingId} not found`)
+      }
+
+      this.connectedUserListings.splice(index, 1)
+
+      try {
+        return await API.deleteListing(listingId, this.connectedUser)
+      } catch (error) {
+        console.error(error)
+        this.connectedUserListings.splice(index, 0, this.connectedUserListings[index]) // Rollback on error
+        throw error // Re-throw the error to be handled by the caller
+      }
+    },
+    async postListing(listing: Listing) {
+      if (!this.connectedUser) {
+        throw new Error('User not connected')
+      }
+
+      const response = await API.postListing(listing, this.connectedUser)
+      const newListingId = response.data.listingId
+      listing.listingId = newListingId
+      this.connectedUserListings.push(listing)
+      return newListingId
+    },
     async updateFilters(newFilters: SelectedFilters) {
       if (JSON.stringify(this.SelectedFilters) !== JSON.stringify(newFilters)) {
         this.nextListingsArr = []

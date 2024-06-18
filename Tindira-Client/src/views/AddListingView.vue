@@ -286,7 +286,6 @@ import ListingImages from '@/components/misc/listing_form/ListingImages.vue'
 import ToggleRole from '@/components/signup/ToggleRole.vue'
 import GoogleMap from '@/components/misc/google_maps/GoogleMap.vue'
 
-import API from '@/api'
 import * as ListingInterface from '@/interfaces/listing.interface'
 import GoogleMapsAutoComplete from '@/components/misc/google_maps/GoogleMapsAutoComplete.vue'
 import type { SavedGeoCodeGoogleLocation } from '@/interfaces/geolocation.interface'
@@ -562,16 +561,15 @@ const sendUploadRequest = async () => {
   }
   try {
     submitting.value = true
-    const response = await API.postListing(listing.value, store.connectedUser)
+    const newListingId = await store.postListing(listing.value)
     toast.add({
       severity: 'success',
       summary: 'Listing Uploaded',
       detail: 'Your listing has been uploaded successfully!',
       life: 3000
     })
-    console.log('response: ', response)
-    uploadImages(response.data.listingId)
-    router.push('/')
+    uploadImages(newListingId)
+    await router.push('/')
   } catch (error: any) {
     console.log(error)
     toast.add({
@@ -599,19 +597,10 @@ const uploadImages = async (listingId: string): Promise<void> => {
   })
 
   if (urls.length) {
-    store
-      .updateConnectedUserListing(listingId, {
-        images: urls
-      })
-      .catch((error) => {
-        toast.add({
-          severity: 'error',
-          summary: 'Listing Image Upload Failed',
-          detail: error?.response?.body ?? "Couldn't upload the listing's images :(",
-          life: 3000
-        })
-        console.error(error)
-      })
+    await store.updateConnectedUserListing(listingId, {
+      images: urls
+    })
+    photosManager.removePhotos(urls)
   }
 }
 </script>

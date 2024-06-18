@@ -34,8 +34,6 @@ import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import { useAppStore } from '@/stores/app'
 
-import API from '@/api'
-
 const store = useAppStore()
 
 const confirm = useConfirm()
@@ -131,9 +129,13 @@ const confirmDelete = async (item: Listing) => {
     rejectLabel: 'Cancel',
     accept: async () => {
       try {
-        if (!store.connectedUser) throw new Error('User not connected')
-        await API.deleteListing(item.listingId, store.connectedUser)
-        toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Listing deleted', life: 3000 })
+        await store.deleteListing(item.listingId)
+        toast.add({
+          severity: 'success',
+          summary: 'Confirmed',
+          detail: 'Listing deleted successfully!',
+          life: 3000
+        })
       } catch (error: any) {
         const errorMessage = error?.response?.data?.message || error?.message || 'Unknown error'
         toast.add({
