@@ -1,5 +1,5 @@
 <template>
-  <Card class="w-4/5 mx-auto">
+  <Card class="w-4/5 mx-auto" @dblclick="showFullAptData">
     <template #header>
       <div>
         <ImageCarousel :key="rerenderer" :images="listing.images" />

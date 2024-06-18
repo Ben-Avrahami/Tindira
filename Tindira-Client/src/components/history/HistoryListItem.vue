@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3">
+  <div
+    class="flex flex-col sm:flex-row sm:items-center p-4 gap-3"
+    @dblclick="() => showFullAptData(listing)"
+  >
     <div class="md:max-w-[60%] mx-auto relative">
       <Image class="block mx-auto rounded-md w-full" :src="listing.images[0]" />
       <Tag :value="tagText" :severity="getSeverity" class="left-1 top-1 absolute" />
