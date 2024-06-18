@@ -11,13 +11,13 @@
             <ToggleRole
               icon="mdi:home-city"
               description="Add apartment for rent"
-              :role="isRent === true"
+              :selected="isRent === true"
               :toggleRole="() => (isRent = true)"
             />
             <ToggleRole
               icon="mdi:home-clock"
               description="Add apartment for sublet"
-              :role="isRent === false"
+              :selected="isRent === false"
               :toggleRole="() => (isRent = false)"
             />
           </div>

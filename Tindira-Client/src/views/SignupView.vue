@@ -153,13 +153,13 @@
             <ToggleRole
               icon="mdi:home-search"
               description="I want to search an apartment"
-              :role="rent"
+              :selected="rent"
               :toggleRole="() => (rent = !rent)"
             />
             <ToggleRole
               icon="mdi:home-city"
               description="I want to post an apartment"
-              :role="lease"
+              :selected="lease"
               :toggleRole="() => (lease = !lease)"
             />
           </div>

@@ -1,8 +1,11 @@
 <template>
   <Button
-    class="flex flex-col aspect-[3/2] items-center justify-center border-transparent hover:border-transparent"
+    class="flex flex-col aspect-[4/3] items-center justify-center border-hidden"
     :class="[
-      { 'bg-primary-500 hover:bg-primary-600': role, 'bg-surface-500 hover:bg-surface-600': !role }
+      {
+        'bg-primary-500 dark:bg-primary-500 hover:bg-primary-600': selected,
+        'bg-surface-500 dark:bg-surface-500 hover:bg-surface-600': !selected
+      }
     ]"
     @click="toggleRole"
   >
@@ -17,7 +20,7 @@ import { Icon } from '@iconify/vue'
 defineProps<{
   icon: string
   description: string
-  role: boolean
+  selected: boolean
   toggleRole: () => void
 }>()
 </script>
