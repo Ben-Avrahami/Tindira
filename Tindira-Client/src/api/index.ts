@@ -1,15 +1,9 @@
+import axios, { type AxiosInstance } from 'axios'
+import { isListingInterface, type Listing } from '@/interfaces/listing.interface'
 import type { SelectedFilters } from '@/stores/State.interface'
-import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
+import { type SavedUser, savedUserFields } from '@/interfaces/user.interface'
 
-type OptionalField =
-  | 'history'
-  | 'fullName'
-  | 'listings'
-  | 'phoneNumber'
-  | 'profileDescription'
-  | 'profilePicture'
-  | 'reviews'
-  | 'roles'
+type OptionalField = keyof SavedUser | 'history' | 'listings' | 'reviews'
 
 ////////////////////////////////////////////////
 //                API SECTION
@@ -27,22 +21,8 @@ class _API {
     this.service = service
   }
 
-  handleSuccess(response: AxiosResponse) {
-    return response
-  }
-
-  handleError = (error: AxiosError) => {
-    console.log(error?.response?.status + 'error, the response message: ' + error.response)
-    return Promise.reject(error)
-  }
-
-  redirectTo = (document: { location: any }, path: any) => {
-    document.location = path
-  }
-
   async checkHealth() {
-    const response = await this.service.get('/health')
-    return response
+    return await this.service.get('/health')
   }
 
   async getNextListings(
@@ -51,14 +31,13 @@ class _API {
     username: string,
     ignoreIds: string[]
   ) {
-    const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : '';
+    const ignoreListings = ignoreIds.length > 0 ? ignoreIds.join(',') : ''
     const response = await this.service.post(
       `/listings/getNext?username=${username}&amount=${amount.toString()}&ignoreListings=${ignoreListings}`,
       {
-        "filters": filters
+        filters: filters
       }
     )
-    console.log(response)
     return response.data
   }
 
@@ -66,16 +45,13 @@ class _API {
     const response = await this.service.put(
       `/listings/tag?username=${username}&listingId=${listingId}&isLike=${isLike.toString()}`
     )
-    console.log(response)
     return response.data
   }
-
 
   async getListingLikedBy(listingId: string, page: number = 1, items: number = 10) {
     const response = await this.service.get(
       `/user/getListingLikedBy?listingId=${listingId}&page=${page.toString()}&items=${items.toString()}`
     )
-    console.log(response)
     return response.data
   }
   async getCategoryHistory(
@@ -88,21 +64,37 @@ class _API {
     const response = await this.service.get(
       `/user/getHistory?username=${username}&category=${category}&showLikes=${showLikes.toString()}&page=${page.toString()}&items=${items.toString()}`
     )
-    console.log(response)
     return response.data
   }
 
   async getUsersByUserName(usernames: string[], optionalFields: OptionalField[] = []) {
-    let usernamesString = usernames.join(',')
-    let optionalFieldsString = optionalFields.join(',')
-    const response = await this.service.get(`/user?username=${usernamesString}&fields=${optionalFieldsString}`)
-    console.log(response)
+    const usernamesString = usernames.join(',')
+    const optionalFieldsString = optionalFields.join(',')
+    const response = await this.service.get(
+      `/user?username=${usernamesString}&fields=${optionalFieldsString}`
+    )
     return response.data
   }
-  async getListingsById(ids: string[]) {
-    let idsString = ids.join(',')
+
+  async getUser(username: string) {
+    const users = await this.getUsersByUserName([username], savedUserFields)
+    return users[0]
+  }
+
+  async updateUser(username: string, payload: Partial<SavedUser>) {
+    return await this.service.put(`/user?username=${username}`, payload)
+  }
+
+  async getListingsById(ids: string[]): Promise<Listing[]> {
+    if (ids.length === 0) return []
+    const idsString = ids.join(',')
     const response = await this.service.get(`listings?id=${idsString}`)
-    console.log(response)
+    const listings = response.data.filter(isListingInterface)
+    return listings
+  }
+
+  async isUsernameTaken(username: string) {
+    const response = await this.service.get(`/user/check?username=${username}`)
     return response.data
   }
 
@@ -116,7 +108,7 @@ class _API {
     profilePicture: string,
     profileDescription: string
   ) {
-    const response = await this.service.post('/register', {
+    return await this.service.post('/register', {
       username: username,
       email: email,
       fullName: fullName,
@@ -126,15 +118,25 @@ class _API {
       profilePicture: profilePicture,
       profileDescription: profileDescription
     })
-    return response
   }
 
   async loginUser(username: string, password: string) {
-    const response = await this.service.post('/login', {
+    return await this.service.post('/login', {
       username: username,
       password: password
     })
-    return response
+  }
+
+  async postListing(payload: Listing, username: string) {
+    return await this.service.post(`/listings?username=${username}`, payload)
+  }
+
+  async updateListing(listingId: string, payload: Partial<Listing>) {
+    return await this.service.put(`/listings?listingId=${listingId}`, payload)
+  }
+
+  async deleteListing(listingId: string, username: string) {
+    return await this.service.delete(`/listings?listingId=${listingId}&username=${username}`)
   }
 }
 

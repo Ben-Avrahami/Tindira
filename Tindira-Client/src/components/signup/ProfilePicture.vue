@@ -42,8 +42,9 @@ import { Icon } from '@iconify/vue'
 import { injectToast } from '@/functions/inject'
 
 const props = defineProps<{
-  profilePicture: string
-  setProfilePicture: (image: string) => void
+  profilePicture: string | null
+  setProfilePicture: (file: File) => void
+  clearProfilePicture: () => void
 }>()
 
 const toast = injectToast()
@@ -55,7 +56,7 @@ const replaceImage = () => {
 }
 
 const removeImage = () => {
-  props.setProfilePicture('')
+  props.clearProfilePicture()
 }
 
 const handleFileUpload = (event: Event) => {
@@ -76,13 +77,7 @@ const handleFileUpload = (event: Event) => {
     return
   }
 
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    props.setProfilePicture(e.target?.result as string)
-    // NOTE: I found a bug here!
-    // If an image was removed, it cannot be uploaded again until another image has been uploaded.
-  }
-  reader.readAsDataURL(file)
+  props.setProfilePicture(file)
 }
 </script>
 

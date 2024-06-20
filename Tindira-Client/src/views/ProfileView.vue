@@ -1,54 +1,50 @@
 <template>
-  <div class="flex flex-col text-center">
-    <Avatar
-      :image="appStore.connectedUserObject?.profilePicture"
-      size="xlarge"
-      shape="circle"
-      class="mx-auto mt-10 mb-10"
-    />
-    <Textarea autoResize rows="15" cols="30" :placeholder="appStore.connectedUserObject?.profileDescription" />
+  <div>
+    <!-- <div class="card" v-touch:swipe.left="swipeLeft" v-touch:swipe.right="swipeRight"> -->
+    <TabMenu v-model:activeIndex="active" :model="items" />
 
-    <div class="flex justify-center items-center space-x-4 my-4">
-      <RouterLink class="w-1/2 px-2" to="/history">
-        <Button class="w-full" rounded label="Swiping History">
-          <template #icon>
-            <Icon icon="material-symbols:history" />
-          </template>
-        </Button>
-      </RouterLink>
-
-      <RouterLink class="w-1/2 px-2" to="/manage">
-        <Button class="w-full" rounded label="Manage Posts">
-          <template #icon>
-            <Icon icon="mdi:post-it-note-edit-outline" />
-          </template>
-        </Button>
-      </RouterLink>
-    </div>
-
-    <div class="flex justify-end items-center space-x-4">
-      <div class="w-1/3 px-2">
-        <Button class="w-full" rounded label="Log Out" @click="logout">
-          <template #icon>
-            <Icon icon="mdi:logout" />
-          </template>
-        </Button>
-      </div>
+    <div class="mx-4 mb-2">
+      <Transition name="fade" mode="out-in">
+        <ProfileView v-if="active === 0" key="0" />
+        <ManageListingsView v-else-if="active === 1" key="1" />
+        <SwipingHistoryView v-else-if="active === 2" key="2" />
+        <AboutView v-else key="3" />
+      </Transition>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { useAppStore } from '@/stores/app'
-import router from '@/router'
+import { ref } from 'vue'
+import AboutView from './profile/AboutView.vue'
+import ProfileView from './profile/ManageProfileView.vue'
+import ManageListingsView from './profile/ManageListingsView.vue'
+import SwipingHistoryView from './profile/HistoryView.vue'
 
-const appStore = useAppStore()
+const active = ref(0)
+const items = ref([
+  { label: 'Profile' },
+  { label: 'Listings' },
+  { label: 'History' },
+  { label: 'About' }
+])
 
-const logout = () => {
-  appStore.disconnectUser()
-  router.push('/')
-}
+// function swipeLeft() {
+//   if (active.value < items.value.length - 1) active.value++
+// }
+
+// function swipeRight() {
+//   if (active.value > 0) active.value--
+// }
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
