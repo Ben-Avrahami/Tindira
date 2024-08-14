@@ -34,7 +34,7 @@ import type { SavedUser } from '@/interfaces/user.interface'
 import { useDialog } from 'primevue/usedialog'
 import { defineAsyncComponent } from 'vue'
 
-import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
+// import UserBusinessCard from '@/components/misc/profile/UserBusinessCard.vue'
 import UserFormPreview from './UserFormPreview.vue'
 
 const store = useAppStore()
@@ -62,17 +62,14 @@ const confirmDelete = async () => {
     rejectLabel: 'Cancel',
     accept: async () => {
       try {
-        if (!store.connectedUser) throw new Error('User not connected')
-        // await API.deleteUser(store.connectedUser) // TODO: Implement deleteUser in API
-        // store.disconnectUser()
-        // toast.add({ severity: 'info', summary: 'Confirmed', detail: 'User deleted', life: 3000 })
-        // router.push('/')
+        await store.deleteConnectedUser()
         toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'User deletion is not implemented yet',
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'User deleted successfully!',
           life: 3000
         })
+        router.push('/')
       } catch (error: any) {
         const errorMessage = error?.response?.data?.message || error?.message || 'Unknown error'
         toast.add({

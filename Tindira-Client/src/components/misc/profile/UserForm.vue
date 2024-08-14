@@ -1,14 +1,12 @@
 <template>
   <div class="flex flex-col text-center justify-center gap-5">
-    <div class="flex flex-col">
-      <Avatar :image="profilePicture" size="xlarge" shape="circle" class="mx-auto my-6" />
-      <IconField>
-        <InputIcon>
-          <Icon icon="mdi:rename" />
-        </InputIcon>
-        <InputText id="username" v-model="username" type="text" placeholder="Username" disabled />
-      </IconField>
-    </div>
+    <ProfilePicture :profilePictureManager :username />
+    <IconField>
+      <InputIcon>
+        <Icon icon="mdi:rename" />
+      </InputIcon>
+      <InputText id="username" :value="username" type="text" placeholder="Username" disabled />
+    </IconField>
     <IconField>
       <InputIcon>
         <Icon icon="mdi:email" />
@@ -75,6 +73,9 @@ import type { SavedUser } from '@/interfaces/user.interface'
 import * as UserFunctions from '@/functions/user'
 import { computed, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
+import { ProfilePictureManager, type Photo } from '@/functions/photosManager'
+
+import ProfilePicture from '../ProfilePicture.vue'
 
 const props = defineProps<{
   user: SavedUser
@@ -85,24 +86,25 @@ const store = useAppStore()
 
 const toast = injectToast()
 
-const profilePicture = ref<string>(props.user.profilePicture)
-const username = ref<string>(props.user.username)
+const username = computed<string>(() => props.user.username) // username is not editable
 const email = ref<string>(props.user.email)
 const fullName = ref<string>(props.user.fullName)
 const phoneNumber = ref<string>(props.user.phoneNumber)
 const profileDescription = ref<string>(props.user.profileDescription)
+
+const photo = ref<Photo>({ url: props.user.profilePicture })
+const profilePictureManager = new ProfilePictureManager(photo)
 
 const isPhoneValid = computed(() => UserFunctions.isPhoneValid(phoneNumber.value))
 const isNameValid = computed(() => UserFunctions.isNameValid(fullName.value))
 const isEmailValid = computed(() => UserFunctions.isEmailValid(email.value))
 
 const resetFields = () => {
-  profilePicture.value = props.user.profilePicture
-  username.value = props.user.username
   email.value = props.user.email
   fullName.value = props.user.fullName
   phoneNumber.value = props.user.phoneNumber
   profileDescription.value = props.user.profileDescription
+  profilePictureManager.reset(props.user.profilePicture)
 }
 
 const cancelForm = () => {
@@ -118,8 +120,7 @@ const constructPayload = () => {
   const payload: Partial<SavedUser> = {}
 
   // take only the fields that have changed (note: username is not editable)
-  if (profilePicture.value !== props.user.profilePicture)
-    payload.profilePicture = profilePicture.value
+  if (photo.value.url !== props.user.profilePicture) payload.profilePicture = photo.value.url
   if (email.value !== props.user.email) payload.email = email.value
   if (fullName.value !== props.user.fullName) payload.fullName = fullName.value
   if (phoneNumber.value !== props.user.phoneNumber) payload.phoneNumber = phoneNumber.value
@@ -182,8 +183,33 @@ const saveForm = () => {
       detail: error.message,
       life: 3000
     })
-    resetFields()
   })
+
+  profilePictureManager
+    .save(username.value)
+    .then(({ url, error }) => {
+      if (error) {
+        // e.g. saving succeeded but deleting old image failed
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error,
+          life: 3000
+        })
+      }
+      if (url) {
+        store.updateConnectedUser({ profilePicture: url })
+      }
+    })
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.message,
+        life: 3000
+      })
+    })
+
   props.close()
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col text-center justify-center gap-5">
     <div class="flex flex-col">
-      <Avatar :image="user.profilePicture" size="xlarge" shape="circle" class="mx-auto my-6" />
+      <Avatar :image="user.profilePicture" size="2xlarge" shape="circle" class="mx-auto my-6" />
       <IconField>
         <InputIcon>
           <Icon icon="mdi:rename" />

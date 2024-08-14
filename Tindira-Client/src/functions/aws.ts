@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 const s3Client = new S3Client({
   region: import.meta.env.VITE_AWS_REGION,
@@ -69,4 +69,26 @@ export const uploadImagesToS3 = async (
     .map((result) => result.error)
 
   return { urls, errors }
+}
+
+export const deleteImagesFromS3 = async (urls: string[]): Promise<string[]> => {
+  const deletePromises = urls.map(async (url) => {
+    const key = url.replace(`${imageUrlPrefix}/`, '')
+    const params = {
+      Bucket: bucketName,
+      Key: key
+    }
+
+    try {
+      await s3Client.send(new DeleteObjectCommand(params))
+      return null
+    } catch (error: any) {
+      const err = `Failed to delete ${key}: ${error}`
+      console.error(err)
+      return err
+    }
+  })
+
+  const errors = await Promise.all(deletePromises)
+  return errors.filter((error): error is string => error !== null)
 }

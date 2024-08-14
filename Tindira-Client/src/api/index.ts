@@ -85,6 +85,11 @@ class _API {
     return await this.service.put(`/user?username=${username}`, payload)
   }
 
+  async deleteUser(username: string) {
+    return await this.service.delete(`/user?username=${username}`)
+    // TODO: delete user bucket from S3
+  }
+
   async getListingsById(ids: string[]): Promise<Listing[]> {
     if (ids.length === 0) return []
     const idsString = ids.join(',')
@@ -137,6 +142,7 @@ class _API {
 
   async deleteListing(listingId: string, username: string) {
     return await this.service.delete(`/listings?listingId=${listingId}&username=${username}`)
+    // TODO: delete listing bucket from S3
   }
 }
 
